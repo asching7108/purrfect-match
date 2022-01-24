@@ -8,7 +8,7 @@ export default class Header extends Component {
 
   handleLogoutClick = () => {
     // TODO: log user out
-    this.context.setAuthState(false);
+    this.context.setLoggedInState(false);
     this.context.setShelterAdminState(false);
   }
 
@@ -52,7 +52,7 @@ export default class Header extends Component {
             <li className='nav-item active'><Link className='nav-link' to='/pets'>Pets</Link></li>
             <li className='nav-item active'><Link className='nav-link' to='/favorites'>Favorites</Link></li>
           </ul>
-          {this.context.hasAuthToken
+          {this.context.isLoggedIn
             ? this.renderLogoutLink()
             : this.renderLoginLink()}
         </div>

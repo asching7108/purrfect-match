@@ -14,7 +14,7 @@ class App extends Component {
   static contextType = AuthContext;
 
   componentDidMount() {
-    this.context.setAuthState(AuthService.hasAuthToken());
+    this.context.setLoggedInState(AuthService.isLoggedIn());
     this.context.setShelterAdminState(AuthService.isShelterAdmin());
   }
 

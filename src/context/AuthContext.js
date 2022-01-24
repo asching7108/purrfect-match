@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 
 const AuthContext = React.createContext({
-  hasAuthToken: false,
+  isLoggedIn: false,
   isShelterAdmin: false,
-  count: 1,
-  setAuthState: () => {},
-  setShelterAdminState: () => {},
-  setCount: () => {}
+  setLoggedInState: () => {},
+  setShelterAdminState: () => {}
 })
 
 export default AuthContext;
@@ -14,26 +12,20 @@ export default AuthContext;
 export class AuthProvider extends Component {
   state = { count: 1 }
 
-  setAuthState = hasAuthToken => {
-    this.setState({ hasAuthToken });
+  setLoggedInState = isLoggedIn => {
+    this.setState({ isLoggedIn });
   }
 
   setShelterAdminState = isShelterAdmin => {
     this.setState({ isShelterAdmin });
   }
 
-  setCount = count => {
-    this.setState({ count });
-  }
-
   render() {
     const contextValue = {
-      hasAuthToken: this.state.hasAuthToken,
+      isLoggedIn: this.state.isLoggedIn,
       isShelterAdmin: this.state.isShelterAdmin,
-      count: this.state.count,
-      setAuthState: this.setAuthState,
-      setShelterAdminState: this.setShelterAdminState,
-      setCount: this.setCount
+      setLoggedInState: this.setLoggedInState,
+      setShelterAdminState: this.setShelterAdminState
     };
 
     return (

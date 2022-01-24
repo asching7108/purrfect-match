@@ -1,7 +1,7 @@
 const AuthService = {
-  hasAuthToken() {
+  isLoggedIn() {
     // TODO
-    return false;
+    return true;
   },
   isShelterAdmin() {
     // TODO

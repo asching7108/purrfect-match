@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import AuthService from '../../services/auth-service';
 
 export default function PrivateRoute({ children }) {
-  return AuthService.hasAuthToken()
+  return AuthService.isLoggedIn()
     ? children
     : <Navigate to={'/login'} />;
 }
