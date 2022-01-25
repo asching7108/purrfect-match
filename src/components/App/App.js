@@ -8,7 +8,7 @@ import FavoritesPage from '../../routes/FavoritesPage/FavoritesPage';
 import HomePage from '../../routes/HomePage/HomePage';
 import LoginPage from '../../routes/LoginPage/LoginPage';
 import NotFoundPage from '../../routes/NotFoundPage';
-import AuthService from '../../services/auth-service';
+import AuthService from '../../services/authService';
 
 class App extends Component {
   static contextType = AuthContext;

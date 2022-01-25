@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext';
-import './Header.css';
 
 export default class Header extends Component {
   static contextType = AuthContext;
