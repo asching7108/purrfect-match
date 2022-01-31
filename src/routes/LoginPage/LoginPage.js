@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import "./LoginPage.css";
 import AuthService from "../../services/authService";
+import AuthContext from "../../context/AuthContext";
 
 export default class LoginPage extends Component {
+  static contextType = AuthContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -18,6 +21,7 @@ export default class LoginPage extends Component {
       password: this.state.password
     });
     this.setToken(token);
+    this.context.setLoggedInState(true);
   }
 
   setToken(userToken) {

@@ -19,8 +19,6 @@ class App extends Component {
 		this.context.setShelterAdminState(AuthService.isShelterAdmin());
 	};
 
-  
-
 	render() {
 		return (
 			<div className="App">
