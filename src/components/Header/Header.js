@@ -6,7 +6,7 @@ export default class Header extends Component {
   static contextType = AuthContext;
 
   handleLogoutClick = () => {
-    sessionStorage.removeItem('token')
+    localStorage.removeItem('token')
     this.context.setLoggedInState(false);
     this.context.setShelterAdminState(false);
   }

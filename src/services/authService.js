@@ -2,7 +2,7 @@ const { isExpired } = require('react-jwt');
 
 const AuthService = {
 	getToken() {
-		const tokenString = sessionStorage.getItem('token');
+		const tokenString = localStorage.getItem('token');
 		const userToken = JSON.parse(tokenString);
 		if (userToken && userToken.token) {
 			return userToken.token;
