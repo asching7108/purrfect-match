@@ -9,7 +9,7 @@ export default class LoginPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
+      email: '',
       password: ''
     }
   }
@@ -17,7 +17,7 @@ export default class LoginPage extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     const token = await AuthService.loginUser({
-      username: this.state.username,
+      email: this.state.email,
       password: this.state.password
     });
     this.setToken(token);
@@ -39,7 +39,7 @@ export default class LoginPage extends Component {
             <label>
               <p>Email Address</p>
               <input type="text" className="form-control" onChange={e => {
-                this.setState({username: e.target.value});
+                this.setState({email: e.target.value});
                 }} />
             </label>
           </div>
