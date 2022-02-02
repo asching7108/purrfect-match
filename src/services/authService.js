@@ -1,4 +1,5 @@
 const { isExpired } = require('react-jwt');
+const { HOSTNAME } = require('../config/hostname.config');
 
 const AuthService = {
 	getToken() {
@@ -30,7 +31,7 @@ const AuthService = {
 		return false;
 	},
 	async loginUser(credentials) {
-		return fetch('http://localhost:8000/login', {
+		return fetch( HOSTNAME + '/login', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
