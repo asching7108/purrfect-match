@@ -25,7 +25,7 @@ class App extends Component {
 				<header>
 					<Header />
 				</header>
-				<main className="contentWrapper">
+				<main>
 					<Routes>
 						<Route path={'/'} element={<HomePage />} />
 						<Route
