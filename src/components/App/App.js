@@ -21,7 +21,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div className='App'>
         <header>
           <Header />
         </header>
@@ -29,7 +29,7 @@ class App extends Component {
           <Routes>
             <Route path={'/'} element={<HomePage />} />
             <Route
-              path="/login"
+              path='/login'
               element={
                 <PublicRoute>
                   <LoginPage />
@@ -37,7 +37,7 @@ class App extends Component {
               }
             />
             <Route
-              path="/favorites"
+              path='/favorites'
               element={
                 <PrivateRoute>
                   <FavoritesPage />
