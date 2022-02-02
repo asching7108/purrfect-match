@@ -27,8 +27,7 @@ export default class LoginPage extends Component {
         this.setState({ errorText: 'Invalid email or password' })
 
       });
-
-  }
+  };
 
   setToken(userToken) {
     localStorage.setItem('token', JSON.stringify(userToken));
