@@ -3,7 +3,12 @@ const { isExpired } = require('react-jwt');
 const AuthService = {
 	getToken() {
 		const tokenString = localStorage.getItem('token');
-		const userToken = JSON.parse(tokenString);
+
+    if (tokenString === 'undefined') {
+      return null;
+    }
+
+		const userToken = tokenString? JSON.parse(tokenString) : null;
 		if (userToken && userToken.token) {
 			return userToken.token;
 		}
