@@ -1,8 +1,8 @@
-import config from '../config';
+const { HOSTNAME } = require('../config/hostname.config');
 
 const PetsService = {
   getPets() {
-    return fetch(`${config.API_BASE_URL}/pets`)
+    return fetch(`${HOSTNAME}/pets`)
       .then(res =>
         (!res.ok)
           ? res.json().then(e => Promise.reject(e))
