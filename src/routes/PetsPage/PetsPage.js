@@ -14,18 +14,26 @@ export default class PetsPage extends Component {
 			.catch(error => console.log(error));
   }
 
-  renderPets() {
-    const { pets } = this.state;
+  renderPetRow(rowStart) {
     return (
-      pets.map(pet => 
-        <PetCard key={pet.PetID} pet={pet} />  
-      ));
+      <div className='row'>
+        {this.state.pets.slice(rowStart, rowStart + 3).map(pet => this.renderPet(pet))}
+      </div>
+    );
+  }
+
+  renderPet(pet) {
+    return (
+      <PetCard key={pet.PetID} pet={pet} />
+    );
   }
   
   render() {
+    const { pets } = this.state;
+    const petRows = pets.length / 3 + (pets.length % 3 === 0 ? 0 : 1);
     return (
-      <div>
-        {this.renderPets()}
+      <div className='container'>
+        {[...Array(petRows)].map((_, i) => this.renderPetRow(i * 3))}
       </div>
     );
   }

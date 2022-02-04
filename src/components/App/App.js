@@ -31,7 +31,7 @@ class App extends Component {
             <Route path={'/'} element={<HomePage />} />
             <Route path={'/pets'} element={<PetsPage />} />
             <Route
-              path='/login'
+              path="/login"
               element={
                 <PublicRoute>
                   <LoginPage />
