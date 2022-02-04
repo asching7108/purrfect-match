@@ -10,8 +10,8 @@ export default class PetsPage extends Component {
 
   componentDidMount() {
     PetsService.getPets()
-			.then(pets => this.setState({ pets }))
-			.catch(error => console.log(error));
+      .then(pets => this.setState({ pets }))
+      .catch(error => console.log(error));
   }
 
   renderPetRow(rowStart) {
