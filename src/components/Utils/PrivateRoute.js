@@ -5,5 +5,5 @@ import AuthService from '../../services/authService';
 export default function PrivateRoute({ children }) {
   return AuthService.isLoggedIn()
     ? children
-    : <Navigate to={'/login'} />;
+    : <Navigate to={'/login?redirect=' + window.location.pathname} />;
 }
