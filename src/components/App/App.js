@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import Header from '../Header/Header';
 import PrivateRoute from '../Utils/PrivateRoute';
@@ -16,7 +17,7 @@ class App extends Component {
   componentDidMount() {
     this.context.setLoggedInState(AuthService.isLoggedIn());
     this.context.setShelterAdminState(AuthService.isShelterAdmin());
-  }
+  };
 
   render() {
     return (
@@ -28,7 +29,7 @@ class App extends Component {
           <Routes>
             <Route path={'/'} element={<HomePage />} />
             <Route
-              path="/login"
+              path='/login'
               element={
                 <PublicRoute>
                   <LoginPage />
@@ -36,7 +37,7 @@ class App extends Component {
               }
             />
             <Route
-              path="/favorites"
+              path='/favorites'
               element={
                 <PrivateRoute>
                   <FavoritesPage />
