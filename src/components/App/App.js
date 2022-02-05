@@ -8,6 +8,7 @@ import AuthContext from '../../context/AuthContext';
 import FavoritesPage from '../../routes/FavoritesPage/FavoritesPage';
 import HomePage from '../../routes/HomePage/HomePage';
 import LoginPage from '../../routes/LoginPage/LoginPage';
+import PetsPage from '../../routes/PetsPage/PetsPage';
 import NotFoundPage from '../../routes/NotFoundPage';
 import AuthService from '../../services/authService';
 
@@ -28,6 +29,7 @@ class App extends Component {
         <main>
           <Routes>
             <Route path={'/'} element={<HomePage />} />
+            <Route path={'/pets'} element={<PetsPage />} />
             <Route
               path='/login'
               element={
