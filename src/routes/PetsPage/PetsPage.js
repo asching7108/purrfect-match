@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PetCard from '../../components/PetCard/PetCard';
+import { Section } from '../../components/Utils/Utils';
 import PetsService from '../../services/petsService';
 
 export default class PetsPage extends Component {
@@ -37,7 +38,7 @@ export default class PetsPage extends Component {
     // no pets exist
     if (petCount === 0) {
       return (
-        <div className="alert alert-success" role="alert">
+        <div className='alert alert-success' role='alert'>
           More pets will be available soon! Check back later :)
         </div>
       );
@@ -46,9 +47,9 @@ export default class PetsPage extends Component {
     // place pets in a 3-cols grid
     const petRows = Math.floor(petCount / 3) + (petCount % 3 === 0 ? 0 : 1);
     return (
-      <div className='container'>
+      <Section>
         {[...Array(petRows)].map((_, i) => this.renderPetRow(i * 3))}
-      </div>
+      </Section>
     );
   }
 }
