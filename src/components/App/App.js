@@ -5,6 +5,7 @@ import Header from '../Header/Header';
 import PrivateRoute from '../Utils/PrivateRoute';
 import PrivateRouteShelter from '../Utils/PrivateRouteShelter';
 import PublicRoute from '../Utils/PublicRoute';
+import PublicRouteShelter from '../Utils/PublicRouteShelter';
 import AuthContext from '../../context/AuthContext';
 import AddPetPage from '../../routes/AddPetPage/AddPetPage';
 import FavoritesPage from '../../routes/FavoritesPage/FavoritesPage';
@@ -52,9 +53,9 @@ class App extends Component {
             <Route
               path="/login/shelter"
               element={
-                <PublicRoute>
+                <PublicRouteShelter>
                   <ShelterLoginPage />
-                </PublicRoute>
+                </PublicRouteShelter>
               }
             />
             <Route
