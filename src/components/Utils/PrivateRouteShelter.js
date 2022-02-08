@@ -5,5 +5,5 @@ import AuthService from '../../services/authService';
 export default function PrivateRouteShelter({ children }) {
   return AuthService.isLoggedIn() && AuthService.isShelterAdmin()
     ? children
-    : <Navigate to={'/login/shelter'} />;
+    : <Navigate to={'/login/shelter?redirect=' + window.location.pathname} />;
 }
