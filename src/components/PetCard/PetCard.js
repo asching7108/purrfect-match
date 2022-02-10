@@ -1,8 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
+import './PetCard.css';
 
-export default function PetCard(props) {
+export default function PetCard(props, newClass) {
   const { pet } = props;
   const navigate = useNavigate();
 
@@ -14,8 +15,10 @@ export default function PetCard(props) {
     e.stopPropagation();
   }
 
+  let classStr = props.className === undefined ? "petCard": "petCard " + props.className
+
   return (
-    <div className='col-sm' onClick={onClickCard}>
+    <div className={classStr} onClick={onClickCard}>
       <img src={pet.Picture} />
       <h3>{pet.Name}</h3>
       <p>{pet.Sex}, {pet.Age} yrs</p>

@@ -1,0 +1,10 @@
+.petCard {
+  text-align: center;
+  border-radius: 25px;
+  border: 2px solid #777;
+  padding: 20px;
+  width: 200px;
+  height: 200px;
+  margin: 10px; 
+}
+
