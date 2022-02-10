@@ -3,9 +3,7 @@ import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import Header from '../Header/Header';
 import PrivateRoute from '../Utils/PrivateRoute';
-import PrivateRouteShelter from '../Utils/PrivateRouteShelter';
 import PublicRoute from '../Utils/PublicRoute';
-import PublicRouteShelter from '../Utils/PublicRouteShelter';
 import AuthContext from '../../context/AuthContext';
 import AddPetPage from '../../routes/AddPetPage/AddPetPage';
 import FavoritesPage from '../../routes/FavoritesPage/FavoritesPage';
@@ -36,9 +34,9 @@ class App extends Component {
             <Route
               path="/pets/create"
               element={
-                <PrivateRouteShelter>
+                <PrivateRoute shelter={true}>
                   <AddPetPage />
-                </PrivateRouteShelter>
+                </PrivateRoute>
               }
             />
             <Route
@@ -52,9 +50,9 @@ class App extends Component {
             <Route
               path="/login/shelter"
               element={
-                <PublicRouteShelter>
+                <PublicRoute shelter={true}>
                   <LoginPage shelter={true} />
-                </PublicRouteShelter>
+                </PublicRoute>
               }
             />
             <Route
