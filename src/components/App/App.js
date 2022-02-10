@@ -11,7 +11,6 @@ import AddPetPage from '../../routes/AddPetPage/AddPetPage';
 import FavoritesPage from '../../routes/FavoritesPage/FavoritesPage';
 import HomePage from '../../routes/HomePage/HomePage';
 import LoginPage from '../../routes/LoginPage/LoginPage';
-import ShelterLoginPage from '../../routes/ShelterLoginPage/ShelterLoginPage';
 import PetsPage from '../../routes/PetsPage/PetsPage';
 import NotFoundPage from '../../routes/NotFoundPage';
 import AuthService from '../../services/authService';
@@ -54,7 +53,7 @@ class App extends Component {
               path="/login/shelter"
               element={
                 <PublicRouteShelter>
-                  <ShelterLoginPage />
+                  <LoginPage shelter={true} />
                 </PublicRouteShelter>
               }
             />
