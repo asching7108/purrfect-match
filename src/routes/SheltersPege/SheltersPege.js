@@ -94,21 +94,22 @@ export default class SheltersPege extends Component {
                 let typeOfAnimal = (pet.TypeOfAnimal === "Cat" || pet.TypeOfAnimal === "Dog") ? pet.TypeOfAnimal : "Other"
 
                 let petAge = ""
-                if (parseInt(pet.Age) < 1 && typeOfAnimal === "Cat") petAge = "Kitten"
-                else if (parseInt(pet.Age) < 1 && typeOfAnimal === "Dog") petAge = "Puppy"
-                else if (parseInt(pet.Age) < 2) petAge = "Young"
-                else if (parseInt(pet.Age) < 7) petAge = "Adult"
+                if (parseInt(pet.Age) <= 1 && typeOfAnimal === "Cat") petAge = "Kitten"
+                else if (parseInt(pet.Age) <= 1 && typeOfAnimal === "Dog") petAge = "Puppy"
+                else if (parseInt(pet.Age) <= 2) petAge = "Young"
+                else if (parseInt(pet.Age) <= 7) petAge = "Adult"
                 else petAge = "Senior"
 
                 let cName = "hideCard"
                 if (typeOfPets === "Any" && age === "Any" && available === "Any") cName = "showCard"
-                if (typeOfPets === typeOfAnimal && age === "Any" && available === "Any") cName = "showCard"
-                if (typeOfPets === typeOfAnimal && age === petAge && available === "Any") cName = "showCard"
-                if (typeOfPets === typeOfAnimal && age === petAge && available === "Any") cName = "showCard"
-                if (typeOfPets === typeOfAnimal && age === "Any" && available === pet.Availability) cName = "showCard"
                 if (typeOfPets === "Any" && age === "Any" && available === pet.Availability) cName = "showCard"
                 if (typeOfPets === "Any" && age === petAge && available === pet.Availability) cName = "showCard"
+                if (typeOfPets === typeOfAnimal && age === "Any" && available === "Any") cName = "showCard"
+                if (typeOfPets === typeOfAnimal && age === petAge && available === "Any") cName = "showCard"
                 if (typeOfPets === "Any" && age === petAge && available === "Any") cName = "showCard"
+                if (typeOfPets === "Any" && age === petAge && available === pet.Availability) cName = "showCard"
+                if (typeOfPets === typeOfAnimal && age === "Any" && available === pet.Availability) cName = "showCard"
+                if (typeOfPets === typeOfAnimal && age === petAge && available === pet.Availability) cName = "showCard"
 
                 return this.renderPet(pet, cName)
               })}
