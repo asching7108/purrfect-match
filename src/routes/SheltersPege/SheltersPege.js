@@ -3,6 +3,9 @@ import { Section, FormGroup } from '../../components/Utils/Utils';
 import './SheltersPege.css';
 import SheltersService from '../../services/sheltersService';
 import PetCard from '../../components/PetCard/PetCard';
+const log = require('loglevel');
+if (process.env.NODE_ENV === 'development') log.setLevel('debug')
+else log.setLevel('silent')
 
 export default class SheltersPege extends Component {
 
@@ -19,21 +22,21 @@ export default class SheltersPege extends Component {
   }
 
   componentDidMount() {
-    console.log("Getting shelter data...")
+    log.debug("Getting shelter data...")
     const path = window.location.pathname;
     const shelterID = path.substring(path.lastIndexOf('/') + 1)
     SheltersService.getShelter(shelterID)
       .then(shelter => this.setState({ shelter: shelter }))
       .catch(error => console.log(error));
 
-    console.log("Getting pets data...")
+    log.debug("Getting pets data...")
     SheltersService.getPetsByShelter(shelterID)
       .then(pets => this.setState({ pets: pets }))
       .catch(error => console.log(error));
   }
 
   renderShelter(shelter) {
-    console.log("Calling renderShelter...")
+    log.debug("Calling renderShelter...")
     return (
       <div>
         <h2>{shelter[0].ShelterName}</h2>
@@ -67,14 +70,14 @@ export default class SheltersPege extends Component {
   }
 
   renderPet(pet, cName) {
-    console.log("Calling renderPet")
+    log.debug("Calling renderPet")
     return (
       <PetCard className={cName} key={pet.PetID} pet={pet} />
     );
   }
 
   renderPets(pets, typeOfPets, age, available) {
-    console.log("Calling renderPets")
+    log.debug("Calling renderPets")
     // no pets exist
     if (pets.length === 0) {
       return (
@@ -123,7 +126,7 @@ export default class SheltersPege extends Component {
   }
 
   renderFilter() {
-    console.log("Calling renderFilter")
+    log.debug("Calling renderFilter")
     return (
       <FormGroup className="flex">
         <div className="select-wrap" style={{ width: "100%" }}>
@@ -162,12 +165,12 @@ export default class SheltersPege extends Component {
   }
 
   inputChanged(field, content) {
-    console.log("Calling inputChanged")
+    log.debug("Calling inputChanged")
     this.setState({ [field]: content });
   }
 
   render() {
-    console.log("Calling render...")
+    log.debug("Calling render...")
     const { shelter } = this.state;
     const { pets } = this.state;
 
