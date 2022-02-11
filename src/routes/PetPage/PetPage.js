@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Section } from '../../components/Utils/Utils';
 import PetsService from '../../services/petsService';
 import { Link } from 'react-router-dom';
 
 export default function PetPage () {
-  const navigate = useNavigate();
   const params = useParams();
-  const [pet, setPet] = useState({});
+  const [pet, setPet] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function getPet() {
-      const pet = await PetsService.getPet(params.petID);
-      setPet(pet);
-    }
-    if (Object.keys(pet).length === 0) {
-      getPet();
+    if (!pet) {
+      PetsService.getPet(params.petID)
+        .then(pet => setPet(pet))
+        .catch(e => {
+          setError(e.error);
+        });
     }
   });
 
@@ -126,6 +126,15 @@ export default function PetPage () {
       </div>
     );
   };
+
+  if (error) {
+    return <div className='alert alert-danger' role='alert'>{error}</div>;
+  }
+
+  // initial state
+  if (!pet) {
+    return <></>;
+  }
 
   return (
     <Section>
