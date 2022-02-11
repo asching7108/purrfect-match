@@ -25,6 +25,12 @@ export default class LoginPage extends Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.shelter !== prevProps.shelter) {
+      this.setState({shelter: this.props.shelter})
+    }
+  }
+
   handleUserLoginSubmit = async (e) => {
     e.preventDefault();
     await AuthService.loginUser({
