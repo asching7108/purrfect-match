@@ -11,13 +11,20 @@ export default class Header extends Component {
     this.context.setShelterAdminState(false);
   }
 
-  renderLoginLink() {
+  renderLoginLinks() {
     return (
-      <Link
-        className='btn btn-outline-light my-2 my-sm-0'
-        to='/login'>
-        Log in
-      </Link>
+      <>
+        <Link
+          className='btn btn-outline-light my-2 my-sm-0 mr-2'
+          to='/login'>
+          Log in
+        </Link>
+        <Link
+          className='btn btn-outline-light my-2 my-sm-0'
+          to='/login/shelter'>
+          Shelter log in
+        </Link>
+      </>
     );
   }
 
@@ -53,7 +60,7 @@ export default class Header extends Component {
           </ul>
           {this.context.isLoggedIn
             ? this.renderLogoutLink()
-            : this.renderLoginLink()}
+            : this.renderLoginLinks()}
         </div>
       </nav>
     );

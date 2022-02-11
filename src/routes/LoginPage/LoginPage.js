@@ -20,11 +20,12 @@ export default class LoginPage extends Component {
       city: '',
       USState: '',
       zipCode: null,
-      createAccount: false
+      createAccount: false,
+      shelter: props.shelter
     }
   }
 
-  handleLoginSubmit = async (e) => {
+  handleUserLoginSubmit = async (e) => {
     e.preventDefault();
     await AuthService.loginUser({
       email: this.state.email,
@@ -39,7 +40,7 @@ export default class LoginPage extends Component {
       });
   };
 
-  handleCreateSubmit = async (e) => {
+  handleUserCreateSubmit = async (e) => {
     e.preventDefault();
 
     if (this.verifyPassword(this.state.password, this.state.confirmPassword)) {
@@ -51,7 +52,7 @@ export default class LoginPage extends Component {
         address: this.getFullAddress(),
         zipCode: this.state.zipCode,
       }).then(() => {
-        this.handleLoginSubmit(e)
+        this.handleUserLoginSubmit(e)
       })
         .catch(() => {
           this.setState({ errorText: 'Account creation failed' })
@@ -85,6 +86,21 @@ export default class LoginPage extends Component {
 
     return true;
   }
+  handleShelterSubmit = async (e) => {
+    e.preventDefault();
+    await AuthService.loginShelter({
+      email: this.state.email,
+      password: this.state.password
+    }).then((token) => {
+      this.setToken(token);
+      this.context.setLoggedInState(true);
+      this.context.setShelterAdminState(true);
+    })
+      .catch(() => {
+        this.setState({ errorText: 'Invalid email or password' })
+
+      });
+  };
 
   setToken(userToken) {
     localStorage.setItem('token', JSON.stringify(userToken));
@@ -113,13 +129,25 @@ export default class LoginPage extends Component {
     )
   }
 
+  renderPageTitle() {
+    if (this.state.shelter) {
+      return (
+        <h2>Shelter Login</h2>
+      )
+    } else {
+      return (
+        <h2>Login</h2>
+      )
+    }
+  }
+
   renderLogin() {
     return (
       <>
         <div className='loginWrapper'>
-          <h2>Login</h2>
+          {this.renderPageTitle()}
           {this.renderErrorMessage()}
-          <form onSubmit={this.handleLoginSubmit}>
+          <form onSubmit={this.state.shelter ? this.handleShelterSubmit : this.handleUserLoginSubmit}>
             <div className='form-group'>
               <label>
                 <p>Email Address</p>
