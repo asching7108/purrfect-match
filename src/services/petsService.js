@@ -22,7 +22,15 @@ const PetsService = {
           ? res.json().then(e => Promise.reject(e))
           : res.json()
       );
-  }
+  },
+  getPet(petID) {
+    return fetch(`${HOSTNAME}/pets/${petID}`)
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      );
+  },
 };
 
 export default PetsService;
