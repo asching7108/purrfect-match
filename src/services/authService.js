@@ -31,7 +31,7 @@ const AuthService = {
     return false;
   },
   async loginUser(credentials) {
-    return fetch(HOSTNAME + '/login', {
+    return fetch(HOSTNAME + '/users/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
