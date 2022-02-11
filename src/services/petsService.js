@@ -15,7 +15,7 @@ const PetsService = {
       headers: {
         'content-type': 'application/json'
       },
-      body: JSON.stringify({ newPet })
+      body: JSON.stringify({ ...newPet })
     })
       .then(res =>
         (!res.ok)
