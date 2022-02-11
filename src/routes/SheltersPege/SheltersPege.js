@@ -3,9 +3,8 @@ import { Section, FormGroup } from '../../components/Utils/Utils';
 import './SheltersPege.css';
 import SheltersService from '../../services/sheltersService';
 import PetCard from '../../components/PetCard/PetCard';
-const log = require('loglevel');
-if (process.env.NODE_ENV === 'development') log.setLevel('debug')
-else log.setLevel('silent')
+import * as logUtils from '../../components/Utils/Logger';
+var log = logUtils.getLogger()
 
 export default class SheltersPege extends Component {
 
