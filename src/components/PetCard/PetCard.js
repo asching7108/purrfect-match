@@ -15,7 +15,7 @@ export default function PetCard(props, newClass) {
     e.stopPropagation();
   }
 
-  let classStr = props.className === undefined ? "petCard": "petCard " + props.className
+  let classStr = props.className === undefined ? "col-sm petCard": "petCard " + props.className
 
   return (
     <div className={classStr} onClick={onClickCard}>

@@ -40,9 +40,9 @@ export default class SheltersPege extends Component {
     return (
       <div>
         <h2>{shelter[0].ShelterName}</h2>
-        <hr />
+        <br />
         <div>
-          <table className='shelterTable'>
+          <table className='table'>
             <tbody>
               <tr>
                 <th>Address</th>
@@ -63,7 +63,7 @@ export default class SheltersPege extends Component {
             </tbody>
           </table>
         </div>
-        <hr />
+        <br />
         <h2>Pets at {shelter[0].ShelterName}</h2>
       </div>
     );
@@ -171,8 +171,7 @@ export default class SheltersPege extends Component {
 
   render() {
     log.debug("Calling render...")
-    const { shelter } = this.state;
-    const { pets } = this.state;
+    const { shelter, pets } = this.state;
 
     return (
       <div>
