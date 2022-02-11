@@ -39,9 +39,9 @@ export default class SheltersPege extends Component {
     return (
       <div>
         <h2>{shelter[0].ShelterName}</h2>
-        <br />
+        <hr />
         <div>
-          <table className='table'>
+          <table className='shelterTable'>
             <tbody>
               <tr>
                 <th>Address</th>
@@ -62,7 +62,7 @@ export default class SheltersPege extends Component {
             </tbody>
           </table>
         </div>
-        <br />
+        <hr />
         <h2>Pets at {shelter[0].ShelterName}</h2>
       </div>
     );

@@ -42,3 +42,12 @@ select{
 .cardContainer{
   width:200px;
 }
+
+.shelterTable{
+  width: 100%;
+}
+
+.shelterTable td, th {
+  text-align: left;
+  padding: 15px 50px;
+}
