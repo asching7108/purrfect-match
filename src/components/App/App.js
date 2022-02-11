@@ -3,7 +3,6 @@ import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import Header from '../Header/Header';
 import PrivateRoute from '../Utils/PrivateRoute';
-import PrivateRouteShelter from '../Utils/PrivateRouteShelter';
 import PublicRoute from '../Utils/PublicRoute';
 import AuthContext from '../../context/AuthContext';
 import AddPetPage from '../../routes/AddPetPage/AddPetPage';
@@ -32,21 +31,27 @@ class App extends Component {
           <Routes>
             <Route path={'/'} element={<HomePage />} />
             <Route path={'/pets'} element={<PetsPage />} />
-            <Route path={'/shelters/:shelterID/pets/create'} element={<AddPetPage />} />
-            {/* temporary set to public page
             <Route
               path="/pets/create"
               element={
-                <PrivateRouteShelter>
+                <PrivateRoute shelter={true}>
                   <AddPetPage />
-                </PrivateRouteShelter>
+                </PrivateRoute>
               }
-            /> */}
+            />
             <Route
               path="/login"
               element={
                 <PublicRoute>
                   <LoginPage />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/login/shelter"
+              element={
+                <PublicRoute shelter={true}>
+                  <LoginPage shelter={true} />
                 </PublicRoute>
               }
             />

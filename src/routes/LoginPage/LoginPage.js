@@ -10,11 +10,12 @@ export default class LoginPage extends Component {
     super(props);
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      shelter: props.shelter
     }
   }
 
-  handleSubmit = async (e) => {
+  handleUserSubmit = async (e) => {
     e.preventDefault();
     await AuthService.loginUser({
       email: this.state.email,
@@ -22,6 +23,22 @@ export default class LoginPage extends Component {
     }).then((token) => {
       this.setToken(token);
       this.context.setLoggedInState(true);
+    })
+      .catch(() => {
+        this.setState({ errorText: 'Invalid email or password' })
+
+      });
+  };
+
+  handleShelterSubmit = async (e) => {
+    e.preventDefault();
+    await AuthService.loginShelter({
+      email: this.state.email,
+      password: this.state.password
+    }).then((token) => {
+      this.setToken(token);
+      this.context.setLoggedInState(true);
+      this.context.setShelterAdminState(true);
     })
       .catch(() => {
         this.setState({ errorText: 'Invalid email or password' })
@@ -43,13 +60,25 @@ export default class LoginPage extends Component {
     }
   }
 
+  renderPageTitle() {
+    if (this.state.shelter) {
+      return (
+        <h2>Shelter Login</h2>
+      )
+    } else {
+      return (
+        <h2>Login</h2>
+      )
+    }
+  }
+
   render() {
     return (
       <>
         <div className='loginWrapper'>
-          <h2>Login</h2>
+          {this.renderPageTitle()}
           {this.renderErrorMessage()}
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={this.state.shelter ? this.handleShelterSubmit : this.handleUserSubmit}>
             <div className='form-group'>
               <label>
                 <p>Email Address</p>
