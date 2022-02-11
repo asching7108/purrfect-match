@@ -72,6 +72,7 @@ export default function PetPage () {
   };
 
   const renderPetPic = () => {
+    // TODO
     return (
       <div className='col-md m-1 border rounded'>
 
@@ -118,6 +119,7 @@ export default function PetPage () {
   };
 
   const renderNewsUpdates = () => {
+    // TODO
     return (
       <div>
         <h2 className='m-10 text-center'>News Updates</h2>
