@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Checkbox, FormGroup, Input, PrimaryButton, SecondaryButton, Select, TextArea } from '../Utils/Utils';
 import PetsService from '../../services/petsService';
+import FilesUploadComponent from '../FileUpload/FileUpload';
 
 export default class PetForm extends Component {
   static defaultProps = {
@@ -269,6 +270,7 @@ export default class PetForm extends Component {
           />
           <label className='form-check-label' htmlFor='houseTrained'>House Trained</label>
         </FormGroup>
+        <FilesUploadComponent />
         <PrimaryButton type='submit'>
           Submit
         </PrimaryButton>

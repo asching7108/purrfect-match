@@ -22,6 +22,20 @@ const PetsService = {
           ? res.json().then(e => Promise.reject(e))
           : res.json()
       );
+  },
+  postImage(image) {
+    return fetch(`${HOSTNAME}/pets/upload`, {
+      method: 'POST',
+      headers: {
+        'enctype': 'multipart/form-data'
+      },
+      body: image
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      );
   }
 };
 
