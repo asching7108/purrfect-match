@@ -45,7 +45,7 @@ export default function PetPage () {
             </tr>
             <tr>
               <td scope='row'>Age:</td>
-              <td>{pet.Age} {pet.Age === 1 ? 'yr' : 'yrs'}</td>
+              <td>{pet.Age} {pet.Age === 1 ? 'year' : 'years'} old</td>
             </tr>
             <tr>
               <td scope='row'>Size:</td>
