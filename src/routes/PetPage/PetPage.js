@@ -35,20 +35,17 @@ export default function PetPage () {
           Hi, I'm {pet.Name}!
           <span> </span>
           {renderFavoriteIcon()}
-          </h2>
+        </h2>
+        <h6>{pet.TypeOfAnimal}, {pet.Breed}</h6>
         <table className='table table-sm table-borderless'>
           <tbody>
-            <tr>
-              <td scope='row'>Breed:</td>
-              <td>{pet.Breed}</td>
-            </tr>
             <tr>
               <td scope='row'>Sex:</td>
               <td>{pet.Sex}</td>
             </tr>
             <tr>
               <td scope='row'>Age:</td>
-              <td>{pet.Age} yrs</td>
+              <td>{pet.Age} {pet.Age === 1 ? 'yr' : 'yrs'}</td>
             </tr>
             <tr>
               <td scope='row'>Size:</td>
@@ -143,8 +140,8 @@ export default function PetPage () {
         {renderPetPic()}
       </div>
       <div className='row'>
-        {renderShelterInfo()}
         {renderPetDescription()}
+        {renderShelterInfo()}
       </div>
       {renderNewsUpdates()}
     </Section>
