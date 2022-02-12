@@ -10,6 +10,7 @@ import FavoritesPage from '../../routes/FavoritesPage/FavoritesPage';
 import HomePage from '../../routes/HomePage/HomePage';
 import LoginPage from '../../routes/LoginPage/LoginPage';
 import PetsPage from '../../routes/PetsPage/PetsPage';
+import SheltersPage from '../../routes/SheltersPege/SheltersPege';
 import NotFoundPage from '../../routes/NotFoundPage';
 import AuthService from '../../services/authService';
 
@@ -31,6 +32,8 @@ class App extends Component {
           <Routes>
             <Route path={'/'} element={<HomePage />} />
             <Route path={'/pets'} element={<PetsPage />} />
+            <Route path={'/shelters/:shelterID'} element={<SheltersPage />} />
+            <Route path={'/shelters/:shelterID/pets/create'} element={<AddPetPage />} />
             <Route
               path="/pets/create"
               element={
