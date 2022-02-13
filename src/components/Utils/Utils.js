@@ -2,14 +2,17 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import {
-  faCog,
-  faHeart
+  faEnvelope,
+  faGlobe,
+  faHeart,
+  faLocationArrow,
+  faPhone
 } from '@fortawesome/free-solid-svg-icons';
 
 // page container
 export function Section({ className, ...props }) {
   return (
-    <section className={['container', className].join(' ')} {...props} />
+    <section className={['container mt-3 mb-3', className].join(' ')} {...props} />
   );
 }
 
@@ -57,8 +60,11 @@ export function SecondaryButton({ className, ...props }) {
 
 export function registerIcons() {
   library.add(
-    faCog,    // settings
-    faHeart,  // favorites
+    faEnvelope,       // email
+    faGlobe,          // website
+    faHeart,          // favorites
+    faPhone,          // phone
+    faLocationArrow,  // address
     far,
     fab
   );
