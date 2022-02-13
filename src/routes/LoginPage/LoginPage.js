@@ -4,6 +4,7 @@ import PasswordChecklist from 'react-password-checklist'
 import './LoginPage.css';
 import AuthService from '../../services/authService';
 import UsersService from '../../services/usersService';
+import SheltersService from '../../services/sheltersService';
 import AuthContext from '../../context/AuthContext';
 
 export default class LoginPage extends Component {
@@ -21,8 +22,11 @@ export default class LoginPage extends Component {
       city: '',
       USState: '',
       zipCode: null,
+      shelterName: '',
+      phoneNumber: null,
+      website: '',
       createAccount: false,
-      shelter: props.shelter
+      shelter: props.shelter,
     }
   }
 
@@ -69,6 +73,28 @@ export default class LoginPage extends Component {
     }
   };
 
+  handleShelterCreateSubmit = async (e) => {
+    e.preventDefault();
+
+    if (this.verifyPassword(this.state.password, this.state.confirmPassword)) {
+      await SheltersService.createShelter({
+        shelterName: this.state.shelterName,
+        emailAddress: this.state.email,
+        phoneNumber: this.state.phoneNumber,
+        password: this.state.password,
+        address: this.getFullAddress(),
+        website: this.state.website,
+      }).then(() => {
+        this.handleShelterLoginSubmit(e)
+      })
+        .catch(() => {
+          this.setState({ errorText: 'Account creation failed' })
+        });
+    } else {
+      this.setState({ errorText: 'Invalid password' });
+    }
+  };
+
   handlePageSwitch = async (e) => {
     e.preventDefault();
     this.state.createAccount
@@ -77,7 +103,11 @@ export default class LoginPage extends Component {
   }
 
   getFullAddress() {
-    if (this.state.address && this.state.city && this.state.USState) {
+    // Add zip code if shelter
+    if (this.state.shelter && this.state.address && this.state.city && this.state.USState && this.state.zipCode) {
+      return this.state.address + ', ' + this.state.city + ', ' + this.state.USState + ' ' + this.state.zipCode;
+      // Ignore zip code if user
+    } else if (this.state.address && this.state.city && this.state.USState) {
       return this.state.address + ', ' + this.state.city + ', ' + this.state.USState;
     } else {
       return null;
@@ -93,7 +123,8 @@ export default class LoginPage extends Component {
 
     return true;
   }
-  handleShelterSubmit = async (e) => {
+
+  handleShelterLoginSubmit = async (e) => {
     e.preventDefault();
     await AuthService.loginShelter({
       email: this.state.email,
@@ -155,7 +186,7 @@ export default class LoginPage extends Component {
           <div className='loginWrapper'>
             {this.renderPageTitle()}
             {this.renderErrorMessage()}
-            <form onSubmit={this.state.shelter ? this.handleShelterSubmit : this.handleUserLoginSubmit}>
+            <form onSubmit={this.state.shelter ? this.handleShelterLoginSubmit : this.handleUserLoginSubmit}>
               <div className='form-group'>
                 <label>
                   <p>Email Address</p>
@@ -182,92 +213,192 @@ export default class LoginPage extends Component {
     );
   }
 
+  renderCreateUserAccountForm() {
+    return (
+      <>
+        <form onSubmit={this.handleUserCreateSubmit}>
+          <div className='form-group'>
+            <label className='mr-1'>
+              <p>First Name</p>
+              <input type='text' className='form-control' required value={this.state.firstName} onChange={e => {
+                this.setState({ firstName: e.target.value });
+              }} />
+            </label>
+            <label>
+              <p>Last Name</p>
+              <input type='text' className='form-control' required value={this.state.lastName} onChange={e => {
+                this.setState({ lastName: e.target.value });
+              }} />
+            </label>
+          </div>
+          <div className='form-group'>
+            <label>
+              <p>Email Address</p>
+              <input type='email' className='form-control' value={this.state.email} onChange={e => {
+                this.setState({ email: e.target.value });
+              }} />
+            </label>
+          </div>
+          <div className='form-group'>
+            <label className='mr-1'>
+              <p>Password</p>
+              <input type='password' className='form-control' required value={this.state.password} onChange={e => {
+                this.setState({ password: e.target.value });
+              }} />
+            </label>
+            <label>
+              <p>Confirm Password</p>
+              <input type='password' className='form-control' required value={this.state.confirmPassword} onChange={e => {
+                this.setState({ confirmPassword: e.target.value });
+              }} />
+            </label>
+            <PasswordChecklist
+              rules={["minLength", "capital", "lowercase", "number", "match"]}
+              minLength={6}
+              value={this.state.password}
+              valueAgain={this.state.confirmPassword}
+              onChange={(isValid) => { }}
+            />
+          </div>
+          <div className='form-group'>
+            <label className='mr-1'>
+              <p>Address <small className='text-muted'>(Optional)</small></p>
+              <input type='text' className='form-control' value={this.state.address} onChange={e => {
+                this.setState({ address: e.target.value });
+              }} />
+            </label>
+            <label className='mr-1'>
+              <p>City <small className='text-muted'>(Optional)</small></p>
+              <input type='text' className='form-control' value={this.state.city} onChange={e => {
+                this.setState({ city: e.target.value });
+              }} />
+            </label>
+            <label>
+              <p>State <small className='text-muted'>(Optional)</small></p>
+              <select className='form-control' value={this.state.USState} onChange={e => {
+                this.setState({ USState: e.target.value });
+              }}>
+                {this.renderUSStates()}
+              </select>
+            </label>
+            <small className='form-text text-muted'>All three of the above inputs inputs must be entered to save full address</small>
+          </div>
+          <div className='form-group'>
+            <label>
+              <p>Zip Code</p>
+              <input type='number' min='0' max='99999' className='form-control' required onChange={e => {
+                this.setState({ zipCode: e.target.value });
+              }} />
+            </label>
+          </div>
+          <button className='btn' type='submit'>Submit</button>
+          <button className='btn btn-link' onClick={this.handlePageSwitch}>Already have an account? Log in here!</button>
+        </form>
+      </>
+    )
+  }
+
+  renderCreateShelterAccountForm() {
+    return (
+      <>
+        <form onSubmit={this.handleShelterCreateSubmit}>
+          <div className='form-group'>
+            <label className='mr-1 input-full'>
+              <p>Shelter Name</p>
+              <input type='text' className='form-control input-full' required value={this.state.shelterName} onChange={e => {
+                this.setState({ shelterName: e.target.value });
+              }} />
+            </label>
+          </div>
+          <div className='form-group'>
+            <label className='mr-1'>
+              <p>Email Address</p>
+              <input type='email' className='form-control' required value={this.state.email} onChange={e => {
+                this.setState({ email: e.target.value });
+              }} />
+            </label>
+            <label>
+              <p>Phone Number</p>
+              <input type='number' className='form-control' max='999999999999' required value={this.state.phoneNumber} onChange={e => {
+                this.setState({ phoneNumber: e.target.value });
+              }} />
+            </label>
+          </div>
+          <div className='form-group'>
+            <label className='mr-1'>
+              <p>Password</p>
+              <input type='password' className='form-control' required value={this.state.password} onChange={e => {
+                this.setState({ password: e.target.value });
+              }} />
+            </label>
+            <label>
+              <p>Confirm Password</p>
+              <input type='password' className='form-control' required value={this.state.confirmPassword} onChange={e => {
+                this.setState({ confirmPassword: e.target.value });
+              }} />
+            </label>
+            <PasswordChecklist
+              rules={["minLength", "capital", "lowercase", "number", "match"]}
+              minLength={6}
+              value={this.state.password}
+              valueAgain={this.state.confirmPassword}
+              onChange={(isValid) => { }}
+            />
+          </div>
+          <div className='form-group'>
+            <label className='mr-1'>
+              <p>Address</p>
+              <input type='text' className='form-control' required value={this.state.address} onChange={e => {
+                this.setState({ address: e.target.value });
+              }} />
+            </label>
+            <label className='mr-1'>
+              <p>City</p>
+              <input type='text' className='form-control' required value={this.state.city} onChange={e => {
+                this.setState({ city: e.target.value });
+              }} />
+            </label>
+            <label>
+              <p>State</p>
+              <select className='form-control' required value={this.state.USState} onChange={e => {
+                this.setState({ USState: e.target.value });
+              }}>
+                {this.renderUSStates()}
+              </select>
+            </label>
+          </div>
+          <div className='form-group'>
+            <label className='mr-1'>
+              <p>Zip Code</p>
+              <input type='number' min='0' max='99999' className='form-control' required onChange={e => {
+                this.setState({ zipCode: e.target.value });
+              }} />
+            </label>
+            <label>
+              <p>Website <small className='text-muted'>(Optional)</small></p>
+              <input type='text' className='form-control' onChange={e => {
+                this.setState({ website: e.target.value });
+              }} />
+            </label>
+          </div>
+          <button className='btn' type='submit'>Submit</button>
+          <button className='btn btn-link' onClick={this.handlePageSwitch}>Already have an account? Log in here!</button>
+        </form>
+      </>
+    )
+  }
+
   renderAccountCreation() {
     return (
       <>
         <Section className='container'>
           <div className='row justify-content-md-center'>
             <div className='col-md-auto'>
-              <h2>Create Account</h2>
+              <h2>Create {this.state.shelter ? 'Shelter ' : ''}Account</h2>
               {this.renderErrorMessage()}
-              <form onSubmit={this.handleUserCreateSubmit}>
-                <div className='form-group'>
-                  <label className='mr-1'>
-                    <p>First Name</p>
-                    <input type='text' className='form-control' required value={this.state.firstName} onChange={e => {
-                      this.setState({ firstName: e.target.value });
-                    }} />
-                  </label>
-                  <label>
-                    <p>Last Name</p>
-                    <input type='text' className='form-control' required value={this.state.lastName} onChange={e => {
-                      this.setState({ lastName: e.target.value });
-                    }} />
-                  </label>
-                </div>
-                <div className='form-group'>
-                  <label>
-                    <p>Email Address</p>
-                    <input type='email' className='form-control' id='email' value={this.state.email} onChange={e => {
-                      this.setState({ email: e.target.value });
-                    }} />
-                  </label>
-                </div>
-                <div className='form-group'>
-                  <label className='mr-1'>
-                    <p>Password</p>
-                    <input type='password' className='form-control' required value={this.state.password} onChange={e => {
-                      this.setState({ password: e.target.value });
-                    }} />
-                  </label>
-                  <label>
-                    <p>Confirm Password</p>
-                    <input type='password' className='form-control' required value={this.state.confirmPassword} onChange={e => {
-                      this.setState({ confirmPassword: e.target.value });
-                    }} />
-                  </label>
-                  <PasswordChecklist
-                    rules={["minLength", "capital", "lowercase", "number", "match"]}
-                    minLength={6}
-                    value={this.state.password}
-                    valueAgain={this.state.confirmPassword}
-                    onChange={(isValid) => { }}
-                  />
-                </div>
-                <div className='form-group'>
-                  <label className='mr-1'>
-                    <p>Address <small className='text-muted'>(Optional)</small></p>
-                    <input type='text' className='form-control' value={this.state.address} onChange={e => {
-                      this.setState({ address: e.target.value });
-                    }} />
-                  </label>
-                  <label className='mr-1'>
-                    <p>City <small className='text-muted'>(Optional)</small></p>
-                    <input type='text' className='form-control' value={this.state.city} onChange={e => {
-                      this.setState({ city: e.target.value });
-                    }} />
-                  </label>
-                  <label>
-                    <p>State <small className='text-muted'>(Optional)</small></p>
-                    <select className='form-control' value={this.state.USState} onChange={e => {
-                      this.setState({ USState: e.target.value });
-                    }}>
-                      {this.renderUSStates()}
-                    </select>
-                  </label>
-                  <small className='form-text text-muted'>All three of the above inputs inputs must be entered to save full address</small>
-                </div>
-                <div className='form-group'>
-                  <label>
-                    <p>Zip Code</p>
-                    <input type='number' min='0' max='99999' className='form-control' required onChange={e => {
-                      this.setState({ zipCode: e.target.value });
-                    }} />
-                  </label>
-                </div>
-                <button className='btn' type='submit'>Submit</button>
-                <button className='btn btn-link' onClick={this.handlePageSwitch}>Already have an account? Log in here!</button>
-              </form>
+              {this.state.shelter
+                ? this.renderCreateShelterAccountForm()
+                : this.renderCreateUserAccountForm()}
             </div>
           </div>
         </Section>
