@@ -10,12 +10,13 @@ const determineRedirect = () => {
 
 export default function PublicRoute({ children, shelter }) {
   if (shelter) {
-    return AuthService.isLoggedIn()
-      ? <Navigate to={determineRedirect()} />
-      : children;
-  } else {
     return (AuthService.isLoggedIn() && AuthService.isShelterAdmin())
       ? <Navigate to={determineRedirect()} />
       : children;
+  } else {
+    return AuthService.isLoggedIn()
+      ? <Navigate to={determineRedirect()} />
+      : children;
+    
   }
 }
