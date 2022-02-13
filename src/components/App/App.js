@@ -3,7 +3,6 @@ import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import Header from '../Header/Header';
 import PrivateRoute from '../Utils/PrivateRoute';
-import PrivateRouteShelter from '../Utils/PrivateRouteShelter';
 import PublicRoute from '../Utils/PublicRoute';
 import AuthContext from '../../context/AuthContext';
 import AddPetPage from '../../routes/AddPetPage/AddPetPage';
@@ -12,6 +11,7 @@ import HomePage from '../../routes/HomePage/HomePage';
 import LoginPage from '../../routes/LoginPage/LoginPage';
 import PetPage from '../../routes/PetPage/PetPage';
 import PetsPage from '../../routes/PetsPage/PetsPage';
+import SheltersPage from '../../routes/SheltersPege/SheltersPege';
 import NotFoundPage from '../../routes/NotFoundPage';
 import AuthService from '../../services/authService';
 
@@ -34,21 +34,29 @@ class App extends Component {
             <Route path={'/'} element={<HomePage />} />
             <Route path={'/pets'} element={<PetsPage />} />
             <Route path={'/pets/:petID'} element={<PetPage />} />
+            <Route path={'/shelters/:shelterID'} element={<SheltersPage />} />
             <Route path={'/shelters/:shelterID/pets/create'} element={<AddPetPage />} />
-            {/* temporary set to public page
             <Route
               path="/pets/create"
               element={
-                <PrivateRouteShelter>
+                <PrivateRoute shelter={true}>
                   <AddPetPage />
-                </PrivateRouteShelter>
+                </PrivateRoute>
               }
-            /> */}
+            />
             <Route
               path="/login"
               element={
                 <PublicRoute>
                   <LoginPage />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/login/shelter"
+              element={
+                <PublicRoute shelter={true}>
+                  <LoginPage shelter={true} />
                 </PublicRoute>
               }
             />

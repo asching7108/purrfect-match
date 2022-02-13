@@ -1,4 +1,4 @@
-const { isExpired } = require('react-jwt');
+const { isExpired, decodeToken } = require('react-jwt');
 const { HOSTNAME } = require('../config/hostname.config');
 
 const AuthService = {
@@ -27,17 +27,39 @@ const AuthService = {
     return true;
   },
   isShelterAdmin() {
-    // TODO
-    return false;
+    const token = AuthService.getToken();
+    if (!token) {
+      return false;
+    }
+    // check JWT expiration
+    const tokenIsExpired = isExpired(token);
+    if (tokenIsExpired) {
+      return false;
+    }
+    // check JWT content
+    const tokenContent = decodeToken(token);
+    if (!tokenContent.hasOwnProperty('shelterID')) {
+      return false
+    }
+    return true;
   },
   async loginUser(credentials) {
-    return fetch(HOSTNAME + '/login', {
+    return fetch(HOSTNAME + '/users/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(credentials)
     }).then((data) => data.json());
+  },
+  async loginShelter(credentials) {
+    return fetch(HOSTNAME + '/shelters/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(credentials)
+    }).then((data) => data.json())
   }
 };
 
