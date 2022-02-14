@@ -15,7 +15,7 @@ const PetsService = {
       headers: {
         'content-type': 'application/json'
       },
-      body: JSON.stringify({ newPet })
+      body: JSON.stringify({ ...newPet })
     })
       .then(res =>
         (!res.ok)
@@ -23,6 +23,7 @@ const PetsService = {
           : res.json()
       );
   },
+
   async postImage(profileImg) {
     const formData = new FormData()
     formData.append('petimage', profileImg)
@@ -33,6 +34,10 @@ const PetsService = {
       },
       body: formData
     })
+  },
+  
+  getPet(petID) {
+    return fetch(`${HOSTNAME}/pets/${petID}`)
       .then(res =>
         (!res.ok)
           ? res.json().then(e => Promise.reject(e))
