@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 import PetCard from '../../components/PetCard/PetCard';
-import { Checkbox, FormGroup, Input, PrimaryButton, Section } from '../../components/Utils/Utils';
+import { Input, Section } from '../../components/Utils/Utils';
 import PetsService from '../../services/petsService';
 
 export default class PetsPage extends Component {
