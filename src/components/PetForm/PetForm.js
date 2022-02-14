@@ -58,7 +58,6 @@ export default class PetForm extends Component {
 
     PetsService.postImage(this.state.profileImg)
       .then(res => {
-        //this.props.setState({picture:"somethin"})
         console.log("Image is saved in server")
         const pet = this.getPet(res.path);
         PetsService.postPet(pet)

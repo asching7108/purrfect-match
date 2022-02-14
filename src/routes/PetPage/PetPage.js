@@ -72,7 +72,7 @@ export default function PetPage () {
     // TODO
     return (
       <div className='col-md m-1 border rounded'>
-
+        <img src={pet.Picture} alt={pet.Name} width="500" height="600"></img>
       </div>
     );
   };

@@ -24,16 +24,20 @@ const PetsService = {
       );
   },
 
-  async postImage(profileImg) {
+  postImage(profileImg) {
     const formData = new FormData()
     formData.append('petimage', profileImg)
-    return await fetch(`${HOSTNAME}/pets/imgupload`, {
+    return fetch(`${HOSTNAME}/pets/imgupload`, {
       method: 'POST',
       headers: {
         'enctype': 'multipart/form-data'
       },
       body: formData
-    })
+    }).then(res =>
+      (!res.ok)
+        ? res.json().then(e => Promise.reject(e))
+        : res.json()
+    );
   },
   
   getPet(petID) {
