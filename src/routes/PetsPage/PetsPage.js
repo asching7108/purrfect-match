@@ -109,7 +109,7 @@ export default class PetsPage extends Component {
     return (
       <form>
         <div className='row mb-2'>
-          <div className='col'>
+          <div className='col-sm m-1'>
             <Select
               placeholder='TYPE OF PET'
               name='typeOfAnimal'
@@ -120,7 +120,7 @@ export default class PetsPage extends Component {
               isMulti
             />
           </div>
-          <div className='col'>
+          <div className='col-sm m-1'>
             <Select
               placeholder='BREED'
               name='breed'
@@ -131,7 +131,7 @@ export default class PetsPage extends Component {
               isMulti
             />
           </div>
-          <div className='col'>
+          <div className='col-sm m-1'>
             <Select
               placeholder='SEX'
               name='sex'
@@ -144,7 +144,7 @@ export default class PetsPage extends Component {
           </div>
         </div>
         <div className='row mb-2'>
-          <div className='col'>
+          <div className='col-sm m-1'>
             <Input
               className=''
               placeholder='FROM AGE'
@@ -155,7 +155,7 @@ export default class PetsPage extends Component {
               onChange={e => this.inputChanged('minAge', e.target.value)}
             />
           </div>
-          <div className='col'>
+          <div className='col-sm m-1'>
             <Input
               className=''
               placeholder='TO AGE'
@@ -166,7 +166,7 @@ export default class PetsPage extends Component {
               onChange={e => this.inputChanged('maxAge', e.target.value)}
             />
           </div>
-          <div className='col'>
+          <div className='col-sm m-1'>
             <Select
               placeholder='MORE'
               name='more'
@@ -184,7 +184,7 @@ export default class PetsPage extends Component {
 
   renderPetRow(rowStart) {
     return (
-      <div key={rowStart} className='row'>
+      <div key={rowStart} className='row mb-2'>
         {this.state.pets.slice(rowStart, rowStart + 3).map(pet => this.renderPet(pet))}
       </div>
     );
@@ -192,7 +192,9 @@ export default class PetsPage extends Component {
 
   renderPet(pet) {
     return (
-      <PetCard key={pet.PetID} pet={pet} />
+      <div className='col-sm-4'>
+        <PetCard key={pet.PetID} pet={pet} page='pets' className='border rounded m-1 p-2' />
+      </div>
     );
   }
   
@@ -213,6 +215,7 @@ export default class PetsPage extends Component {
     return (
       <Section>
         {this.renderFilters()}
+        <br />
         {[...Array(petRows)].map((_, i) => this.renderPetRow(i * 3))}
       </Section>
     );

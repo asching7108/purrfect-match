@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Section } from '../../components/Utils/Utils';
+import { renderFavoriteIcon, Section } from '../../components/Utils/Utils';
 import PetsService from '../../services/petsService';
 import { Link } from 'react-router-dom';
 
@@ -20,21 +20,13 @@ export default function PetPage () {
     }
   });
 
-  const renderFavoriteIcon = () => {
-    // TODO
-    if (true) {
-      return <span className='text-danger'><FontAwesomeIcon icon='heart' /></span>;
-    }
-    return <span className='text-danger'><FontAwesomeIcon icon={['far', 'heart']} /></span>;
-  }
-
   const renderPetBio = () => {
     return (
       <div className='col-md m-1'>
         <h2>
           Hi, I'm {pet.Name}!
           <span> </span>
-          {renderFavoriteIcon()}
+          {renderFavoriteIcon(pet.petID)}
         </h2>
         <h6>{pet.TypeOfAnimal}, {pet.Breed}</h6>
         <table className='table table-sm table-borderless'>

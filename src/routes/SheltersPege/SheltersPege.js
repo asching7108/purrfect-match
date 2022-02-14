@@ -71,7 +71,7 @@ export default class SheltersPege extends Component {
   renderPet(pet, cName) {
     log.debug("Calling renderPet")
     return (
-      <PetCard className={cName} key={pet.PetID} pet={pet} />
+      <PetCard className={`petCard ${cName}`} key={pet.PetID} pet={pet} page='shelter' />
     );
   }
 
