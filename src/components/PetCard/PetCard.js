@@ -19,7 +19,7 @@ export default function PetCard(props, newClass) {
 
   return (
     <div className={classStr} onClick={onClickCard}>
-      <img src={pet.Picture} />
+      <img src={pet.Picture} class="img-fluid" />
       <h3>{pet.Name}</h3>
       <p>{pet.Sex}, {pet.Age} yrs</p>
       <p>

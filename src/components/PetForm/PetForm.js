@@ -53,7 +53,7 @@ export default class PetForm extends Component {
 
   handleAddSubmit = e => {
     e.preventDefault();
-    
+
     console.log("handleAddSubmit...")
 
     PetsService.postImage(this.state.profileImg)
@@ -235,6 +235,10 @@ export default class PetForm extends Component {
             required
           />
         </FormGroup>
+        <FormGroup className='petImage'>
+          <label htmlFor='petImage'>Pet Image</label>
+          <FilesUploadComponent id='picture' onChange={this.onFileChange} required />
+        </FormGroup>
         <FormGroup className='form-check'>
           <Checkbox
             name='goodWithOtherAnimals'
@@ -289,7 +293,6 @@ export default class PetForm extends Component {
           />
           <label className='form-check-label' htmlFor='houseTrained'>House Trained</label>
         </FormGroup>
-        <FilesUploadComponent id='picture' onChange={this.onFileChange} required />
         <PrimaryButton type='submit'>
           Submit
         </PrimaryButton>

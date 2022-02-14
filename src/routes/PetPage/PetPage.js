@@ -69,10 +69,9 @@ export default function PetPage () {
   };
 
   const renderPetPic = () => {
-    // TODO
     return (
       <div className='col-md m-1 border rounded'>
-        <img src={pet.Picture} alt={pet.Name} width="500" height="600"></img>
+        <img class="img-fluid" src={pet.Picture} alt={pet.Name} width="500" height="600"></img>
       </div>
     );
   };

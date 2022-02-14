@@ -4,16 +4,9 @@ import { FormGroup } from '../Utils/Utils';
 export default class FilesUploadComponent extends Component {
   render() {
     return (
-      <div className="container">
-        <div className="row">
-          <FormGroup>
-            <label htmlFor='petImage'>Pet Image</label>
             <div className="form-group">
               <input type="file" name="uploaded_file" onChange={this.props.onChange} />
             </div>
-          </FormGroup>
-        </div>
-      </div>
     )
   }
 }
