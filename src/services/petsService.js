@@ -1,8 +1,16 @@
 const { HOSTNAME } = require('../config/hostname.config');
 
 const PetsService = {
-  getPets() {
-    return fetch(`${HOSTNAME}/pets`)
+  getPets(filters) {
+    const query = [];
+    for (const [key, value] of Object.entries(filters)) {
+      if (Array.isArray(value)) {
+        query.push(`${key}=${value.join(',')}`);
+      } else {
+        query.push(`${key}=${value}`);
+      }
+    }
+    return fetch(`${HOSTNAME}/pets?${query.join('&').replace(' ', '%20')}`)
       .then(res =>
         (!res.ok)
           ? res.json().then(e => Promise.reject(e))
@@ -31,6 +39,14 @@ const PetsService = {
           : res.json()
       );
   },
+  getBreeds() {
+    return fetch(`${HOSTNAME}/breeds`)
+    .then(res =>
+      (!res.ok)
+        ? res.json().then(e => Promise.reject(e))
+        : res.json()
+    );
+  }
 };
 
 export default PetsService;

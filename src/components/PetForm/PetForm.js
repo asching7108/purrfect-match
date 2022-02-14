@@ -222,7 +222,7 @@ export default class PetForm extends Component {
             checked={goodWithOtherAnimals}
             onChange={e => this.checkBoxChanged('goodWithOtherAnimals')}
           />
-          <label className='form-check-label' htmlFor='goodWithOtherAnimals'>Good with Other Animals</label>
+          <label className='form-check-label' htmlFor='goodWithOtherAnimals'>Good With Other Animals</label>
         </FormGroup>
         <FormGroup className='form-check'>
           <Checkbox
@@ -231,7 +231,7 @@ export default class PetForm extends Component {
             checked={goodWithChildren}
             onChange={e => this.checkBoxChanged('goodWithChildren')}
           />
-          <label className='form-check-label' htmlFor='goodWithChildren'>Good with Children</label>
+          <label className='form-check-label' htmlFor='goodWithChildren'>Good With Children</label>
         </FormGroup>
         <FormGroup className='form-check'>
           <Checkbox

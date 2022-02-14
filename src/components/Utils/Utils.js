@@ -36,7 +36,7 @@ export function Checkbox({ className, ...props }) {
 
 export function Select({ className, ...props }) {
   return (
-    <select className={['form-control', className].join(' ')} {...props} />
+    <select className={['form-control form-select', className].join(' ')} {...props} />
   );
 }
 
