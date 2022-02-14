@@ -14,6 +14,9 @@ const AuthService = {
       return userToken.token;
     }
   },
+  setToken(userToken) {
+    localStorage.setItem('token', JSON.stringify(userToken));
+  },
   isLoggedIn() {
     const token = AuthService.getToken();
     if (!token) {
