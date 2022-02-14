@@ -1,6 +1,6 @@
 //reference: https://www.positronx.io/react-file-upload-tutorial-with-node-express-and-multer/
 import React, { Component } from 'react';
-import { FormGroup, PrimaryButton } from '../Utils/Utils';
+import { FormGroup } from '../Utils/Utils';
 export default class FilesUploadComponent extends Component {
   render() {
     return (
@@ -9,7 +9,7 @@ export default class FilesUploadComponent extends Component {
           <FormGroup>
             <label htmlFor='petImage'>Pet Image</label>
             <div className="form-group">
-              <input type="file" name="uploaded_file" />
+              <input type="file" name="uploaded_file" onChange={this.props.onChange} />
             </div>
           </FormGroup>
         </div>

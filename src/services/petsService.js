@@ -23,13 +23,15 @@ const PetsService = {
           : res.json()
       );
   },
-  postImage(image) {
-    return fetch(`${HOSTNAME}/pets/upload`, {
+  async postImage(profileImg) {
+    const formData = new FormData()
+    formData.append('petimage', profileImg)
+    return await fetch(`${HOSTNAME}/pets/imgupload`, {
       method: 'POST',
       headers: {
         'enctype': 'multipart/form-data'
       },
-      body: image
+      body: formData
     })
       .then(res =>
         (!res.ok)
