@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Section, FormGroup } from '../../components/Utils/Utils';
 import './SheltersPege.css';
 import SheltersService from '../../services/sheltersService';
-import PetCard from '../../components/PetCard/PetCard';
+import PetCard from '../../components/PetCard';
 import * as logUtils from '../../components/Utils/Logger';
 var log = logUtils.getLogger()
 

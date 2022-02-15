@@ -2,11 +2,10 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
-import { renderFavoriteIcon } from '../Utils/Utils';
-import './PetCard.css';
+import { renderFavoriteIcon } from './Utils/Utils';
 
 export default function PetCard(props) {
-  const { pet, page, className } = props;
+  const { pet, page } = props;
   const navigate = useNavigate();
 
   const onClickCard = () => {
@@ -30,7 +29,7 @@ export default function PetCard(props) {
   }
 
   return (
-    <div className={className} onClick={onClickCard}>
+    <div className='border rounded m-1 p-2' onClick={onClickCard}>
       <img src={pet.Picture} />
       <h3>
         {pet.Name}

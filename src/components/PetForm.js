@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Checkbox, FormGroup, Input, PrimaryButton, SecondaryButton, Select, TextArea } from '../Utils/Utils';
-import PetsService from '../../services/petsService';
+import { Checkbox, FormGroup, Input, PrimaryButton, SecondaryButton, Select, TextArea } from './Utils/Utils';
+import PetsService from '../services/petsService';
 
 export default class PetForm extends Component {
   static defaultProps = {
