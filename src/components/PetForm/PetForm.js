@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
 import { Checkbox, FormGroup, Input, PrimaryButton, SecondaryButton, Select, TextArea } from '../Utils/Utils';
 import PetsService from '../../services/petsService';
+import FilesUploadComponent from '../FileUpload/FileUpload';
 
 export default class PetForm extends Component {
   static defaultProps = {
     pet: {},
     type: '',
     shelterID: '',
-    onAddPetSuccess: () => {},
-    onClickCancel: () => {}
+    onAddPetSuccess: () => { },
+    onClickCancel: () => { }
   };
 
   constructor(props) {
     super(props);
+    this.onFileChange = this.onFileChange.bind(this);
     this.state = {
       name: '',
       typeOfAnimal: 'Cat',
@@ -20,7 +22,7 @@ export default class PetForm extends Component {
       sex: 'Female',
       age: '',
       size: '',
-      picture: 'test',  // temporary
+      picture: '',
       availability: 'Available',
       description: '',
       goodWithOtherAnimals: false,
@@ -41,13 +43,31 @@ export default class PetForm extends Component {
     this.setState({ [field]: !this.state[field] });
   }
 
+  onFileChange(e) {
+    this.setState({ profileImg: e.target.files[0] })
+  }
+
+  imageStatusChange(status) {
+    this.setState({ imageStatus: status })
+  }
+
   handleAddSubmit = e => {
     e.preventDefault();
-    const pet = this.getPet();
 
-    PetsService.postPet(pet)
+    console.log("handleAddSubmit...")
+
+    PetsService.postImage(this.state.profileImg)
       .then(res => {
-        this.props.onAddPetSuccess(res.insertId);
+        console.log("Image is saved in server")
+        const pet = this.getPet(res.path);
+        PetsService.postPet(pet)
+          .then(res => {
+
+            this.props.onAddPetSuccess(res.insertId);
+          })
+          .catch(res => {
+            this.setState({ error: res.error });
+          });
       })
       .catch(res => {
         this.setState({ error: res.error });
@@ -58,7 +78,7 @@ export default class PetForm extends Component {
     // TODO
   }
 
-  getPet() {
+  getPet(filepath) {
     const {
       name,
       typeOfAnimal,
@@ -83,7 +103,7 @@ export default class PetForm extends Component {
       sex,
       age: age === '' ? null : age,
       size,
-      picture,
+      picture: filepath,
       availability,
       description,
       goodWithOtherAnimals,
@@ -214,6 +234,10 @@ export default class PetForm extends Component {
             onChange={e => this.inputChanged('description', e.target.value)}
             required
           />
+        </FormGroup>
+        <FormGroup className='petImage'>
+          <label htmlFor='petImage'>Pet Image</label>
+          <FilesUploadComponent id='picture' onChange={this.onFileChange} required />
         </FormGroup>
         <FormGroup className='form-check'>
           <Checkbox

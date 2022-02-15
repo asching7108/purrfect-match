@@ -23,6 +23,23 @@ const PetsService = {
           : res.json()
       );
   },
+
+  postImage(profileImg) {
+    const formData = new FormData()
+    formData.append('petimage', profileImg)
+    return fetch(`${HOSTNAME}/pets/imgupload`, {
+      method: 'POST',
+      headers: {
+        'enctype': 'multipart/form-data'
+      },
+      body: formData
+    }).then(res =>
+      (!res.ok)
+        ? res.json().then(e => Promise.reject(e))
+        : res.json()
+    );
+  },
+  
   getPet(petID) {
     return fetch(`${HOSTNAME}/pets/${petID}`)
       .then(res =>
@@ -30,7 +47,7 @@ const PetsService = {
           ? res.json().then(e => Promise.reject(e))
           : res.json()
       );
-  },
+  }
 };
 
 export default PetsService;

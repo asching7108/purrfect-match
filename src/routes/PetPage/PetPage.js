@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Section } from '../../components/Utils/Utils';
 import PetsService from '../../services/petsService';
 import { Link } from 'react-router-dom';
+const { HOSTNAME } = require('../../config/hostname.config');
 
 export default function PetPage () {
   const params = useParams();
@@ -69,10 +70,9 @@ export default function PetPage () {
   };
 
   const renderPetPic = () => {
-    // TODO
     return (
       <div className='col-md m-1 border rounded'>
-
+        <img class="img-fluid" src={HOSTNAME + pet.Picture} alt={pet.Name} width="500" height="600"></img>
       </div>
     );
   };
