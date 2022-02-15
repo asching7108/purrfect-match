@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PetFilters from '../../components/PetFilters';
 import PetList from '../../components/PetList';
 import { Section } from '../../components/Utils/Utils';
 import PetsService from '../../services/petsService';
@@ -8,8 +7,7 @@ export default class PetsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pets: [],
-      petCount: -1, // this is set to prevent the no pets alert before data is loaded
+      pets: null,
       typeOfAnimal: [],
       breed: [],
       sex: '',
@@ -18,21 +16,16 @@ export default class PetsPage extends Component {
       more: []
     };
     this.inputChanged = this.inputChanged.bind(this);
-    this.multiSelectChanged = this.multiSelectChanged.bind(this);
   }
 
   componentDidMount() {
     PetsService.getPets({})
-      .then(pets => this.setState({ pets, petCount: pets.length }))
+      .then(pets => this.setState({ pets }))
       .catch(error => console.log(error));
   }
 
   inputChanged(field, content) {
     this.setState({ [field]: content }, () => this.handleSubmit());
-  }
-
-  multiSelectChanged(field, selectedOptions) {
-    this.setState({ [field]: selectedOptions }, () => this.handleSubmit());
   }
 
   handleSubmit = () => {
@@ -54,7 +47,7 @@ export default class PetsPage extends Component {
       maxAge,
       more
     } = this.state;
-    const filters = {};
+    const filters = { availability: 'Available' };
     if (typeOfAnimal.length > 0)
       filters.typeOfAnimal = Array.from(typeOfAnimal, option => option.value);
     if (breed.length > 0)
@@ -72,7 +65,6 @@ export default class PetsPage extends Component {
   render() {
     const {
       pets,
-      petCount,
       typeOfAnimal,
       breed,
       sex,
@@ -82,7 +74,9 @@ export default class PetsPage extends Component {
     } = this.state;
     return (
       <Section>
-        <PetFilters
+        {pets && <PetList
+          pets={pets}
+          page='pets'
           typeOfAnimal={typeOfAnimal}
           breed={breed}
           sex={sex}
@@ -90,10 +84,7 @@ export default class PetsPage extends Component {
           maxAge={maxAge}
           more={more}
           inputChangeHandler={this.inputChanged}
-          multiSelectChangeHandler={this.multiSelectChanged}
-        />
-        <br />
-        <PetList pets={pets} petCount = {petCount} page='pets' />
+        />}
       </Section>
     );
   }
