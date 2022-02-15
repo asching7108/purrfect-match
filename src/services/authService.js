@@ -48,14 +48,12 @@ const AuthService = {
     const token = AuthService.getToken();
     const tokenContent = decodeToken(token);
     return tokenContent.userID;
-    
   },
   getShelterIDFromToken() {
     if (!AuthService.isShelterAdmin()) return null;
     const token = AuthService.getToken();
     const tokenContent = decodeToken(token);
     return tokenContent.shelterID;
-
   },
   async loginUser(credentials) {
     return fetch(HOSTNAME + '/users/login', {
