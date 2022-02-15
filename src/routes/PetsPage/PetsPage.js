@@ -92,7 +92,7 @@ export default class PetsPage extends Component {
         ? typeOfAnimal.find(type => type.value === breed.TypeOfAnimal) : true
       )
       .map(breed => {
-        return { value: breed.Breed, label: `${breed.TypeOfAnimal} - ${breed.Breed}` }
+        return { value: breed.Breed, label: `${breed.TypeOfAnimal} - ${breed.Breed}` };
       });
     const sexOptions = [
       { value: 'Female', label: 'Female' },
@@ -192,8 +192,8 @@ export default class PetsPage extends Component {
 
   renderPet(pet) {
     return (
-      <div className='col-sm-4'>
-        <PetCard key={pet.PetID} pet={pet} page='pets' className='border rounded m-1 p-2' />
+      <div key={pet.PetID} className='col-sm-4'>
+        <PetCard pet={pet} page='pets' className='border rounded m-1 p-2' />
       </div>
     );
   }
