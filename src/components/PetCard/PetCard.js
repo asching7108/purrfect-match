@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import './PetCard.css';
+const { HOSTNAME } = require('../../config/hostname.config');
 
 export default function PetCard(props, newClass) {
   const { pet } = props;
@@ -19,7 +20,7 @@ export default function PetCard(props, newClass) {
 
   return (
     <div className={classStr} onClick={onClickCard}>
-      <img src={pet.Picture} class="img-fluid" />
+      <img src={HOSTNAME + pet.Picture} class="img-fluid" />
       <h3>{pet.Name}</h3>
       <p>{pet.Sex}, {pet.Age} yrs</p>
       <p>
