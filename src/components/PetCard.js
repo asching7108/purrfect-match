@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { renderFavoriteIcon } from './Utils/Utils';
+const { HOSTNAME } = require('../config/hostname.config');
 
 export default function PetCard(props) {
   const { pet, page } = props;
@@ -30,7 +31,7 @@ export default function PetCard(props) {
 
   return (
     <div className='border rounded m-1 p-2' onClick={onClickCard}>
-      <img src={pet.Picture} />
+      <img src={HOSTNAME + pet.Picture} width="100%"/>
       <h3>
         {pet.Name}
         <span> </span>
