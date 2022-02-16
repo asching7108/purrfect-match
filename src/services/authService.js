@@ -14,6 +14,9 @@ const AuthService = {
       return userToken.token;
     }
   },
+  setToken(userToken) {
+    localStorage.setItem('token', JSON.stringify(userToken));
+  },
   isLoggedIn() {
     const token = AuthService.getToken();
     if (!token) {
@@ -42,6 +45,18 @@ const AuthService = {
       return false
     }
     return true;
+  },
+  getUserIDFromToken() {
+    if (!AuthService.isLoggedIn()) return null;
+    const token = AuthService.getToken();
+    const tokenContent = decodeToken(token);
+    return tokenContent.userID;
+  },
+  getShelterIDFromToken() {
+    if (!AuthService.isShelterAdmin()) return null;
+    const token = AuthService.getToken();
+    const tokenContent = decodeToken(token);
+    return tokenContent.shelterID;
   },
   async loginUser(credentials) {
     return fetch(HOSTNAME + '/users/login', {

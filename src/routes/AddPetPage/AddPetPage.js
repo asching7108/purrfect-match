@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router';
 import PetForm from '../../components/PetForm';
 import { Section } from '../../components/Utils/Utils';
+import AuthService from '../../services/authService';
 
 export default function AddPetPage () {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export default function AddPetPage () {
   }
 
   const handleClickCancel = () => {
-    navigate(`/shelters/${params.shelterID}/pets`);
+    navigate(`/shelters/${AuthService.getShelterIDFromToken()}/pets`);
   }
 
   return (
@@ -20,7 +21,7 @@ export default function AddPetPage () {
       <h2>Add A Pet</h2>
       <PetForm
         type='create'
-        shelterID={params.shelterID}
+        shelterID={AuthService.getShelterIDFromToken()}
         onAddPetSuccess={handleAddPetSuccess}
         onClickCancel={handleClickCancel}
       />
