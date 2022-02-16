@@ -4,6 +4,8 @@ import "cropperjs/dist/cropper.css";
 import "./Cropper.css";
 
 export default function Demo(props) {
+  const { handler } = props;
+
   const [image, setImage] = useState();
   const [cropData, setCropData] = useState("#");
   const [cropper, setCropper] = useState();
@@ -33,6 +35,8 @@ export default function Demo(props) {
     cropper.getCroppedCanvas().toBlob(function (blob) {
       var formData = new FormData();
       formData.append('croppedImage', blob);
+
+      handler()
 
       // Use `jQuery.ajax` method
       // $.ajax('/path/to/upload', {
