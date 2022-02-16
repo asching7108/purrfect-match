@@ -18,7 +18,7 @@ export default class PetForm extends Component {
     this.state = {
       breeds: [],
       name: '',
-      typeOfAnimal: 'Cat',
+      typeOfAnimal: 'Select',
       breed: '',
       sex: 'Female',
       age: '',
@@ -38,7 +38,7 @@ export default class PetForm extends Component {
 
   componentDidMount() {
     PetsService.getBreeds()
-      .then(breeds => this.setState({ breeds }))
+    .then(breeds => this.setState({ breeds }))
       .catch(error => console.log(error));
   }
 
@@ -51,9 +51,6 @@ export default class PetForm extends Component {
   }
 
   onFileChange(e) {
-    console.log("onFileChange in petForm")
-    console.log(e)
-    //console.log(e.target.files[0])
     this.setState({ profileImg: e })
   }
 
@@ -172,13 +169,14 @@ export default class PetForm extends Component {
         </FormGroup>
         <FormGroup>
           <label htmlFor='typeOfAnimal'>Type Of Animal</label>
-          <Select
+          <Select 
             name='typeOfAnimal'
             id='typeOfAnimal'
             value={typeOfAnimal}
             onChange={e => this.inputChanged('typeOfAnimal', e.target.value)}
             required
           >
+            <option value='Select'>Select</option>
             <option value='Cat'>Cat</option>
             <option value='Dog'>Dog</option>
             <option value='Other'>Other</option>
