@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
 import { AuthProvider } from './context/AuthContext';
-import App from './components/App/App';
+import App from './components/App';
 import { registerIcons } from './components/Utils/Utils';
 import './main.css';
 

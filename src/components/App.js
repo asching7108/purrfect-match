@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
-import './App.css';
 import { Routes, Route } from 'react-router-dom';
-import Header from '../Header/Header';
-import PrivateRoute from '../Utils/PrivateRoute';
-import PublicRoute from '../Utils/PublicRoute';
-import AuthContext from '../../context/AuthContext';
-import AddPetPage from '../../routes/AddPetPage/AddPetPage';
-import FavoritesPage from '../../routes/FavoritesPage/FavoritesPage';
-import HomePage from '../../routes/HomePage/HomePage';
-import LoginPage from '../../routes/LoginPage/LoginPage';
-import PetPage from '../../routes/PetPage/PetPage';
-import PetsPage from '../../routes/PetsPage/PetsPage';
-import SheltersPage from '../../routes/SheltersPege/SheltersPege';
-import NotFoundPage from '../../routes/NotFoundPage';
-import AuthService from '../../services/authService';
+import Header from './Header';
+import PrivateRoute from './Utils/PrivateRoute';
+import PublicRoute from './Utils/PublicRoute';
+import AuthContext from '../context/AuthContext';
+import AddPetPage from '../routes/AddPetPage/AddPetPage';
+import FavoritesPage from '../routes/FavoritesPage/FavoritesPage';
+import HomePage from '../routes/HomePage/HomePage';
+import LoginPage from '../routes/LoginPage/LoginPage';
+import PetPage from '../routes/PetPage/PetPage';
+import PetsPage from '../routes/PetsPage/PetsPage';
+import SheltersPage from '../routes/SheltersPege/SheltersPege';
+import NotFoundPage from '../routes/NotFoundPage';
+import AuthService from '../services/authService';
 
 class App extends Component {
   static contextType = AuthContext;

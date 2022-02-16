@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Checkbox, FormGroup, Input, PrimaryButton, SecondaryButton, Select, TextArea } from '../Utils/Utils';
-import PetsService from '../../services/petsService';
-import FilesUploadComponent from '../FileUpload/FileUpload';
-import Demo from '../FileUpload/Cropper';
+import { Checkbox, FormGroup, Input, PrimaryButton, SecondaryButton, Select, TextArea } from './Utils/Utils';
+import PetsService from '../services/petsService';
+import FilesUploadComponent from './FileUpload/FileUpload';
+import Demo from './FileUpload/Cropper';
 
 export default class PetForm extends Component {
   static defaultProps = {
@@ -17,6 +17,7 @@ export default class PetForm extends Component {
     super(props);
     this.onFileChange = this.onFileChange.bind(this);
     this.state = {
+      breeds: [],
       name: '',
       typeOfAnimal: 'Cat',
       breed: '',
@@ -34,6 +35,12 @@ export default class PetForm extends Component {
       houseTrained: false,
       error: null
     };
+  }
+
+  componentDidMount() {
+    PetsService.getBreeds()
+      .then(breeds => this.setState({ breeds }))
+      .catch(error => console.log(error));
   }
 
   inputChanged(field, content) {
@@ -118,6 +125,12 @@ export default class PetForm extends Component {
     };
   }
 
+  renderBreedOptions() {
+    return this.state.breeds
+      .filter(breed => breed.TypeOfAnimal === this.state.typeOfAnimal)
+      .map(breed => <option key={breed.Breed} value={breed.Breed}>{breed.Breed}</option>);
+  }
+
   render() {
     const {
       name,
@@ -171,13 +184,15 @@ export default class PetForm extends Component {
         </FormGroup>
         <FormGroup>
           <label htmlFor='breed'>Breed</label>
-          <Input
+          <Select
             name='breed'
             id='breed'
             value={breed}
             onChange={e => this.inputChanged('breed', e.target.value)}
             required
-          />
+          >
+            {this.renderBreedOptions()}
+          </Select>
         </FormGroup>
         <FormGroup>
           <label htmlFor='sex'>Sex</label>
@@ -249,7 +264,7 @@ export default class PetForm extends Component {
             checked={goodWithOtherAnimals}
             onChange={e => this.checkBoxChanged('goodWithOtherAnimals')}
           />
-          <label className='form-check-label' htmlFor='goodWithOtherAnimals'>Good with Other Animals</label>
+          <label className='form-check-label' htmlFor='goodWithOtherAnimals'>Good With Other Animals</label>
         </FormGroup>
         <FormGroup className='form-check'>
           <Checkbox
@@ -258,7 +273,7 @@ export default class PetForm extends Component {
             checked={goodWithChildren}
             onChange={e => this.checkBoxChanged('goodWithChildren')}
           />
-          <label className='form-check-label' htmlFor='goodWithChildren'>Good with Children</label>
+          <label className='form-check-label' htmlFor='goodWithChildren'>Good With Children</label>
         </FormGroup>
         <FormGroup className='form-check'>
           <Checkbox
