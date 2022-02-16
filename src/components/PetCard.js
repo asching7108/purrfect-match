@@ -31,7 +31,7 @@ export default function PetCard(props) {
 
   return (
     <div className='border rounded m-1 p-2' onClick={onClickCard}>
-      <img src={HOSTNAME + pet.Picture} width="100%"/>
+      <img className="img-fluid rounded" src={HOSTNAME + pet.Picture} width="100%"/>
       <h3>
         {pet.Name}
         <span> </span>

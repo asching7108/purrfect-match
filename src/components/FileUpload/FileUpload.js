@@ -52,10 +52,10 @@ export default function FileUpload(props) {
         <br />
         <Cropper
           style={{ maxHeight: 400, width: "100%" }}
-          initialAspectRatio={16/9}
+          initialAspectRatio={1}
           src={image}
           viewMode={1}
-          aspectRatio={16/9}
+          aspectRatio={1}
           minCropBoxHeight={10}
           minCropBoxWidth={10}
           background={false}
