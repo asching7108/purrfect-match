@@ -19,7 +19,7 @@ export default class PetForm extends Component {
       breeds: [],
       name: '',
       typeOfAnimal: 'Cat',
-      breed: '',
+      breed: 'Domestic ShortHair',
       sex: 'Female',
       age: '',
       size: '',

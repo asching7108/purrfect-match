@@ -1,3 +1,4 @@
+import AuthService from './authService';
 const { HOSTNAME } = require('../config/hostname.config');
 
 const PetsService = {
@@ -18,10 +19,14 @@ const PetsService = {
       );
   },
   postPet(newPet) {
+    console.log('posting pet')
+    const token = AuthService.getToken()
+    console.log(token)
     return fetch(`${HOSTNAME}/pets`, {
       method: 'POST',
       headers: {
-        'content-type': 'application/json'
+        'content-type': 'application/json',
+        'authorization': token
       },
       body: JSON.stringify({ ...newPet })
     })
@@ -47,7 +52,7 @@ const PetsService = {
         : res.json()
     );
   },
-  
+
   getPet(petID) {
     return fetch(`${HOSTNAME}/pets/${petID}`)
       .then(res =>
@@ -56,14 +61,14 @@ const PetsService = {
           : res.json()
       );
   },
-  
+
   getBreeds() {
     return fetch(`${HOSTNAME}/breeds`)
-    .then(res =>
-      (!res.ok)
-        ? res.json().then(e => Promise.reject(e))
-        : res.json()
-    );
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      );
   }
 };
 
