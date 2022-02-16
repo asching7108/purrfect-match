@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PetCard from '../../components/PetCard/PetCard';
+import PetList from '../../components/PetList';
 import { Section } from '../../components/Utils/Utils';
 import PetsService from '../../services/petsService';
 
@@ -7,48 +7,84 @@ export default class PetsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pets: [],
-      petCount: -1  // this is set to prevent the no pets alert before data is loaded
+      pets: null,
+      typeOfAnimal: [],
+      breed: [],
+      sex: '',
+      minAge: '',
+      maxAge: '',
+      more: []
     };
+    this.inputChanged = this.inputChanged.bind(this);
   }
 
   componentDidMount() {
-    PetsService.getPets()
-      .then(pets => this.setState({ pets, petCount: pets.length }))
+    PetsService.getPets({})
+      .then(pets => this.setState({ pets }))
       .catch(error => console.log(error));
   }
 
-  renderPetRow(rowStart) {
-    return (
-      <div key={rowStart} className='row'>
-        {this.state.pets.slice(rowStart, rowStart + 3).map(pet => this.renderPet(pet))}
-      </div>
-    );
+  inputChanged(field, content) {
+    this.setState({ [field]: content }, () => this.handleSubmit());
   }
 
-  renderPet(pet) {
-    return (
-      <PetCard key={pet.PetID} pet={pet} />
-    );
+  handleSubmit = () => {
+    PetsService.getPets(this.getFilters())
+      .then(pets => {
+        this.setState({ pets });
+      })
+      .catch(res => {
+        this.setState({ error: res.error });
+      });
+  }
+
+  getFilters() {
+    const {
+      typeOfAnimal,
+      breed,
+      sex,
+      minAge,
+      maxAge,
+      more
+    } = this.state;
+    const filters = { availability: 'Available' };
+    if (typeOfAnimal.length > 0)
+      filters.typeOfAnimal = Array.from(typeOfAnimal, option => option.value);
+    if (breed.length > 0)
+      filters.breed = Array.from(breed, option => option.value);
+    if (sex)
+      filters.sex = sex.value;
+    if (minAge > 0)
+      filters.minAge = minAge;
+    if (maxAge > 0)
+      filters.maxAge = maxAge;
+    more.forEach(option => filters[option.value] = true);
+    return filters;
   }
   
   render() {
-    const { petCount } = this.state;
-
-    // no pets exist
-    if (petCount === 0) {
-      return (
-        <div className='alert alert-success' role='alert'>
-          More pets will be available soon! Check back later :)
-        </div>
-      );
-    }
-
-    // place pets in a 3-cols grid
-    const petRows = Math.floor(petCount / 3) + (petCount % 3 === 0 ? 0 : 1);
+    const {
+      pets,
+      typeOfAnimal,
+      breed,
+      sex,
+      minAge,
+      maxAge,
+      more
+    } = this.state;
     return (
       <Section>
-        {[...Array(petRows)].map((_, i) => this.renderPetRow(i * 3))}
+        {pets && <PetList
+          pets={pets}
+          page='pets'
+          typeOfAnimal={typeOfAnimal}
+          breed={breed}
+          sex={sex}
+          minAge={minAge}
+          maxAge={maxAge}
+          more={more}
+          inputChangeHandler={this.inputChanged}
+        />}
       </Section>
     );
   }

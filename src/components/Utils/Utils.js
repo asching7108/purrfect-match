@@ -5,9 +5,11 @@ import {
   faEnvelope,
   faGlobe,
   faHeart,
+  faHouseUser,
   faLocationArrow,
   faPhone
 } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // page container
 export function Section({ className, ...props }) {
@@ -36,7 +38,7 @@ export function Checkbox({ className, ...props }) {
 
 export function Select({ className, ...props }) {
   return (
-    <select className={['form-control', className].join(' ')} {...props} />
+    <select className={['form-control form-select', className].join(' ')} {...props} />
   );
 }
 
@@ -58,11 +60,20 @@ export function SecondaryButton({ className, ...props }) {
   );
 }
 
+export function renderFavoriteIcon(petID) {
+  // TODO
+  if (true) {
+    return <span className='text-danger'><FontAwesomeIcon icon='heart' /></span>;
+  }
+  return <span className='text-danger'><FontAwesomeIcon icon={['far', 'heart']} /></span>;
+}
+
 export function registerIcons() {
   library.add(
     faEnvelope,       // email
     faGlobe,          // website
     faHeart,          // favorites
+    faHouseUser,      // shelter
     faPhone,          // phone
     faLocationArrow,  // address
     far,

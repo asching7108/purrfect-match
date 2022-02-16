@@ -10,7 +10,7 @@ const AuthContext = React.createContext({
 export default AuthContext;
 
 export class AuthProvider extends Component {
-  state = { count: 1 }
+  state = {}
 
   setLoggedInState = isLoggedIn => {
     this.setState({ isLoggedIn });

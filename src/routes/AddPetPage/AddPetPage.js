@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router';
-import PetForm from '../../components/PetForm/PetForm';
+import PetForm from '../../components/PetForm';
 import { Section } from '../../components/Utils/Utils';
 import AuthService from '../../services/authService';
 
