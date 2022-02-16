@@ -19,9 +19,7 @@ const PetsService = {
       );
   },
   postPet(newPet) {
-    console.log('posting pet')
     const token = AuthService.getToken()
-    console.log(token)
     return fetch(`${HOSTNAME}/pets`, {
       method: 'POST',
       headers: {
