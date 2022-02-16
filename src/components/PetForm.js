@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Checkbox, FormGroup, Input, PrimaryButton, SecondaryButton, Select, TextArea } from './Utils/Utils';
 import PetsService from '../services/petsService';
 import FilesUploadComponent from './FileUpload/FileUpload';
-import Demo from './FileUpload/Cropper';
 
 export default class PetForm extends Component {
   static defaultProps = {
@@ -53,7 +52,9 @@ export default class PetForm extends Component {
 
   onFileChange(e) {
     console.log("onFileChange in petForm")
-    this.setState({ profileImg: e.target.files[0] })
+    console.log(e)
+    //console.log(e.target.files[0])
+    this.setState({ profileImg: e })
   }
 
   imageStatusChange(status) {
@@ -69,6 +70,7 @@ export default class PetForm extends Component {
       .then(res => {
         console.log("Image is saved in server")
         const pet = this.getPet(res.path);
+        console.log(res.path)
         PetsService.postPet(pet)
           .then(res => {
 
@@ -254,8 +256,7 @@ export default class PetForm extends Component {
         </FormGroup>
         <FormGroup className='petImage'>
           <label htmlFor='petImage'>Pet Image</label>
-          <Demo  id='picture' handler={this.onFileChange} required />
-          {/* <FilesUploadComponent id='picture' onChange={this.onFileChange} required /> */}
+          <FilesUploadComponent  id='picture' handler={this.onFileChange} required />
         </FormGroup>
         <FormGroup className='form-check'>
           <Checkbox
