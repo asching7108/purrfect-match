@@ -5,7 +5,7 @@ export default class FilesUploadComponent extends Component {
   render() {
     return (
             <div className="form-group">
-              <input type="file" name="uploaded_file" onChange={this.props.onChange} required />
+              <input type="file" name="uploaded_file" onChange={this.props.onChange} />
             </div>
     )
   }
