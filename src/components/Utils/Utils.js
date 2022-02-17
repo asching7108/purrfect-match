@@ -10,6 +10,7 @@ import {
   faPhone
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import AuthService from '../../services/authService';
 
 // page container
 export function Section({ className, ...props }) {
@@ -58,6 +59,10 @@ export function SecondaryButton({ className, ...props }) {
   return (
     <button className={['btn btn-outline-primary btn-block', className].join(' ')} {...props} />
   );
+}
+
+export function isShelterAdmin(shelterID) {
+  return AuthService.getShelterIDFromToken() == shelterID;
 }
 
 export function renderFavoriteIcon(petID) {

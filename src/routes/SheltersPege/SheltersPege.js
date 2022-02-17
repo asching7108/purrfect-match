@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Section } from '../../components/Utils/Utils';
+import { isShelterAdmin, Section } from '../../components/Utils/Utils';
 import './SheltersPege.css';
 import SheltersService from '../../services/sheltersService';
 import * as logUtils from '../../components/Utils/Logger';
 import PetList from '../../components/PetList';
 import PetsService from '../../services/petsService';
+import { Link } from 'react-router-dom';
 var log = logUtils.getLogger()
 
 export default class SheltersPege extends Component {
@@ -49,7 +50,7 @@ export default class SheltersPege extends Component {
     PetsService.getPets(this.getFilters())
       .then(pets => this.setState({ pets: pets }))
       .catch(error => console.log(error));
-}
+  }
 
   getFilters() {
     const {
@@ -104,8 +105,6 @@ export default class SheltersPege extends Component {
             </tbody>
           </table>
         </div>
-        <hr />
-        <h2>Pets at {shelter[0].ShelterName}</h2>
       </div>
     );
   }
@@ -113,6 +112,8 @@ export default class SheltersPege extends Component {
   renderPetList() {
     log.debug("Calling renderPetList")
     const {
+      shelterID,
+      shelter,
       pets,
       typeOfAnimal,
       breed,
@@ -123,6 +124,14 @@ export default class SheltersPege extends Component {
     } = this.state;
     return (
       <>
+        <div className='d-flex justify-content-between align-items-center flex-wrap'>
+          <h2>Pets at {shelter[0].ShelterName}</h2>
+          {isShelterAdmin(shelterID) &&
+            <Link to={`/shelters/${shelterID}/pets/create`} className='btn btn-primary'>
+              Add A Pet
+            </Link>
+          }
+        </div>
         {pets && <PetList
           pets={pets}
           page='shelter'
@@ -144,14 +153,14 @@ export default class SheltersPege extends Component {
     return (
       <div>
         <Section>
-          {shelter == null ? null : this.renderShelter(shelter)}
+          {shelter && this.renderShelter(shelter)}
         </Section>
+        <hr />
         <Section>
-          {this.renderPetList()}
+          {shelter && this.renderPetList()}
         </Section>
       </div>
 
     );
   }
 }
-
