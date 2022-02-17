@@ -50,7 +50,7 @@ export default class PetForm extends Component {
     const filteredBreeds = this.state.breeds
       .filter(breed => breed.TypeOfAnimal === this.state.typeOfAnimal);
     if (filteredBreeds.length > 0 && this.state.breed !== filteredBreeds[0].Breed) {
-      this.setState({ breed: filteredBreeds[0].Breed});
+      this.setState({ breed: filteredBreeds[0].Breed });
     }
   }
 
