@@ -39,7 +39,7 @@ export default class PetForm extends Component {
 
   componentDidMount() {
     PetsService.getBreeds()
-    .then(breeds => this.setState({ breeds }))
+      .then(breeds => this.setState({ breeds }))
       .catch(error => console.log(error));
   }
 
@@ -63,26 +63,26 @@ export default class PetForm extends Component {
     e.preventDefault();
 
     console.log("handleAddSubmit...")
-    if(!this.state.imageStatus){
+    if (!this.state.imageStatus) {
       this.setState({ error: "Please save cropped image!" });
-    }else{
+    } else {
       PetsService.postImage(this.state.profileImg)
-      .then(res => {
-        console.log("Image is saved in server")
-        const pet = this.getPet(res.path);
+        .then(res => {
+          console.log("Image is saved in server")
+          const pet = this.getPet(res.path);
 
-        PetsService.postPet(pet)
-          .then(res => {
+          PetsService.postPet(pet)
+            .then(res => {
 
-            this.props.onAddPetSuccess(res.insertId);
-          })
-          .catch(res => {
-            this.setState({ error: res.error });
-          });
-      })
-      .catch(res => {
-        this.setState({ error: res.error });
-      });
+              this.props.onAddPetSuccess(res.insertId);
+            })
+            .catch(res => {
+              this.setState({ error: res.error });
+            });
+        })
+        .catch(res => {
+          this.setState({ error: res.error });
+        });
     }
   }
 
@@ -173,7 +173,7 @@ export default class PetForm extends Component {
         </FormGroup>
         <FormGroup>
           <label htmlFor='typeOfAnimal'>Type Of Animal</label>
-          <Select 
+          <Select
             name='typeOfAnimal'
             id='typeOfAnimal'
             value={typeOfAnimal}
@@ -258,7 +258,7 @@ export default class PetForm extends Component {
         </FormGroup>
         <FormGroup className='petImage'>
           <label htmlFor='petImage'>Pet Image</label>
-          <FilesUploadComponent  id='picture' handler={this.onFileChange} imgHandler={this.imageStatusChange }required />
+          <FilesUploadComponent id='picture' handler={this.onFileChange} imgHandler={this.imageStatusChange} required />
         </FormGroup>
         <FormGroup className='form-check'>
           <Checkbox
