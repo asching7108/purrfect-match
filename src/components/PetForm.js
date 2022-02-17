@@ -15,6 +15,7 @@ export default class PetForm extends Component {
   constructor(props) {
     super(props);
     this.onFileChange = this.onFileChange.bind(this);
+    this.imageStatusChange = this.imageStatusChange.bind(this);
     this.state = {
       breeds: [],
       name: '',
@@ -62,12 +63,14 @@ export default class PetForm extends Component {
     e.preventDefault();
 
     console.log("handleAddSubmit...")
-
-    PetsService.postImage(this.state.profileImg)
+    if(!this.state.imageStatus){
+      this.setState({ error: "Please save cropped image!" });
+    }else{
+      PetsService.postImage(this.state.profileImg)
       .then(res => {
         console.log("Image is saved in server")
         const pet = this.getPet(res.path);
-        console.log(res.path)
+
         PetsService.postPet(pet)
           .then(res => {
 
@@ -80,6 +83,7 @@ export default class PetForm extends Component {
       .catch(res => {
         this.setState({ error: res.error });
       });
+    }
   }
 
   handleUpdateSubmit = e => {
@@ -254,7 +258,7 @@ export default class PetForm extends Component {
         </FormGroup>
         <FormGroup className='petImage'>
           <label htmlFor='petImage'>Pet Image</label>
-          <FilesUploadComponent  id='picture' handler={this.onFileChange} required />
+          <FilesUploadComponent  id='picture' handler={this.onFileChange} imgHandler={this.imageStatusChange }required />
         </FormGroup>
         <FormGroup className='form-check'>
           <Checkbox

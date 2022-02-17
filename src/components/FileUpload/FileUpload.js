@@ -4,7 +4,7 @@ import "cropperjs/dist/cropper.css";
 import "./FileUpload.css";
 
 export default function FileUpload(props) {
-  const { handler } = props;
+  const { handler, imgHandler } = props;
 
   const [image, setImage] = useState();
   const [saved, setSaved ] = useState("");
@@ -28,6 +28,7 @@ export default function FileUpload(props) {
 
     setSaved("")
     setCropImage("")
+    imgHandler(false)
   };
 
   const getCropData = () => {
@@ -41,14 +42,14 @@ export default function FileUpload(props) {
       formData.append('croppedImage', blob);
       handler(blob)
     });
-
+    imgHandler(true)
     setSaved("Saved!")
   };
 
   return (
     <div>
       <div style={{ width: "100%" }}>
-        <input type="file" accept="image/png, image/jpg, image/jpeg" onChange={onChange} /> 
+        <input type="file" accept="image/png, image/jpg, image/jpeg" onChange={onChange} required /> 
         <br />
         <Cropper
           style={{ maxHeight: 400, width: "100%" }}
