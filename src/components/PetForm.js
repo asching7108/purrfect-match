@@ -217,6 +217,7 @@ export default class PetForm extends Component {
             name='age'
             id='age'
             type='number'
+            min='1'
             value={age}
             onChange={e => this.inputChanged('age', e.target.value)}
           />
