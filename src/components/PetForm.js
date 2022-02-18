@@ -148,7 +148,6 @@ export default class PetForm extends Component {
         this.props.onSubmitSuccess();
       })
       .catch(res => {
-        console.log(res);
         this.setState({ error: res.error });
       });
   }

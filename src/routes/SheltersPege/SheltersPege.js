@@ -127,7 +127,7 @@ export default class SheltersPege extends Component {
         <div className='d-flex justify-content-between align-items-center flex-wrap'>
           <h2>Pets at {shelter[0].ShelterName}</h2>
           {isShelterAdmin(shelterID) &&
-            <Link to={`/shelters/${shelterID}/pets/create`} className='btn btn-primary'>
+            <Link to={`/shelters/${shelterID}/pets/create`} className='btn btn-primary m-1'>
               Add A Pet
             </Link>
           }
