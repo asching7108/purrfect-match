@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import PetList from '../../components/PetList';
-import { Section } from '../../components/Utils/Utils';
-import PetsService from '../../services/petsService';
+import PetList from '../components/PetList';
+import { Section } from '../components/Utils/Utils';
+import PetsService from '../services/petsService';
 
 export default class PetsPage extends Component {
   constructor(props) {

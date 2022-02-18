@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { renderFavoriteIcon, Section } from '../../components/Utils/Utils';
-import PetsService from '../../services/petsService';
+import { isShelterAdmin, renderFavoriteIcon, Section } from '../components/Utils/Utils';
+import PetsService from '../services/petsService';
 import { Link } from 'react-router-dom';
-const { HOSTNAME } = require('../../config/hostname.config');
+const { HOSTNAME } = require('../config/hostname.config');
 
 export default function PetPage () {
+  const navigate = useNavigate();
   const params = useParams();
   const [pet, setPet] = useState(null);
+  const [petNews, setPetNews] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -19,16 +21,50 @@ export default function PetPage () {
           setError(e.error);
         });
     }
+    if (!petNews) {
+      PetsService.getPetNews(params.petID)
+        .then(petNews => setPetNews(petNews))
+        .catch(e => {
+          setError(e.error);
+        });
+    }
   });
+
+  const onClickDelete = () => {
+    if (window.confirm('Are you sure you want to delete this pet?')) {
+      PetsService.deletePet(pet.PetID)
+      .then(() => {
+        navigate(`/shelters/${pet.ShelterID}`);
+      })
+      .catch(res => {
+        window.alert(res.error);
+      });
+
+    }
+  };
 
   const renderPetBio = () => {
     return (
       <div className='col-md m-1'>
-        <h2>
-          Hi, I'm {pet.Name}!
-          <span> </span>
-          {renderFavoriteIcon(pet.petID)}
-        </h2>
+        <div className='d-flex justify-content-between align-items-center flex-wrap'>
+          <div>
+            <h2>
+              Hi, I'm {pet.Name}!
+              <span> </span>
+              {renderFavoriteIcon(pet.PetID)}
+            </h2>
+          </div>
+          {isShelterAdmin(pet.ShelterID) &&
+            <div>
+              <Link className='btn p-2 text-primary' to={`/shelters/${pet.ShelterID}/pets/${pet.PetID}/edit`}>
+                <FontAwesomeIcon icon='edit' />
+              </Link>
+              <span role='button' className='btn p-2 text-primary' onClick={onClickDelete}>
+                <FontAwesomeIcon icon='trash-alt' />
+              </span>
+            </div>
+          }
+        </div>
         <h6>{pet.TypeOfAnimal}, {pet.Breed}</h6>
         <table className='table table-sm table-borderless'>
           <tbody>
@@ -107,11 +143,31 @@ export default function PetPage () {
     );
   };
 
+  const renderNewsUpdateItems = () => {
+    if (petNews.length === 0) {
+      return (
+        <div className='row'>
+          <div className='col alert alert-success text-center' role='alert'>
+            News coming soon!
+          </div>
+        </div>
+      );
+    }
+    return petNews.map(news =>
+      <div key={news.NewsItemID}  className='row border rounded mb-2'>
+        <div className='col'>
+          <p>{news.NewsItem}</p>
+          <p className='text-right small'>{new Date(news.DatePosted).toLocaleString()}</p>
+        </div>
+      </div>
+    );
+  };
+
   const renderNewsUpdates = () => {
-    // TODO
     return (
       <div>
         <h2 className='m-10 text-center'>News Updates</h2>
+        {petNews && renderNewsUpdateItems()}
       </div>
     );
   };

@@ -8,7 +8,7 @@ export default class PetForm extends Component {
     pet: {},
     type: '',
     shelterID: '',
-    onAddPetSuccess: () => { },
+    onSubmitSuccess: () => { },
     onClickCancel: () => { }
   };
 
@@ -17,6 +17,7 @@ export default class PetForm extends Component {
     this.onFileChange = this.onFileChange.bind(this);
     this.imageStatusChange = this.imageStatusChange.bind(this);
     this.state = {
+      petID: null,
       breeds: [],
       name: '',
       typeOfAnimal: 'Select',
@@ -24,7 +25,7 @@ export default class PetForm extends Component {
       sex: 'Female',
       age: '',
       size: '',
-      picture: '',
+      profileImg: '',
       availability: 'Available',
       description: '',
       goodWithOtherAnimals: false,
@@ -39,12 +40,50 @@ export default class PetForm extends Component {
 
   componentDidMount() {
     PetsService.getBreeds()
-      .then(breeds => this.setState({ breeds }))
+      .then(breeds => this.setState({ breeds, breed: breeds[0].Breed }))
       .catch(error => console.log(error));
+    this.updateState();
   }
 
-  inputChanged(field, content) {
-    this.setState({ [field]: content });
+  componentDidUpdate(prevProps) {
+    if (Object.keys(this.props.pet).length > Object.keys(prevProps.pet).length) {
+      this.updateState();
+    }
+  }
+
+  updateState() {
+    const { pet } = this.props;
+    if (Object.keys(pet).length !== 0) {
+      this.setState({
+        petID: pet.PetID,
+        name: pet.Name,
+        typeOfAnimal: pet.TypeOfAnimal,
+        breed: pet.Breed,
+        sex: pet.Sex,
+        age: pet.Age,
+        size: pet.Size,
+        availability: pet.Availability,
+        description: pet.Description,
+        goodWithOtherAnimals: pet.GoodWithOtherAnimals,
+        goodWithChildren: pet.GoodWithChildren,
+        mustBeLeashed: pet.MustBeLeashed,
+        neutered: pet.Neutered,
+        vaccinated: pet.Vaccinated,
+        houseTrained: pet.HouseTrained
+      });
+    }
+  }
+
+  inputChanged(field, content, callback) {
+    this.setState({ [field]: content }, callback);
+  }
+
+  updateSelectedBreed() {
+    const filteredBreeds = this.state.breeds
+      .filter(breed => breed.TypeOfAnimal === this.state.typeOfAnimal);
+    if (filteredBreeds.length > 0 && this.state.breed !== filteredBreeds[0].Breed) {
+      this.setState({ breed: filteredBreeds[0].Breed });
+    }
   }
 
   checkBoxChanged(field) {
@@ -66,15 +105,14 @@ export default class PetForm extends Component {
     if (!this.state.imageStatus) {
       this.setState({ error: "Please save cropped image!" });
     } else {
+      const pet = this.getPet();
       PetsService.postImage(this.state.profileImg)
         .then(res => {
           console.log("Image is saved in server")
-          const pet = this.getPet(res.path);
-
+          pet.picture = res.path;
           PetsService.postPet(pet)
             .then(res => {
-
-              this.props.onAddPetSuccess(res.insertId);
+              this.props.onSubmitSuccess(res.insertId);
             })
             .catch(res => {
               this.setState({ error: res.error });
@@ -87,10 +125,38 @@ export default class PetForm extends Component {
   }
 
   handleUpdateSubmit = e => {
-    // TODO
+    e.preventDefault();
+
+    console.log("handleEditSubmit...")
+
+    const { profileImg } = this.state;
+    const pet = this.getPet();
+    if (profileImg) {
+      PetsService.postImage(this.state.profileImg)
+        .then(res => {
+          console.log("Image is saved in server")
+          pet.picture = res.path;
+          this.updatePet(pet);
+        })
+        .catch(res => {
+          this.setState({ error: res.error });
+        });
+    } else {
+      this.updatePet(pet);
+    }
   }
 
-  getPet(filepath) {
+  updatePet = pet => {
+    PetsService.patchPet(this.state.petID, pet)
+      .then(() => {
+        this.props.onSubmitSuccess();
+      })
+      .catch(res => {
+        this.setState({ error: res.error });
+      });
+  }
+
+  getPet() {
     const {
       name,
       typeOfAnimal,
@@ -98,7 +164,6 @@ export default class PetForm extends Component {
       sex,
       age,
       size,
-      picture,
       availability,
       description,
       goodWithOtherAnimals,
@@ -115,7 +180,6 @@ export default class PetForm extends Component {
       sex,
       age: age === '' ? null : age,
       size,
-      picture: filepath,
       availability,
       description,
       goodWithOtherAnimals,
@@ -136,13 +200,13 @@ export default class PetForm extends Component {
 
   render() {
     const {
+      type,
       name,
       typeOfAnimal,
       breed,
       sex,
       age,
       size,
-      picture,
       availability,
       description,
       goodWithOtherAnimals,
@@ -177,7 +241,7 @@ export default class PetForm extends Component {
             name='typeOfAnimal'
             id='typeOfAnimal'
             value={typeOfAnimal}
-            onChange={e => this.inputChanged('typeOfAnimal', e.target.value)}
+            onChange={e => this.inputChanged('typeOfAnimal', e.target.value, this.updateSelectedBreed)}
             required
           >
             <option value='Select'>Select</option>
@@ -217,6 +281,7 @@ export default class PetForm extends Component {
             name='age'
             id='age'
             type='number'
+            min='1'
             value={age}
             onChange={e => this.inputChanged('age', e.target.value)}
           />
@@ -258,7 +323,10 @@ export default class PetForm extends Component {
         </FormGroup>
         <FormGroup className='petImage'>
           <label htmlFor='petImage'>Pet Image</label>
-          <FilesUploadComponent id='picture' handler={this.onFileChange} imgHandler={this.imageStatusChange} required />
+          {type === 'create'
+            ? <FilesUploadComponent id='picture' handler={this.onFileChange} imgHandler={this.imageStatusChange} required />
+            : <FilesUploadComponent id='picture' handler={this.onFileChange} imgHandler={this.imageStatusChange} />
+          }
         </FormGroup>
         <FormGroup className='form-check'>
           <Checkbox

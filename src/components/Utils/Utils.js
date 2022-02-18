@@ -2,14 +2,17 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import {
+  faEdit,
   faEnvelope,
   faGlobe,
   faHeart,
   faHouseUser,
   faLocationArrow,
-  faPhone
+  faPhone,
+  faTrashAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import AuthService from '../../services/authService';
 
 // page container
 export function Section({ className, ...props }) {
@@ -60,6 +63,10 @@ export function SecondaryButton({ className, ...props }) {
   );
 }
 
+export function isShelterAdmin(shelterID) {
+  return AuthService.getShelterIDFromToken() == shelterID;
+}
+
 export function renderFavoriteIcon(petID) {
   // TODO
   if (true) {
@@ -70,12 +77,14 @@ export function renderFavoriteIcon(petID) {
 
 export function registerIcons() {
   library.add(
+    faEdit,
     faEnvelope,       // email
     faGlobe,          // website
     faHeart,          // favorites
     faHouseUser,      // shelter
     faPhone,          // phone
     faLocationArrow,  // address
+    faTrashAlt,
     far,
     fab
   );
