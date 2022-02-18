@@ -19,15 +19,14 @@ const PetsService = {
       );
   },
 
-  postPet(newPet) {
-    const token = AuthService.getToken()
+  postPet(pet) {
     return fetch(`${HOSTNAME}/pets`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        'authorization': token
+        'authorization': AuthService.getToken()
       },
-      body: JSON.stringify({ ...newPet })
+      body: JSON.stringify({ ...pet })
     })
       .then(res =>
         (!res.ok)
@@ -36,13 +35,42 @@ const PetsService = {
       );
   },
 
+  patchPet(petID, pet) {
+    return fetch(`${HOSTNAME}/pets/${petID}`, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': AuthService.getToken()
+      },
+      body: JSON.stringify({ ...pet })
+    })
+      .then(res => {
+        if (!res.ok) {
+          return res.json().then(e => Promise.reject(e));
+        }
+      });
+  },
+
+  deletePet(petID) {
+    return fetch(`${HOSTNAME}/pets/${petID}`, {
+      method: 'DELETE',
+      headers: { 'authorization': AuthService.getToken() }
+    })
+      .then(res => {
+        if (!res.ok) {
+          return res.json().then(e => Promise.reject(e));
+        }
+      });
+  },
+
   postImage(profileImg) {
     const formData = new FormData()
     formData.append('petimage', profileImg)
     return fetch(`${HOSTNAME}/pets/imgupload`, {
       method: 'POST',
       headers: {
-        'enctype': 'multipart/form-data'
+        'enctype': 'multipart/form-data',
+        'authorization': AuthService.getToken()
       },
       body: formData
     }).then(res =>
@@ -56,7 +84,8 @@ const PetsService = {
     return fetch(`${HOSTNAME}/pets/${petID}/news`, {
       method: 'POST',
       headers: {
-        'content-type': 'application/json'
+        'content-type': 'application/json',
+        'authorization': AuthService.getToken()
       },
       body: JSON.stringify({ newsItem })
     })

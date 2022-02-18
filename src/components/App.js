@@ -4,12 +4,13 @@ import Header from './Header';
 import PrivateRoute from './Utils/PrivateRoute';
 import PublicRoute from './Utils/PublicRoute';
 import AuthContext from '../context/AuthContext';
-import AddPetPage from '../routes/AddPetPage/AddPetPage';
+import AddPetPage from '../routes/AddPetPage';
+import EditPetPage from '../routes/EditPetPage';
 import FavoritesPage from '../routes/FavoritesPage/FavoritesPage';
 import HomePage from '../routes/HomePage/HomePage';
 import LoginPage from '../routes/LoginPage/LoginPage';
-import PetPage from '../routes/PetPage/PetPage';
-import PetsPage from '../routes/PetsPage/PetsPage';
+import PetPage from '../routes/PetPage';
+import PetsPage from '../routes/PetsPage';
 import SheltersPage from '../routes/SheltersPege/SheltersPege';
 import NotFoundPage from '../routes/NotFoundPage';
 import AuthService from '../services/authService';
@@ -34,12 +35,19 @@ class App extends Component {
             <Route path={'/pets'} element={<PetsPage />} />
             <Route path={'/pets/:petID'} element={<PetPage />} />
             <Route path={'/shelters/:shelterID'} element={<SheltersPage />} />
-            <Route path={'/shelters/:shelterID/pets/create'} element={<AddPetPage />} />
             <Route
-              path="/pets/create"
+              path={'/shelters/:shelterID/pets/create'}
               element={
                 <PrivateRoute shelter={true}>
                   <AddPetPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path={'/shelters/:shelterID/pets/:petID/edit'}
+              element={
+                <PrivateRoute shelter={true}>
+                  <EditPetPage />
                 </PrivateRoute>
               }
             />
