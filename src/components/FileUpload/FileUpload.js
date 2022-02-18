@@ -4,12 +4,10 @@ import "cropperjs/dist/cropper.css";
 import "./FileUpload.css";
 
 export default function FileUpload(props) {
-  const { handler, imgHandler } = props;
-
+  const { handler, imgHandler, req } = props;
   const [image, setImage] = useState();
   const [saved, setSaved ] = useState("");
   const [showCropImage, setCropImage ] = useState("hide");
-  const [cropData, setCropData] = useState("#");
   const [cropper, setCropper] = useState();
   const onChange = (e) => {
     e.preventDefault();
@@ -33,10 +31,6 @@ export default function FileUpload(props) {
 
   const getCropData = () => {
 
-    if (typeof cropper !== "undefined") {
-      setCropData(cropper.getCroppedCanvas().toDataURL("image/jpeg"));
-    }
-
     cropper.getCroppedCanvas().toBlob(function (blob) {
       var formData = new FormData();
       formData.append('croppedImage', blob);
@@ -49,7 +43,11 @@ export default function FileUpload(props) {
   return (
     <div>
       <div style={{ width: "100%" }}>
-        <input type="file" accept="image/png, image/jpg, image/jpeg" onChange={onChange} required /> 
+      {req === true
+        ? <input type="file" accept="image/png, image/jpg, image/jpeg" onChange={onChange} required/> 
+        : <input type="file" accept="image/png, image/jpg, image/jpeg" onChange={onChange} /> 
+      }
+        
         <br />
         <Cropper
           style={{ maxHeight: 400, width: "100%" }}
