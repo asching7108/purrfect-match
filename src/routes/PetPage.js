@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { renderFavoriteIcon, Section } from '../../components/Utils/Utils';
-import PetsService from '../../services/petsService';
+import { isShelterAdmin, renderFavoriteIcon, Section } from '../components/Utils/Utils';
+import PetsService from '../services/petsService';
 import { Link } from 'react-router-dom';
-const { HOSTNAME } = require('../../config/hostname.config');
+const { HOSTNAME } = require('../config/hostname.config');
 
 export default function PetPage () {
+  const navigate = useNavigate();
   const params = useParams();
   const [pet, setPet] = useState(null);
   const [petNews, setPetNews] = useState(null);
@@ -29,14 +30,41 @@ export default function PetPage () {
     }
   });
 
+  const onClickDelete = () => {
+    if (window.confirm('Are you sure you want to delete this pet?')) {
+      PetsService.deletePet(pet.PetID)
+      .then(() => {
+        navigate(`/shelters/${pet.ShelterID}`);
+      })
+      .catch(res => {
+        window.alert(res.error);
+      });
+
+    }
+  };
+
   const renderPetBio = () => {
     return (
       <div className='col-md m-1'>
-        <h2>
-          Hi, I'm {pet.Name}!
-          <span> </span>
-          {renderFavoriteIcon(pet.petID)}
-        </h2>
+        <div className='d-flex justify-content-between align-items-center flex-wrap'>
+          <div>
+            <h2>
+              Hi, I'm {pet.Name}!
+              <span> </span>
+              {renderFavoriteIcon(pet.PetID)}
+            </h2>
+          </div>
+          {isShelterAdmin(pet.ShelterID) &&
+            <div>
+              <Link className='btn p-2 text-primary' to={`/shelters/${pet.ShelterID}/pets/${pet.PetID}/edit`}>
+                <FontAwesomeIcon icon='edit' />
+              </Link>
+              <span role='button' className='btn p-2 text-primary' onClick={onClickDelete}>
+                <FontAwesomeIcon icon='trash-alt' />
+              </span>
+            </div>
+          }
+        </div>
         <h6>{pet.TypeOfAnimal}, {pet.Breed}</h6>
         <table className='table table-sm table-borderless'>
           <tbody>

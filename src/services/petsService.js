@@ -18,19 +18,43 @@ const PetsService = {
       );
   },
 
-  postPet(newPet) {
+  postPet(pet) {
     return fetch(`${HOSTNAME}/pets`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
       },
-      body: JSON.stringify({ ...newPet })
+      body: JSON.stringify({ ...pet })
     })
       .then(res =>
         (!res.ok)
           ? res.json().then(e => Promise.reject(e))
           : res.json()
       );
+  },
+
+  patchPet(petID, pet) {
+    return fetch(`${HOSTNAME}/pets/${petID}`, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({ ...pet })
+    })
+      .then(res => {
+        if (!res.ok) {
+          return res.json().then(e => Promise.reject(e));
+        }
+      });
+  },
+
+  deletePet(petID) {
+    return fetch(`${HOSTNAME}/pets/${petID}`, { method: 'DELETE' })
+      .then(res => {
+        if (!res.ok) {
+          return res.json().then(e => Promise.reject(e));
+        }
+      });
   },
 
   postImage(profileImg) {
