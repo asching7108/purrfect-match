@@ -9,12 +9,20 @@ const { HOSTNAME } = require('../../config/hostname.config');
 export default function PetPage () {
   const params = useParams();
   const [pet, setPet] = useState(null);
+  const [petNews, setPetNews] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!pet) {
       PetsService.getPet(params.petID)
         .then(pet => setPet(pet))
+        .catch(e => {
+          setError(e.error);
+        });
+    }
+    if (!petNews) {
+      PetsService.getPetNews(params.petID)
+        .then(petNews => setPetNews(petNews))
         .catch(e => {
           setError(e.error);
         });
@@ -64,7 +72,7 @@ export default function PetPage () {
   const renderPetPic = () => {
     return (
       <div className='col-md m-1 border rounded'>
-        <img class="img-fluid" src={HOSTNAME + pet.Picture} alt={pet.Name} width="500" height="600"></img>
+        <img className="img-fluid" src={HOSTNAME + pet.Picture} alt={pet.Name} width="500" height="600"></img>
       </div>
     );
   };
@@ -107,11 +115,31 @@ export default function PetPage () {
     );
   };
 
+  const renderNewsUpdateItems = () => {
+    if (petNews.length === 0) {
+      return (
+        <div className='row'>
+          <div className='col alert alert-success text-center' role='alert'>
+            News coming soon!
+          </div>
+        </div>
+      );
+    }
+    return petNews.map(news =>
+      <div key={news.NewsItemID}  className='row border rounded mb-2'>
+        <div className='col'>
+          <p>{news.NewsItem}</p>
+          <p className='text-right small'>{new Date(news.DatePosted).toLocaleString()}</p>
+        </div>
+      </div>
+    );
+  };
+
   const renderNewsUpdates = () => {
-    // TODO
     return (
       <div>
         <h2 className='m-10 text-center'>News Updates</h2>
+        {petNews && renderNewsUpdateItems()}
       </div>
     );
   };

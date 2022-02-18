@@ -23,7 +23,7 @@ export default class PetForm extends Component {
       sex: 'Female',
       age: '',
       size: '',
-      picture: '',
+      profileImg: '',
       availability: 'Available',
       description: '',
       goodWithOtherAnimals: false,
@@ -38,12 +38,20 @@ export default class PetForm extends Component {
 
   componentDidMount() {
     PetsService.getBreeds()
-      .then(breeds => this.setState({ breeds }))
+      .then(breeds => this.setState({ breeds, breed: breeds[0].Breed }))
       .catch(error => console.log(error));
   }
 
-  inputChanged(field, content) {
-    this.setState({ [field]: content });
+  inputChanged(field, content, callback) {
+    this.setState({ [field]: content }, callback);
+  }
+
+  updateSelectedBreed() {
+    const filteredBreeds = this.state.breeds
+      .filter(breed => breed.TypeOfAnimal === this.state.typeOfAnimal);
+    if (filteredBreeds.length > 0 && this.state.breed !== filteredBreeds[0].Breed) {
+      this.setState({ breed: filteredBreeds[0].Breed });
+    }
   }
 
   checkBoxChanged(field) {
@@ -69,7 +77,6 @@ export default class PetForm extends Component {
         const pet = this.getPet(res.path);
         PetsService.postPet(pet)
           .then(res => {
-
             this.props.onAddPetSuccess(res.insertId);
           })
           .catch(res => {
@@ -93,7 +100,6 @@ export default class PetForm extends Component {
       sex,
       age,
       size,
-      picture,
       availability,
       description,
       goodWithOtherAnimals,
@@ -172,7 +178,7 @@ export default class PetForm extends Component {
             name='typeOfAnimal'
             id='typeOfAnimal'
             value={typeOfAnimal}
-            onChange={e => this.inputChanged('typeOfAnimal', e.target.value)}
+            onChange={e => this.inputChanged('typeOfAnimal', e.target.value, this.updateSelectedBreed)}
             required
           >
             <option value='Cat'>Cat</option>
@@ -211,6 +217,7 @@ export default class PetForm extends Component {
             name='age'
             id='age'
             type='number'
+            min='1'
             value={age}
             onChange={e => this.inputChanged('age', e.target.value)}
           />

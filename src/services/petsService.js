@@ -18,6 +18,7 @@ const PetsService = {
           : res.json()
       );
   },
+
   postPet(newPet) {
     const token = AuthService.getToken()
     return fetch(`${HOSTNAME}/pets`, {
@@ -51,6 +52,21 @@ const PetsService = {
     );
   },
 
+  postNewsItem(petID, newsItem) {
+    return fetch(`${HOSTNAME}/pets/${petID}/news`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({ newsItem })
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      );
+  },
+
   getPet(petID) {
     return fetch(`${HOSTNAME}/pets/${petID}`)
       .then(res =>
@@ -58,6 +74,15 @@ const PetsService = {
           ? res.json().then(e => Promise.reject(e))
           : res.json()
       );
+  },
+
+  getPetNews(petID) {
+    return fetch(`${HOSTNAME}/pets/${petID}/news`)
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+        );
   },
 
   getBreeds() {
