@@ -39,7 +39,18 @@ export default function PetPage () {
       .catch(res => {
         window.alert(res.error);
       });
+    }
+  };
 
+  const onClickDeleteNewsItem = newsItemID => {
+    if (window.confirm('Are you sure you want to delete this news update?')) {
+      PetsService.deletePetNews(pet.PetID, newsItemID)
+      .then(() => {
+        window.location.reload(false);
+      })
+      .catch(res => {
+        window.alert(res.error);
+      });
     }
   };
 
@@ -157,7 +168,14 @@ export default function PetPage () {
       <div key={news.NewsItemID}  className='row border rounded mb-2'>
         <div className='col'>
           <p>{news.NewsItem}</p>
-          <p className='text-right small'>{new Date(news.DatePosted).toLocaleString()}</p>
+          <p className='text-right small'>
+            {new Date(news.DatePosted).toLocaleString()}
+            {isShelterAdmin(pet.ShelterID) &&
+              <span role='button' className='btn p-2 text-primary' onClick={e => onClickDeleteNewsItem(news.NewsItemID)}>
+                <FontAwesomeIcon icon='trash-alt' />
+              </span>
+            }
+          </p>
         </div>
       </div>
     );
