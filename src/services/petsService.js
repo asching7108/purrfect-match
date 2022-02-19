@@ -80,7 +80,7 @@ const PetsService = {
     );
   },
 
-  postNewsItem(petID, newsItem) {
+  postPetNews(petID, newsItem) {
     return fetch(`${HOSTNAME}/pets/${petID}/news`, {
       method: 'POST',
       headers: {

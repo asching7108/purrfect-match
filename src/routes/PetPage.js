@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { isShelterAdmin, renderFavoriteIcon, Section } from '../components/Utils/Utils';
+import { FormGroup, isShelterAdmin, PrimaryButton, renderFavoriteIcon, SecondaryButton, Section, TextArea } from '../components/Utils/Utils';
 import PetsService from '../services/petsService';
 import { Link } from 'react-router-dom';
 const { HOSTNAME } = require('../config/hostname.config');
@@ -11,6 +11,8 @@ export default function PetPage () {
   const params = useParams();
   const [pet, setPet] = useState(null);
   const [petNews, setPetNews] = useState(null);
+  const [creatingNews, setCreatingNews] = useState(false);
+  const [newUpdate, setNewUpdate] = useState('');
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -33,25 +35,40 @@ export default function PetPage () {
   const onClickDelete = () => {
     if (window.confirm('Are you sure you want to delete this pet?')) {
       PetsService.deletePet(pet.PetID)
-      .then(() => {
-        navigate(`/shelters/${pet.ShelterID}`);
-      })
-      .catch(res => {
-        window.alert(res.error);
-      });
+        .then(() => {
+          navigate(`/shelters/${pet.ShelterID}`);
+        })
+        .catch(res => {
+          window.alert(res.error);
+        });
     }
+  };
+
+  const toggleCreatingNewsState = () => {
+    setCreatingNews(!creatingNews);
   };
 
   const onClickDeleteNewsItem = newsItemID => {
     if (window.confirm('Are you sure you want to delete this news update?')) {
       PetsService.deletePetNews(pet.PetID, newsItemID)
-      .then(() => {
+        .then(() => {
+          window.location.reload(false);
+        })
+        .catch(res => {
+          window.alert(res.error);
+        });
+    }
+  };
+
+  const handleSubmitNewUpdate = e => {
+    e.preventDefault();
+    PetsService.postPetNews(pet.PetID, newUpdate)
+      .then(res => {
         window.location.reload(false);
       })
-      .catch(res => {
-        window.alert(res.error);
+      .catch(e => {
+        setError(e.error);
       });
-    }
   };
 
   const renderPetBio = () => {
@@ -154,39 +171,79 @@ export default function PetPage () {
     );
   };
 
-  const renderNewsUpdateItems = () => {
-    if (petNews.length === 0) {
+  const renderNewUpdateSection = () => {
+    if (!creatingNews) {
       return (
-        <div className='row'>
-          <div className='col alert alert-success text-center' role='alert'>
-            News coming soon!
-          </div>
+        <div className='row justify-content-center'>
+          <button className='btn btn-primary mb-2' onClick={toggleCreatingNewsState}>
+            New Update
+          </button>
         </div>
       );
     }
-    return petNews.map(news =>
-      <div key={news.NewsItemID}  className='row border rounded mb-2'>
-        <div className='col'>
-          <p>{news.NewsItem}</p>
-          <p className='text-right small'>
-            {new Date(news.DatePosted).toLocaleString()}
-            {isShelterAdmin(pet.ShelterID) &&
-              <span role='button' className='btn p-2 text-primary' onClick={e => onClickDeleteNewsItem(news.NewsItemID)}>
-                <FontAwesomeIcon icon='trash-alt' />
-              </span>
-            }
-          </p>
+    return (
+      <form onSubmit={handleSubmitNewUpdate}>
+        <FormGroup className='row'>
+          <TextArea
+            placeholder='Enter here'
+            value={newUpdate}
+            onChange={e => setNewUpdate(e.target.value)}
+            required
+          />
+        </FormGroup>
+        <FormGroup className='d-flex justify-content-center'>
+          <div className='mx-1'>
+            <SecondaryButton type='button' onClick={toggleCreatingNewsState}>
+              Cancel
+            </SecondaryButton>
+          </div>
+          <div className='mx-1'>
+            <PrimaryButton type='submit'>Submit</PrimaryButton>
+          </div>
+        </FormGroup>
+      </form>
+    );
+  };
+
+  const renderNewsUpdateItems = () => {
+    if (petNews.length === 0) {
+      return (
+        <div className='row alert alert-success text-center' role='alert'>
+          News coming soon!
         </div>
+      );
+    }
+    return (
+      <div>
+        {petNews.map(news =>
+          <div key={news.NewsItemID} className='row border rounded my-1'>
+            <div className='col'>
+              <p>{news.NewsItem}</p>
+              <span className='d-block text-right small'>
+                {new Date(news.DatePosted).toLocaleString()}
+                {isShelterAdmin(pet.ShelterID) &&
+                  <span
+                    role='button'
+                    className='btn p-2 text-primary'
+                    onClick={e => onClickDeleteNewsItem(news.NewsItemID)}>
+                    <FontAwesomeIcon icon='trash-alt' />
+                  </span>
+                }
+              </span>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
 
   const renderNewsUpdates = () => {
     return (
-      <div>
-        <h2 className='m-10 text-center'>News Updates</h2>
+      <>
+        <h2 className='text-center'>News Updates</h2>
+        {isShelterAdmin(pet.ShelterID) && renderNewUpdateSection()}
         {petNews && renderNewsUpdateItems()}
-      </div>
+      </>
     );
   };
 
