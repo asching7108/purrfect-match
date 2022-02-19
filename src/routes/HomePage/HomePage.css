@@ -1,0 +1,19 @@
+.homeImageContainer {
+  position: relative;
+  width: 100%;
+}
+
+.homeImageContainer img{
+  max-height: 600px;
+  object-fit: cover;
+}
+#message{
+  position: absolute;
+  top: 85%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 45px;
+  text-align: center;
+  width: 80%;
+}
