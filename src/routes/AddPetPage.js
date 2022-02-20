@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router';
 import PetForm from '../components/PetForm';
-import { isShelterAdmin, Section } from '../components/Utils/Utils';
+import {  Section } from '../components/Utils/Utils';
 import AuthService from '../services/authService';
 
 export default function AddPetPage () {
@@ -16,7 +16,7 @@ export default function AddPetPage () {
     navigate(`/shelters/${AuthService.getShelterIDFromToken()}/pets`);
   }
 
-  if (!isShelterAdmin(params.shelterID)) {
+  if (!AuthService.isShelterAdmin()) {
     return (
       <div className='alert alert-danger' role='alert'>
         Not authorized to create pets for the selected shelter.

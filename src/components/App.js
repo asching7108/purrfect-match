@@ -36,7 +36,7 @@ class App extends Component {
             <Route path={'/pets/:petID'} element={<PetPage />} />
             <Route path={'/shelters/:shelterID'} element={<SheltersPage />} />
             <Route
-              path={'/shelters/:shelterID/pets/create'}
+              path={'/pets/create'}
               element={
                 <PrivateRoute shelter={true}>
                   <AddPetPage />

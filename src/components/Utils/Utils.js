@@ -63,10 +63,6 @@ export function SecondaryButton({ className, ...props }) {
   );
 }
 
-export function isShelterAdmin(shelterID) {
-  return AuthService.getShelterIDFromToken() == shelterID;
-}
-
 export function renderFavoriteIcon(petID) {
   // TODO
   if (true) {
