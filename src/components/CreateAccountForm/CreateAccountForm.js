@@ -79,11 +79,6 @@ export default class CreateAccountForm extends Component {
         obj[updateKeys[i]] = inputsToCheck[i];
         if (inputsToCheck[i]) Object.assign(userUpdates, obj);
       }
-
-      
-
-
-
       return userUpdates;
   }
 
@@ -122,7 +117,7 @@ export default class CreateAccountForm extends Component {
     if (!this.state.password || this.verifyPassword(this.state.password, this.state.confirmPassword)) {
       const userID = AuthService.getUserIDFromToken();
       const userUpdates = this.getUserUpdateObject();
-      
+
       await UsersService.updateUser(userID, userUpdates)
         .then(() => {
           this.props.onUpdate(e)
@@ -130,8 +125,6 @@ export default class CreateAccountForm extends Component {
         .catch(() => {
           this.setState({ errorText: 'Account update failed' })
         })
-
-
     } else if (this.state.password) {
       this.setState({ errorText: 'Invalid password' });
     }
