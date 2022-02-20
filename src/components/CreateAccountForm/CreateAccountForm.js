@@ -57,6 +57,32 @@ export default class CreateAccountForm extends Component {
     return true;
   }
 
+  getUserUpdateObject() {
+    let userUpdates = {}
+      const inputsToCheck = [
+        this.state.firstName,
+        this.state.lastName,
+        this.state.email,
+        this.state.password,
+        this.getFullAddress(),
+        this.state.zipCode
+      ]
+      const updateKeys = [
+        'firstName',
+        'lastName',
+        'email',
+        'password',
+        'address',
+        'zipCode'
+      ]
+      for (let i = 0; i < inputsToCheck.length; i++) {
+        let obj = {};
+        obj[updateKeys[i]] = inputsToCheck[i];
+        if (inputsToCheck[i]) Object.assign(userUpdates, obj);
+      }
+      return userUpdates;
+  }
+
   handleUserCreateSubmit = async (e) => {
     e.preventDefault();
 
@@ -84,6 +110,28 @@ export default class CreateAccountForm extends Component {
       this.setState({ errorText: 'Invalid password' });
     }
   };
+
+  handleUserUpdateSubmit = async (e) => {
+    e.preventDefault();
+
+    // only verify password if one is submitted
+    if (!this.state.password || this.verifyPassword(this.state.password, this.state.confirmPassword)) {
+      const userID = AuthService.getUserIDFromToken();
+      const userUpdates = this.getUserUpdateObject();
+
+      await UsersService.updateUser(userID, userUpdates)
+        .then(() => {
+          this.props.onUpdate(e)
+        })
+        .catch(() => {
+          this.setState({ errorText: 'Account update failed' })
+        })
+
+
+    } else if (this.state.password) {
+      this.setState({ errorText: 'Invalid password' });
+    }
+  }
 
   handleShelterCreateSubmit = async (e) => {
     e.preventDefault();
@@ -125,7 +173,7 @@ export default class CreateAccountForm extends Component {
   }
 
   renderUSStates() {
-    let stateOptions = [<options></options>];
+    let stateOptions = [<option></option>];
     const states = USStates.states;
     for (let i = 0; i < states.length; i++) {
       stateOptions.push(<option>{states[i]}</option>);
@@ -147,7 +195,7 @@ export default class CreateAccountForm extends Component {
   renderCreateUserAccountForm() {
     return (
       <>
-        <form onSubmit={this.handleUserCreateSubmit}>
+        <form onSubmit={this.state.edit ? this.handleUserUpdateSubmit : this.handleUserCreateSubmit}>
           <div className='form-group'>
             <label className='mr-1'>
               <p>First Name</p>
@@ -173,13 +221,13 @@ export default class CreateAccountForm extends Component {
           <div className='form-group'>
             <label className='mr-1'>
               <p>Password</p>
-              <input type='password' className='form-control' required value={this.state.password} onChange={e => {
+              <input type='password' className='form-control' value={this.state.password} onChange={e => {
                 this.setState({ password: e.target.value });
               }} />
             </label>
             <label>
               <p>Confirm Password</p>
-              <input type='password' className='form-control' required value={this.state.confirmPassword} onChange={e => {
+              <input type='password' className='form-control' value={this.state.confirmPassword} onChange={e => {
                 this.setState({ confirmPassword: e.target.value });
               }} />
             </label>

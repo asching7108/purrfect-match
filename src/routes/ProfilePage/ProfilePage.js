@@ -26,14 +26,18 @@ export default class ProfilePage extends Component {
     UsersService.getUser(userID)
       .then(user => this.setState({ user: user[0] }))
       .catch(error => console.log(error));
-
   }
 
   handleEditButtonClick = async (e) => {
     e.preventDefault()
     this.state.edit
-      ? this.setState({edit: false})
-      : this.setState({edit: true})
+      ? this.setState({ edit: false })
+      : this.setState({ edit: true })
+  }
+
+  onUpdate = async (e) => {
+    e.preventDefault();
+    window.location.reload()
   }
 
   renderProfile() {
@@ -43,7 +47,6 @@ export default class ProfilePage extends Component {
     const email = user.EmailAddress;
     const address = user.Address;
     const zipCode = user.ZipCode;
-    const password = user.Password;
     const lastUpdated = user.LastUpdated.slice(0, 10); // only need date
     let street = '';
     let city = '';
@@ -61,16 +64,16 @@ export default class ProfilePage extends Component {
       return (
         <Section>
           <CreateAccountForm
-          edit={true}
-          firstName={firstName}
-          lastName={lastName}
-          email={email}
-          password={password}
-          address={address}
-          zipCode={zipCode}
-          address={street}
-          city={city}
-          USState={USState}
+            edit={true}
+            firstName={firstName}
+            lastName={lastName}
+            email={email}
+            address={address}
+            zipCode={zipCode}
+            address={street}
+            city={city}
+            USState={USState}
+            onUpdate={this.onUpdate}
           />
         </Section>
       )
@@ -117,7 +120,6 @@ export default class ProfilePage extends Component {
             <button className='btn ml-3' onClick={this.handleEditButtonClick}>Edit</button>
           </h2>
         </Section>
-        
         {user && this.renderProfile()}
         {userPreferences && this.renderPreferences()}
       </>
