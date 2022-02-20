@@ -11,6 +11,7 @@ import LoginPage from '../routes/LoginPage/LoginPage';
 import PetPage from '../routes/PetPage/PetPage';
 import PetsPage from '../routes/PetsPage/PetsPage';
 import SheltersPage from '../routes/SheltersPege/SheltersPege';
+import ProfilePage from '../routes/ProfilePage/ProfilePage';
 import NotFoundPage from '../routes/NotFoundPage';
 import AuthService from '../services/authService';
 
@@ -34,7 +35,6 @@ class App extends Component {
             <Route path={'/pets'} element={<PetsPage />} />
             <Route path={'/pets/:petID'} element={<PetPage />} />
             <Route path={'/shelters/:shelterID'} element={<SheltersPage />} />
-            <Route path={'/shelters/:shelterID/pets/create'} element={<AddPetPage />} />
             <Route
               path="/pets/create"
               element={
@@ -64,6 +64,14 @@ class App extends Component {
               element={
                 <PrivateRoute>
                   <FavoritesPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path='/profile'
+              element={
+                <PrivateRoute>
+                  <ProfilePage />
                 </PrivateRoute>
               }
             />

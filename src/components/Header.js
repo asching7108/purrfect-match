@@ -56,6 +56,7 @@ export default class Header extends Component {
         <div className='collapse navbar-collapse' id='navbarSupportedContent'>
           <ul className='navbar-nav mr-auto'>
             <li className='nav-item active'><Link className='nav-link' to='/pets'>Pets</Link></li>
+            <li className='nav-item active'><Link className='nav-link' to='/profile'>My Profile</Link></li>
             <li className='nav-item active'><Link className='nav-link' to='/favorites'>Favorites</Link></li>
           </ul>
           {this.context.isLoggedIn
