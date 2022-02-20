@@ -15,11 +15,12 @@ export default class PetForm extends Component {
   constructor(props) {
     super(props);
     this.onFileChange = this.onFileChange.bind(this);
+    this.imageStatusChange = this.imageStatusChange.bind(this);
     this.state = {
       petID: null,
       breeds: [],
       name: '',
-      typeOfAnimal: 'Cat',
+      typeOfAnimal: 'Select',
       breed: '',
       sex: 'Female',
       age: '',
@@ -68,7 +69,8 @@ export default class PetForm extends Component {
         mustBeLeashed: pet.MustBeLeashed,
         neutered: pet.Neutered,
         vaccinated: pet.Vaccinated,
-        houseTrained: pet.HouseTrained
+        houseTrained: pet.HouseTrained,
+        picture: pet.Picture
       });
     }
   }
@@ -90,10 +92,11 @@ export default class PetForm extends Component {
   }
 
   onFileChange(e) {
-    this.setState({ profileImg: e.target.files[0] })
+    this.setState({ profileImg: e })
   }
 
   imageStatusChange(status) {
+    if (!status) this.inputChanged('picture', '')
     this.setState({ imageStatus: status })
   }
 
@@ -101,42 +104,47 @@ export default class PetForm extends Component {
     e.preventDefault();
 
     console.log("handleAddSubmit...")
-
-    const pet = this.getPet();
-    PetsService.postImage(this.state.profileImg)
-      .then(res => {
-        console.log("Image is saved in server")
-        pet.picture = res.path;
-        PetsService.postPet(pet)
-          .then(res => {
-            this.props.onSubmitSuccess(res.insertId);
-          })
-          .catch(res => {
-            this.setState({ error: res.error });
-          });
-      })
-      .catch(res => {
-        this.setState({ error: res.error });
-      });
+    if (!this.state.imageStatus) {
+      this.setState({ error: "Please save cropped image!" });
+    } else {
+      const pet = this.getPet();
+      PetsService.postImage(this.state.profileImg)
+        .then(res => {
+          console.log("Image is saved in server")
+          pet.picture = res.path;
+          PetsService.postPet(pet)
+            .then(res => {
+              this.props.onSubmitSuccess(res.insertId);
+            })
+            .catch(res => {
+              this.setState({ error: res.error });
+            });
+        })
+        .catch(res => {
+          this.setState({ error: res.error });
+        });
+    }
   }
 
   handleUpdateSubmit = e => {
     e.preventDefault();
 
-    console.log("handleEditSubmit...")
-
-    const { profileImg } = this.state;
+    console.log("handleUpdateSubmit...")
     const pet = this.getPet();
-    if (profileImg) {
-      PetsService.postImage(this.state.profileImg)
-        .then(res => {
-          console.log("Image is saved in server")
-          pet.picture = res.path;
-          this.updatePet(pet);
-        })
-        .catch(res => {
-          this.setState({ error: res.error });
-        });
+    if (pet.picture === '') {
+      if (!this.state.imageStatus) {
+        this.setState({ error: "Please save cropped image!" });
+      } else {
+        PetsService.postImage(this.state.profileImg)
+          .then(res => {
+            console.log("Image is saved in server")
+            pet.picture = res.path;
+            this.updatePet(pet);
+          })
+          .catch(res => {
+            this.setState({ error: res.error });
+          });
+      }
     } else {
       this.updatePet(pet);
     }
@@ -167,7 +175,8 @@ export default class PetForm extends Component {
       mustBeLeashed,
       neutered,
       vaccinated,
-      houseTrained
+      houseTrained,
+      picture
     } = this.state;
     return {
       name,
@@ -184,7 +193,8 @@ export default class PetForm extends Component {
       neutered,
       vaccinated,
       houseTrained,
-      shelterID: this.props.shelterID
+      shelterID: this.props.shelterID,
+      picture
     };
   }
 
@@ -221,7 +231,6 @@ export default class PetForm extends Component {
           : this.handleUpdateSubmit
         }
       >
-        {error && <div className='alert alert-danger' role='alert'>{error}</div>}
         <FormGroup>
           <label htmlFor='name'>Name</label>
           <Input
@@ -240,6 +249,7 @@ export default class PetForm extends Component {
             onChange={e => this.inputChanged('typeOfAnimal', e.target.value, this.updateSelectedBreed)}
             required
           >
+            <option value='Select'>Select</option>
             <option value='Cat'>Cat</option>
             <option value='Dog'>Dog</option>
             <option value='Other'>Other</option>
@@ -318,9 +328,9 @@ export default class PetForm extends Component {
         </FormGroup>
         <FormGroup className='petImage'>
           <label htmlFor='petImage'>Pet Image</label>
-          {type === 'create'
-            ? <FilesUploadComponent id='picture' onChange={this.onFileChange} required />
-            : <FilesUploadComponent id='picture' onChange={this.onFileChange} />
+          {this.props.type === 'create'
+            ? <FilesUploadComponent id='picture' handler={this.onFileChange} imgHandler={this.imageStatusChange} req={true} />
+            : <FilesUploadComponent id='picture' handler={this.onFileChange} imgHandler={this.imageStatusChange} req={false}/>
           }
         </FormGroup>
         <FormGroup className='form-check'>
@@ -377,6 +387,7 @@ export default class PetForm extends Component {
           />
           <label className='form-check-label' htmlFor='houseTrained'>House Trained</label>
         </FormGroup>
+        {error && <div className='alert alert-danger' role='alert'>{error}</div>}
         <PrimaryButton type='submit'>
           Submit
         </PrimaryButton>

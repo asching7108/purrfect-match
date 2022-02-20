@@ -99,8 +99,8 @@ export default function PetPage () {
 
   const renderPetPic = () => {
     return (
-      <div className='col-md m-1 border rounded'>
-        <img className="img-fluid" src={HOSTNAME + pet.Picture} alt={pet.Name} width="500" height="600"></img>
+      <div className='col-md m-1 text-center'>
+        <img className="img-fluid rounded" src={HOSTNAME + pet.Picture} alt={pet.Name} width="100%" height="600"></img>
       </div>
     );
   };
