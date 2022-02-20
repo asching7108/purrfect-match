@@ -117,7 +117,7 @@ export default class ProfilePage extends Component {
         <Section>
           <h2>
             My Profile
-            <button className='btn ml-3' onClick={this.handleEditButtonClick}>Edit</button>
+            <button className='btn ml-3' onClick={this.handleEditButtonClick}>{this.state.edit ? 'Cancel' : 'Edit'}</button>
           </h2>
         </Section>
         {user && this.renderProfile()}
