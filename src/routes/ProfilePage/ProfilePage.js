@@ -4,6 +4,7 @@ import * as logUtils from '../../components/Utils/Logger';
 import UsersService from '../../services/usersService';
 import { Section } from '../../components/Utils/Utils';
 import './ProfilePage.css'
+import CreateAccountForm from '../../components/CreateAccountForm/CreateAccountForm';
 const log = logUtils.getLogger()
 
 export default class ProfilePage extends Component {
@@ -13,7 +14,8 @@ export default class ProfilePage extends Component {
     this.state = {
       userID: null,
       user: null,
-      userPreferences: null
+      userPreferences: null,
+      edit: false
     }
   }
 
@@ -27,9 +29,11 @@ export default class ProfilePage extends Component {
 
   }
 
-  handleEditButtonClick() {
-    // TODO:
-    console.log("coming soon...")
+  handleEditButtonClick = async (e) => {
+    e.preventDefault()
+    this.state.edit
+      ? this.setState({edit: false})
+      : this.setState({edit: true})
   }
 
   renderProfile() {
@@ -39,9 +43,38 @@ export default class ProfilePage extends Component {
     const email = user.EmailAddress;
     const address = user.Address;
     const zipCode = user.ZipCode;
+    const password = user.Password;
     const lastUpdated = user.LastUpdated.slice(0, 10); // only need date
+    let street = '';
+    let city = '';
+    let USState = '';
 
-    console.log(user)
+    if (address) {
+      const addressArray = address.split(', ');
+      street = addressArray.slice(0, -2).join(', '); // handles street addresses with commas in them
+      // 2nd to last item in array is always city. Last is always state
+      city = addressArray[addressArray.length - 2];
+      USState = addressArray[addressArray.length - 1];
+    }
+
+    if (this.state.edit) {
+      return (
+        <Section>
+          <CreateAccountForm
+          edit={true}
+          firstName={firstName}
+          lastName={lastName}
+          email={email}
+          password={password}
+          address={address}
+          zipCode={zipCode}
+          address={street}
+          city={city}
+          USState={USState}
+          />
+        </Section>
+      )
+    }
 
     return (
       <>
@@ -84,6 +117,7 @@ export default class ProfilePage extends Component {
             <button className='btn ml-3' onClick={this.handleEditButtonClick}>Edit</button>
           </h2>
         </Section>
+        
         {user && this.renderProfile()}
         {userPreferences && this.renderPreferences()}
       </>

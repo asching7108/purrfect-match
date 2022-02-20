@@ -12,19 +12,20 @@ export default class CreateAccountForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: '',
-      lastName: '',
-      email: '',
+      firstName: props.firstName ? props.firstName : '',
+      lastName: props.lastName ? props.lastName : '',
+      email: props.email ? props.email : '',
       password: '',
       confirmPassword: '',
-      address: '',
-      city: '',
-      USState: '',
-      zipCode: null,
+      address: props.address ? props.address : '',
+      city: props.city ? props.city : '',
+      USState: props.USState ? props.USState : '',
+      zipCode: props.zipCode ? props.zipCode : null,
       shelterName: '',
       phoneNumber: null,
       website: '',
       shelter: props.shelter,
+      edit: props.edit
     }
   }
 
@@ -136,6 +137,13 @@ export default class CreateAccountForm extends Component {
     )
   }
 
+  renderHeader() {
+    if (this.state.edit) return null;
+    return (
+      <h2>Create {this.state.shelter ? 'Shelter ' : ''}Account</h2>
+    )
+  }
+
   renderCreateUserAccountForm() {
     return (
       <>
@@ -209,7 +217,7 @@ export default class CreateAccountForm extends Component {
           <div className='form-group'>
             <label>
               <p>Zip Code</p>
-              <input type='number' min='0' max='99999' className='form-control' required onChange={e => {
+              <input type='number' min='0' max='99999' className='form-control' value={this.state.zipCode} required onChange={e => {
                 this.setState({ zipCode: e.target.value });
               }} />
             </label>
@@ -312,8 +320,7 @@ export default class CreateAccountForm extends Component {
   render() {
     return (
       <>
-
-        <h2>Create {this.state.shelter ? 'Shelter ' : ''}Account</h2>
+        {this.renderHeader()}
         {this.renderErrorMessage()}
         {this.state.shelter
           ? this.renderCreateShelterAccountForm()
