@@ -41,7 +41,7 @@ export default class Header extends Component {
 
   render() {
     return (
-      <nav className='navbar navbar-expand-sm navbar-fixed-top navbar-dark bg-primary'>
+      <nav className='navbar navbar-expand-sm navbar-fixed-top navbar-dark bg-info'>
         <Link className='navbar-brand' to='/'>Purrfect Match</Link>
         <button
           className='navbar-toggler'
