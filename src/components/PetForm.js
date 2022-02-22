@@ -22,7 +22,7 @@ export default class PetForm extends Component {
       name: '',
       typeOfAnimal: '',
       breed: '',
-      sex: 'Female',
+      sex: '',
       age: '',
       size: '',
       profileImg: '',
@@ -275,6 +275,7 @@ export default class PetForm extends Component {
             onChange={e => this.inputChanged('sex', e.target.value)}
             required
           >
+            <option value=''>Select</option>
             <option value='Female'>Female</option>
             <option value='Male'>Male</option>
           </Select>
