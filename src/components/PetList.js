@@ -55,6 +55,15 @@ export default function PetList(props) {
     { value: 'houseTrained', label: 'House Trained' },
   ];
 
+  const clearFilters = () => {
+    for (const field of ['typeOfAnimal', 'breed', 'more']) {
+      inputChangeHandler(field, []);
+    }
+    for (const field of ['sex', 'minAge', 'maxAge']) {
+      inputChangeHandler(field, '');
+    }
+  };
+
   const renderPet = pet => {
     return (
       <div key={pet.PetID} className='col-sm-4'>
@@ -73,78 +82,83 @@ export default function PetList(props) {
 
   const renderFilters = () => {
     return (
-      <form>
-        <div className='row mb-2'>
-          <div className='col-sm m-1'>
-            <Select
-              placeholder='TYPE OF PET'
-              name='typeOfAnimal'
-              id='typeOfAnimal'
-              value={typeOfAnimal}
-              options={typeOptions}
-              onChange={selectedOptions => inputChangeHandler('typeOfAnimal', selectedOptions)}
-              isMulti
-            />
+      <>
+        <form>
+          <div className='row mb-2'>
+            <div className='col-sm m-1'>
+              <Select
+                placeholder='TYPE OF PET'
+                name='typeOfAnimal'
+                id='typeOfAnimal'
+                value={typeOfAnimal}
+                options={typeOptions}
+                onChange={selectedOptions => inputChangeHandler('typeOfAnimal', selectedOptions)}
+                isMulti
+              />
+            </div>
+            <div className='col-sm m-1'>
+              <Select
+                placeholder='BREED'
+                name='breed'
+                id='breed'
+                value={breed}
+                options={breedOptions}
+                onChange={selectedOptions => inputChangeHandler('breed', selectedOptions)}
+                isMulti
+              />
+            </div>
+            <div className='col-sm m-1'>
+              <Select
+                placeholder='SEX'
+                name='sex'
+                id='sex'
+                value={sex}
+                options={sexOptions}
+                onChange={selectedOption => inputChangeHandler('sex', selectedOption)}
+                isClearable
+              />
+            </div>
           </div>
-          <div className='col-sm m-1'>
-            <Select
-              placeholder='BREED'
-              name='breed'
-              id='breed'
-              value={breed}
-              options={breedOptions}
-              onChange={selectedOptions => inputChangeHandler('breed', selectedOptions)}
-              isMulti
-            />
+          <div className='row mb-2'>
+            <div className='col-sm m-1'>
+              <Input
+                className=''
+                placeholder='FROM AGE'
+                name='minAge'
+                id='minAge'
+                type='number'
+                value={minAge}
+                onChange={e => inputChangeHandler('minAge', e.target.value)}
+              />
+            </div>
+            <div className='col-sm m-1'>
+              <Input
+                className=''
+                placeholder='TO AGE'
+                name='maxAge'
+                id='maxAge'
+                type='number'
+                value={maxAge}
+                onChange={e => inputChangeHandler('maxAge', e.target.value)}
+              />
+            </div>
+            <div className='col-sm m-1'>
+              <Select
+                placeholder='MORE'
+                name='more'
+                id='more'
+                value={more}
+                options={moreOptions}
+                onChange={selectedOptions => inputChangeHandler('more', selectedOptions)}
+                isMulti
+              />
+            </div>
           </div>
-          <div className='col-sm m-1'>
-            <Select
-              placeholder='SEX'
-              name='sex'
-              id='sex'
-              value={sex}
-              options={sexOptions}
-              onChange={selectedOption => inputChangeHandler('sex', selectedOption)}
-              isClearable
-            />
-          </div>
+        </form>
+        <div className='d-flex justify-content-end'>
+          <span role='button' className='btn btn-outline-primary btn-sm m-1' onClick={clearFilters}>Clear Filters</span>
         </div>
-        <div className='row mb-2'>
-          <div className='col-sm m-1'>
-            <Input
-              className=''
-              placeholder='FROM AGE'
-              name='minAge'
-              id='minAge'
-              type='number'
-              value={minAge}
-              onChange={e => inputChangeHandler('minAge', e.target.value)}
-            />
-          </div>
-          <div className='col-sm m-1'>
-            <Input
-              className=''
-              placeholder='TO AGE'
-              name='maxAge'
-              id='maxAge'
-              type='number'
-              value={maxAge}
-              onChange={e => inputChangeHandler('maxAge', e.target.value)}
-            />
-          </div>
-          <div className='col-sm m-1'>
-            <Select
-              placeholder='MORE'
-              name='more'
-              id='more'
-              value={more}
-              options={moreOptions}
-              onChange={selectedOptions => inputChangeHandler('more', selectedOptions)}
-              isMulti
-            />
-          </div>
-        </div>
-      </form>
+      </>
     );
   };
 
