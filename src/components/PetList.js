@@ -89,13 +89,21 @@ export default function PetList(props) {
 
         // TODO: change these states all at once
         inputChangeHandler('typeOfAnimal', res.TypeOfAnimal ? JSON.parse(res.TypeOfAnimal) : []);
-        inputChangeHandler('breed', res.Breed? JSON.parse(res.Breed) : []);
+        inputChangeHandler('breed', res.Breed ? JSON.parse(res.Breed) : []);
         inputChangeHandler('sex', res.Sex ? { value: res.Sex, label: res.Sex } : '');
         inputChangeHandler('minAge', res.MinAge ? res.MinAge : '');
-        inputChangeHandler('maxAge', res.MaxAge? res.MaxAge : '');
-        inputChangeHandler('more', res.More? JSON.parse(res.More) : []);
+        inputChangeHandler('maxAge', res.MaxAge ? res.MaxAge : '');
+        inputChangeHandler('more', res.More ? JSON.parse(res.More) : []);
       })
   }
+  const clearFilters = () => {
+    for (const field of ['typeOfAnimal', 'breed', 'more']) {
+      inputChangeHandler(field, []);
+    }
+    for (const field of ['sex', 'minAge', 'maxAge']) {
+      inputChangeHandler(field, '');
+    }
+  };
 
   const renderPet = pet => {
     return (
@@ -127,79 +135,84 @@ export default function PetList(props) {
 
   const renderFilters = () => {
     return (
-      <form>
-        <div className='row mb-2'>
-          <div className='col-sm m-1'>
-            <Select
-              placeholder='TYPE OF PET'
-              name='typeOfAnimal'
-              id='typeOfAnimal'
-              value={typeOfAnimal}
-              options={typeOptions}
-              onChange={selectedOptions => inputChangeHandler('typeOfAnimal', selectedOptions)}
-              isMulti
-            />
+      <>
+        <form>
+          <div className='row mb-2'>
+            <div className='col-sm m-1'>
+              <Select
+                placeholder='TYPE OF PET'
+                name='typeOfAnimal'
+                id='typeOfAnimal'
+                value={typeOfAnimal}
+                options={typeOptions}
+                onChange={selectedOptions => inputChangeHandler('typeOfAnimal', selectedOptions)}
+                isMulti
+              />
+            </div>
+            <div className='col-sm m-1'>
+              <Select
+                placeholder='BREED'
+                name='breed'
+                id='breed'
+                value={breed}
+                options={breedOptions}
+                onChange={selectedOptions => inputChangeHandler('breed', selectedOptions)}
+                isMulti
+              />
+            </div>
+            <div className='col-sm m-1'>
+              <Select
+                placeholder='SEX'
+                name='sex'
+                id='sex'
+                value={sex}
+                options={sexOptions}
+                onChange={selectedOption => inputChangeHandler('sex', selectedOption)}
+                isClearable
+              />
+            </div>
           </div>
-          <div className='col-sm m-1'>
-            <Select
-              placeholder='BREED'
-              name='breed'
-              id='breed'
-              value={breed}
-              options={breedOptions}
-              onChange={selectedOptions => inputChangeHandler('breed', selectedOptions)}
-              isMulti
-            />
+          <div className='row mb-2'>
+            <div className='col-sm m-1'>
+              <Input
+                className=''
+                placeholder='FROM AGE'
+                name='minAge'
+                id='minAge'
+                type='number'
+                value={minAge}
+                onChange={e => inputChangeHandler('minAge', e.target.value)}
+              />
+            </div>
+            <div className='col-sm m-1'>
+              <Input
+                className=''
+                placeholder='TO AGE'
+                name='maxAge'
+                id='maxAge'
+                type='number'
+                value={maxAge}
+                onChange={e => inputChangeHandler('maxAge', e.target.value)}
+              />
+            </div>
+            <div className='col-sm m-1'>
+              <Select
+                placeholder='MORE'
+                name='more'
+                id='more'
+                value={more}
+                options={moreOptions}
+                onChange={selectedOptions => inputChangeHandler('more', selectedOptions)}
+                isMulti
+              />
+            </div>
           </div>
-          <div className='col-sm m-1'>
-            <Select
-              placeholder='SEX'
-              name='sex'
-              id='sex'
-              value={sex}
-              options={sexOptions}
-              onChange={selectedOption => inputChangeHandler('sex', selectedOption)}
-              isClearable
-            />
-          </div>
-        </div>
-        <div className='row mb-2'>
-          <div className='col-sm m-1'>
-            <Input
-              className=''
-              placeholder='FROM AGE'
-              name='minAge'
-              id='minAge'
-              type='number'
-              value={minAge}
-              onChange={e => inputChangeHandler('minAge', e.target.value)}
-            />
-          </div>
-          <div className='col-sm m-1'>
-            <Input
-              className=''
-              placeholder='TO AGE'
-              name='maxAge'
-              id='maxAge'
-              type='number'
-              value={maxAge}
-              onChange={e => inputChangeHandler('maxAge', e.target.value)}
-            />
-          </div>
-          <div className='col-sm m-1'>
-            <Select
-              placeholder='MORE'
-              name='more'
-              id='more'
-              value={more}
-              options={moreOptions}
-              onChange={selectedOptions => inputChangeHandler('more', selectedOptions)}
-              isMulti
-            />
-          </div>
+        </form>
+        <div className='d-flex justify-content-end'>
+          <span role='button' className='btn btn-outline-primary btn-sm m-1' onClick={clearFilters}>Clear Filters</span>
         </div>
         {renderPreferencesButton()}
-      </form>
+      </>
     );
   };
 

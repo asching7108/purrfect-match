@@ -80,7 +80,7 @@ const PetsService = {
     );
   },
 
-  postNewsItem(petID, newsItem) {
+  postPetNews(petID, newsItem) {
     return fetch(`${HOSTNAME}/pets/${petID}/news`, {
       method: 'POST',
       headers: {
@@ -94,6 +94,18 @@ const PetsService = {
           ? res.json().then(e => Promise.reject(e))
           : res.json()
       );
+  },
+
+  deletePetNews(petID, newsItemID) {
+    return fetch(`${HOSTNAME}/pets/${petID}/news/${newsItemID}`, {
+      method: 'DELETE',
+      headers: { 'authorization': AuthService.getToken() }
+    })
+      .then(res => {
+        if (!res.ok) {
+          return res.json().then(e => Promise.reject(e));
+        }
+      });
   },
 
   getPet(petID) {
