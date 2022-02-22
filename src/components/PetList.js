@@ -141,6 +141,8 @@ export default function PetList(props) {
   };
 
   const renderSaveButton = () => {
+
+    if (!AuthService.getUserIDFromToken()) return null;
     if (confirmSaved) return (<button className='btn btn-success btn-sm m-1' disabled>Preferences saved!</button>)
 
     return (<button className='btn btn-primary btn-sm m-1' onClick={savePreferences}>Save Preferences</button>)
