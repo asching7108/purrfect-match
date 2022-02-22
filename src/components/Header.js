@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import AuthService from '../services/authService';
 
 export default class Header extends Component {
   static contextType = AuthContext;
@@ -39,6 +40,29 @@ export default class Header extends Component {
     );
   }
 
+  renderShelterNavItems() {
+    return (
+      <>
+        <li className='nav-item active'>
+          <Link className='nav-link' to={`/shelters/${AuthService.getShelterIDFromToken()}`}>
+            Shelter
+          </Link>
+        </li>
+        <li className='nav-item active'><Link className='nav-link' to='/pets/create'>Add Pets</Link></li>
+      </>
+    );
+  }
+
+  renderUserNavItems() {
+    return (
+      <>
+        <li className='nav-item active'><Link className='nav-link' to='/pets'>Pets</Link></li>
+        <li className='nav-item active'><Link className='nav-link' to='/profile'>My Profile</Link></li>
+        <li className='nav-item active'><Link className='nav-link' to='/favorites'>Favorites</Link></li>
+      </>
+    );
+  }
+
   render() {
     return (
       <nav className='navbar navbar-expand-sm navbar-fixed-top navbar-dark bg-info'>
@@ -55,8 +79,9 @@ export default class Header extends Component {
         </button>
         <div className='collapse navbar-collapse' id='navbarSupportedContent'>
           <ul className='navbar-nav mr-auto'>
-            <li className='nav-item active'><Link className='nav-link' to='/pets'>Pets</Link></li>
-            <li className='nav-item active'><Link className='nav-link' to='/favorites'>Favorites</Link></li>
+            {this.context.isShelterAdmin
+              ? this.renderShelterNavItems()
+              : this.renderUserNavItems()}
           </ul>
           {this.context.isLoggedIn
             ? this.renderLogoutLink()
