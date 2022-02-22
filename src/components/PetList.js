@@ -6,8 +6,6 @@ import PetsService from '../services/petsService';
 import UsersService from '../services/usersService';
 import AuthService from '../services/authService';
 
-// const useMountEffect = (func) => useEffect(func, []);
-
 export default function PetList(props) {
   const {
     pets,
@@ -18,7 +16,8 @@ export default function PetList(props) {
     minAge,
     maxAge,
     more,
-    inputChangeHandler
+    inputChangeHandler,
+    savedPreferencesHandler,
   } = props;
 
   const [breeds, setBreeds] = useState([]);
@@ -83,18 +82,22 @@ export default function PetList(props) {
   }
 
   const getSavedPreferences = async (userID) => {
-    UsersService.getSavedPreferences(userID)
-      .then((res) => {
-        res = res[0];
+    try {
+      let res = await UsersService.getSavedPreferences(userID)
+      res = res[0];
 
-        // TODO: change these states all at once
-        inputChangeHandler('typeOfAnimal', res.TypeOfAnimal ? JSON.parse(res.TypeOfAnimal) : []);
-        inputChangeHandler('breed', res.Breed ? JSON.parse(res.Breed) : []);
-        inputChangeHandler('sex', res.Sex ? { value: res.Sex, label: res.Sex } : '');
-        inputChangeHandler('minAge', res.MinAge ? res.MinAge : '');
-        inputChangeHandler('maxAge', res.MaxAge ? res.MaxAge : '');
-        inputChangeHandler('more', res.More ? JSON.parse(res.More) : []);
-      })
+      const changedPrefs = {
+        typeOfAnimal: res.TypeOfAnimal ? JSON.parse(res.TypeOfAnimal) : [],
+        breed: res.Breed ? JSON.parse(res.Breed) : [],
+        sex: res.Sex ? { value: res.Sex, label: res.Sex } : '',
+        minAge: res.MinAge ? res.MinAge : '',
+        maxAge: res.MaxAge ? res.MaxAge : '',
+        more: res.More ? JSON.parse(res.More) : []
+      }
+      savedPreferencesHandler(changedPrefs);
+    } catch (error) {
+      console.log(error);
+    }
   }
   const clearFilters = () => {
     for (const field of ['typeOfAnimal', 'breed', 'more']) {
@@ -120,18 +123,6 @@ export default function PetList(props) {
       </div>
     );
   };
-
-  const renderPreferencesButton = () => {
-    if (typeOfAnimal.length > 0 || breed.length > 0 || sex || minAge || maxAge || more.length > 0) {
-      return (
-        <div className='row mb-2'>
-          <div className='col-sm m-1'>
-            <button className='btn' onClick={savePreferences}>Save Preferences</button>
-          </div>
-        </div>
-      )
-    }
-  }
 
   const renderFilters = () => {
     return (
@@ -209,9 +200,9 @@ export default function PetList(props) {
           </div>
         </form>
         <div className='d-flex justify-content-end'>
-          <span role='button' className='btn btn-outline-primary btn-sm m-1' onClick={clearFilters}>Clear Filters</span>
+          <button className='btn btn-primary btn-sm m-1' onClick={savePreferences}>Save Preferences</button>
+          <button className='btn btn-outline-primary btn-sm m-1' onClick={clearFilters}>Clear Filters</button>
         </div>
-        {renderPreferencesButton()}
       </>
     );
   };

@@ -16,6 +16,7 @@ export default class PetsPage extends Component {
       more: []
     };
     this.inputChanged = this.inputChanged.bind(this);
+    this.changeSavedPreferences = this.changeSavedPreferences.bind(this);
   }
 
   componentDidMount() {
@@ -26,6 +27,10 @@ export default class PetsPage extends Component {
 
   inputChanged(field, content) {
     this.setState({ [field]: content }, () => this.handleSubmit());
+  }
+
+  changeSavedPreferences(changedPrefs) {
+    this.setState(changedPrefs, () => this.handleSubmit());
   }
 
   handleSubmit = () => {
@@ -84,6 +89,7 @@ export default class PetsPage extends Component {
           maxAge={maxAge}
           more={more}
           inputChangeHandler={this.inputChanged}
+          savedPreferencesHandler={this.changeSavedPreferences}
         />}
       </Section>
     );
