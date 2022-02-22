@@ -3,6 +3,10 @@ import Select from 'react-select';
 import PetCard from './PetCard';
 import { Input } from './Utils/Utils';
 import PetsService from '../services/petsService';
+import UsersService from '../services/usersService';
+import AuthService from '../services/authService';
+
+// const useMountEffect = (func) => useEffect(func, []);
 
 export default function PetList(props) {
   const {
@@ -26,6 +30,14 @@ export default function PetList(props) {
         .catch(error => console.log(error));
     }
   });
+
+  // This useEffect only runs one when mounted
+  useEffect(() => {
+    const userID = AuthService.getUserIDFromToken()
+    if (userID) {
+      getSavedPreferences(userID);
+    }
+  }, [])
 
   const typeOptions = [
     { value: 'Cat', label: 'Cat' },
@@ -55,6 +67,36 @@ export default function PetList(props) {
     { value: 'houseTrained', label: 'House Trained' },
   ];
 
+  const savePreferences = async (e) => {
+    e.preventDefault();
+    const objectKeys = ['typeOfAnimal', 'breed', 'sex', 'minAge', 'maxAge', 'more'];
+    const preferenceTypes = [typeOfAnimal, breed, sex.value, minAge, maxAge, more];
+    let changedPreferences = {};
+
+    for (let i = 0; i < preferenceTypes.length; i++) {
+      let type = preferenceTypes[i];
+      if ((Array.isArray(type) && type.length !== 0) || (!Array.isArray(type) && type)) {
+        changedPreferences[objectKeys[i]] = type;
+      }
+    }
+    UsersService.saveUserPreferences(AuthService.getUserIDFromToken(), 'POST', changedPreferences);
+  }
+
+  const getSavedPreferences = async (userID) => {
+    UsersService.getSavedPreferences(userID)
+      .then((res) => {
+        res = res[0];
+
+        // TODO: change these states all at once
+        inputChangeHandler('typeOfAnimal', res.TypeOfAnimal ? JSON.parse(res.TypeOfAnimal) : []);
+        inputChangeHandler('breed', res.Breed? JSON.parse(res.Breed) : []);
+        inputChangeHandler('sex', res.Sex ? { value: res.Sex, label: res.Sex } : '');
+        inputChangeHandler('minAge', res.MinAge ? res.MinAge : '');
+        inputChangeHandler('maxAge', res.MaxAge? res.MaxAge : '');
+        inputChangeHandler('more', res.More? JSON.parse(res.More) : []);
+      })
+  }
+
   const renderPet = pet => {
     return (
       <div key={pet.PetID} className='col-sm-4'>
@@ -70,6 +112,18 @@ export default function PetList(props) {
       </div>
     );
   };
+
+  const renderPreferencesButton = () => {
+    if (typeOfAnimal.length > 0 || breed.length > 0 || sex || minAge || maxAge || more.length > 0) {
+      return (
+        <div className='row mb-2'>
+          <div className='col-sm m-1'>
+            <button className='btn' onClick={savePreferences}>Save Preferences</button>
+          </div>
+        </div>
+      )
+    }
+  }
 
   const renderFilters = () => {
     return (
@@ -144,13 +198,14 @@ export default function PetList(props) {
             />
           </div>
         </div>
+        {renderPreferencesButton()}
       </form>
     );
   };
 
   const renderPetList = () => {
     const petCount = pets.length;
-    
+
     // no pets exist
     if (petCount === 0) {
       return (
