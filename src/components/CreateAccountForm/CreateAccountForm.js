@@ -164,7 +164,7 @@ export default class CreateAccountForm extends Component {
     let stateOptions = [];
     const states = USStates.states;
     for (let i = 0; i < states.length; i++) {
-      stateOptions.push(<option>{states[i]}</option>);
+      stateOptions.push(<option key={states[i]}>{states[i]}</option>);
     }
     return (
       <>
