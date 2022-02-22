@@ -84,7 +84,7 @@ export default function PetPage () {
           </div>
           {isShelterAdmin(pet.ShelterID) &&
             <div>
-              <Link className='btn p-2 text-primary' to={`/shelters/${pet.ShelterID}/pets/${pet.PetID}/edit`}>
+              <Link className='btn p-2 text-primary' to={`/pets/${pet.PetID}/edit`}>
                 <FontAwesomeIcon icon='edit' />
               </Link>
               <span role='button' className='btn p-2 text-primary' onClick={onClickDelete}>

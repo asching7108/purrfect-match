@@ -20,9 +20,9 @@ export default class PetForm extends Component {
       petID: null,
       breeds: [],
       name: '',
-      typeOfAnimal: 'Select',
+      typeOfAnimal: '',
       breed: '',
-      sex: 'Female',
+      sex: '',
       age: '',
       size: '',
       profileImg: '',
@@ -206,7 +206,6 @@ export default class PetForm extends Component {
 
   render() {
     const {
-      type,
       name,
       typeOfAnimal,
       breed,
@@ -249,7 +248,7 @@ export default class PetForm extends Component {
             onChange={e => this.inputChanged('typeOfAnimal', e.target.value, this.updateSelectedBreed)}
             required
           >
-            <option value='Select'>Select</option>
+            <option value=''>Select</option>
             <option value='Cat'>Cat</option>
             <option value='Dog'>Dog</option>
             <option value='Other'>Other</option>
@@ -276,6 +275,7 @@ export default class PetForm extends Component {
             onChange={e => this.inputChanged('sex', e.target.value)}
             required
           >
+            <option value=''>Select</option>
             <option value='Female'>Female</option>
             <option value='Male'>Male</option>
           </Select>
