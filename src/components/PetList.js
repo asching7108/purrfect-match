@@ -106,19 +106,8 @@ export default function PetList(props) {
           maxAge: res.MaxAge ? res.MaxAge : '',
           more: res.More ? JSON.parse(res.More) : []
         }
-
-        // Check if any preferences were received
-        if (
-          changedPrefs.typeOfAnimal.length > 0 ||
-          changedPrefs.breed.length > 0 ||
-          changedPrefs.sex ||
-          changedPrefs.minAge ||
-          changedPrefs.maxAge ||
-          changedPrefs.more.length > 0
-        ) {
           setSavedPrefs(true);
           savedPreferencesHandler(changedPrefs);
-        }
       }
     } catch (error) {
       console.log(error);
