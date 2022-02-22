@@ -59,27 +59,18 @@ export default class CreateAccountForm extends Component {
 
   getUserUpdateObject() {
     // address should be included, even if null
-    let userUpdates = {address: this.getFullAddress()}
-      const inputsToCheck = [
-        this.state.firstName,
-        this.state.lastName,
-        this.state.email,
-        this.state.password,
-        this.state.zipCode
-      ]
-      const updateKeys = [
-        'firstName',
-        'lastName',
-        'email',
-        'password',
-        'zipCode'
-      ]
-      for (let i = 0; i < inputsToCheck.length; i++) {
-        let obj = {};
-        obj[updateKeys[i]] = inputsToCheck[i];
-        if (inputsToCheck[i]) Object.assign(userUpdates, obj);
-      }
-      return userUpdates;
+    let userUpdates = { address: this.getFullAddress() }
+    const updateKeys = [
+      'firstName',
+      'lastName',
+      'email',
+      'password',
+      'zipCode'
+    ]
+    for (const key of updateKeys) {
+      if (this.state[key]) userUpdates[key] = this.state[key];
+    }
+    return userUpdates;
   }
 
   handleUserCreateSubmit = async (e) => {
@@ -218,7 +209,7 @@ export default class CreateAccountForm extends Component {
           <div className='form-group'>
             <label className='mr-1'>
               <p>Password</p>
-              <input type='password' className='form-control' value={this.state.password} onChange={e => {
+              <input type='password' className='form-control' required={!this.state.edit} value={this.state.password} onChange={e => {
                 this.setState({ password: e.target.value });
               }} />
             </label>

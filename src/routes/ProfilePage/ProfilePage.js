@@ -28,11 +28,8 @@ export default class ProfilePage extends Component {
       .catch(error => console.log(error));
   }
 
-  handleEditButtonClick = async (e) => {
-    e.preventDefault()
-    this.state.edit
-      ? this.setState({ edit: false })
-      : this.setState({ edit: true })
+  handleEditButtonClick = async () => {
+    this.setState({ edit: !this.state.edit })
   }
 
   onUpdate = async (e) => {
@@ -47,7 +44,7 @@ export default class ProfilePage extends Component {
     const email = user.EmailAddress;
     const address = user.Address;
     const zipCode = user.ZipCode;
-    const lastUpdated = user.LastUpdated.slice(0, 10); // only need date
+    const lastUpdated = new Date(user.LastUpdated).toLocaleDateString();
     let street = '';
     let city = '';
     let USState = '';
@@ -116,7 +113,7 @@ export default class ProfilePage extends Component {
       <>
         <Section>
           <h2>
-            My Profile
+            {this.state.edit ? 'Edit Profile' : 'My Profile'}
             <button className='btn ml-3' onClick={this.handleEditButtonClick}>{this.state.edit ? 'Cancel' : 'Edit'}</button>
           </h2>
         </Section>
@@ -124,6 +121,5 @@ export default class ProfilePage extends Component {
         {userPreferences && this.renderPreferences()}
       </>
     )
-
   }
 }
