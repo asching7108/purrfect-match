@@ -17,9 +17,6 @@ const UsersService = {
         : res.json());
   },
   async saveUserPreferences(userID, method, changedPreferences) {
-    
-    // TODO: delete all preferences for user before saving new ones
-
     const res = await fetch(`${HOSTNAME}/users/${userID}/prefs`, {
       method: method,
       headers: {
@@ -30,8 +27,8 @@ const UsersService = {
     });
     return await (
       (!res.ok)
-        ? res.json().then(e => Promise.reject(e))
-        : res.json());
+        ? res.text().then(e => Promise.reject(e))
+        : res.text());
   },
   async getSavedPreferences(userID) {
     const res = await fetch(`${HOSTNAME}/users/${userID}/prefs`, {

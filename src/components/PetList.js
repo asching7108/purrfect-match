@@ -21,6 +21,8 @@ export default function PetList(props) {
   } = props;
 
   const [breeds, setBreeds] = useState([]);
+  const [savedPrefs, setSavedPrefs] = useState(false);
+  const [confirmSaved, setConfirmSaved] = useState(false);
 
   useEffect(() => {
     if (breeds.length === 0) {
@@ -78,28 +80,53 @@ export default function PetList(props) {
         changedPreferences[objectKeys[i]] = type;
       }
     }
-    UsersService.saveUserPreferences(AuthService.getUserIDFromToken(), 'POST', changedPreferences);
+    // Determine if POST or PATCH
+    if (savedPrefs) {
+      await UsersService.saveUserPreferences(AuthService.getUserIDFromToken(), 'PATCH', changedPreferences);
+      setConfirmSaved(true);
+    } else {
+      await UsersService.saveUserPreferences(AuthService.getUserIDFromToken(), 'POST', changedPreferences);
+      setSavedPrefs(true);
+      setConfirmSaved(true);
+    }
+    
   }
 
   const getSavedPreferences = async (userID) => {
     try {
-      let res = await UsersService.getSavedPreferences(userID)
-      res = res[0];
+      let res = await UsersService.getSavedPreferences(userID);
+      if (res.length > 0) {
+        res = res[0];
 
-      const changedPrefs = {
-        typeOfAnimal: res.TypeOfAnimal ? JSON.parse(res.TypeOfAnimal) : [],
-        breed: res.Breed ? JSON.parse(res.Breed) : [],
-        sex: res.Sex ? { value: res.Sex, label: res.Sex } : '',
-        minAge: res.MinAge ? res.MinAge : '',
-        maxAge: res.MaxAge ? res.MaxAge : '',
-        more: res.More ? JSON.parse(res.More) : []
+        const changedPrefs = {
+          typeOfAnimal: res.TypeOfAnimal ? JSON.parse(res.TypeOfAnimal) : [],
+          breed: res.Breed ? JSON.parse(res.Breed) : [],
+          sex: res.Sex ? { value: res.Sex, label: res.Sex } : '',
+          minAge: res.MinAge ? res.MinAge : '',
+          maxAge: res.MaxAge ? res.MaxAge : '',
+          more: res.More ? JSON.parse(res.More) : []
+        }
+
+        // Check if any preferences were received
+        if (
+          changedPrefs.typeOfAnimal.length > 0 ||
+          changedPrefs.breed.length > 0 ||
+          changedPrefs.sex ||
+          changedPrefs.minAge ||
+          changedPrefs.maxAge ||
+          changedPrefs.more.length > 0
+        ) {
+          setSavedPrefs(true);
+          savedPreferencesHandler(changedPrefs);
+        }
       }
-      savedPreferencesHandler(changedPrefs);
     } catch (error) {
       console.log(error);
     }
   }
+
   const clearFilters = () => {
+    setConfirmSaved(false);
     for (const field of ['typeOfAnimal', 'breed', 'more']) {
       inputChangeHandler(field, []);
     }
@@ -124,6 +151,12 @@ export default function PetList(props) {
     );
   };
 
+  const renderSaveButton = () => {
+    if (confirmSaved) return (<button className='btn btn-success btn-sm m-1' disabled>Preferences saved!</button>)
+
+    return (<button className='btn btn-primary btn-sm m-1' onClick={savePreferences}>Save Preferences</button>)
+  }
+
   const renderFilters = () => {
     return (
       <>
@@ -136,7 +169,10 @@ export default function PetList(props) {
                 id='typeOfAnimal'
                 value={typeOfAnimal}
                 options={typeOptions}
-                onChange={selectedOptions => inputChangeHandler('typeOfAnimal', selectedOptions)}
+                onChange={selectedOptions => {
+                  setConfirmSaved(false);
+                  inputChangeHandler('typeOfAnimal', selectedOptions)
+                }}
                 isMulti
               />
             </div>
@@ -147,7 +183,10 @@ export default function PetList(props) {
                 id='breed'
                 value={breed}
                 options={breedOptions}
-                onChange={selectedOptions => inputChangeHandler('breed', selectedOptions)}
+                onChange={selectedOptions => {
+                  setConfirmSaved(false);
+                  inputChangeHandler('breed', selectedOptions)
+                }}
                 isMulti
               />
             </div>
@@ -158,7 +197,10 @@ export default function PetList(props) {
                 id='sex'
                 value={sex}
                 options={sexOptions}
-                onChange={selectedOption => inputChangeHandler('sex', selectedOption)}
+                onChange={selectedOption => {
+                  setConfirmSaved(false);
+                  inputChangeHandler('sex', selectedOption)
+                }}
                 isClearable
               />
             </div>
@@ -172,7 +214,10 @@ export default function PetList(props) {
                 id='minAge'
                 type='number'
                 value={minAge}
-                onChange={e => inputChangeHandler('minAge', e.target.value)}
+                onChange={e => {
+                  setConfirmSaved(false);
+                  inputChangeHandler('minAge', e.target.value)
+                }}
               />
             </div>
             <div className='col-sm m-1'>
@@ -183,7 +228,10 @@ export default function PetList(props) {
                 id='maxAge'
                 type='number'
                 value={maxAge}
-                onChange={e => inputChangeHandler('maxAge', e.target.value)}
+                onChange={e => {
+                  setConfirmSaved(false);
+                  inputChangeHandler('maxAge', e.target.value)
+                }}
               />
             </div>
             <div className='col-sm m-1'>
@@ -193,14 +241,17 @@ export default function PetList(props) {
                 id='more'
                 value={more}
                 options={moreOptions}
-                onChange={selectedOptions => inputChangeHandler('more', selectedOptions)}
+                onChange={selectedOptions => {
+                  setConfirmSaved(false);
+                  inputChangeHandler('more', selectedOptions)
+                }}
                 isMulti
               />
             </div>
           </div>
         </form>
         <div className='d-flex justify-content-end'>
-          <button className='btn btn-primary btn-sm m-1' onClick={savePreferences}>Save Preferences</button>
+          {renderSaveButton()}
           <button className='btn btn-outline-primary btn-sm m-1' onClick={clearFilters}>Clear Filters</button>
         </div>
       </>
