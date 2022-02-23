@@ -43,6 +43,7 @@ export default class Header extends Component {
   renderShelterNavItems() {
     return (
       <>
+        <li className='nav-item active'><Link className='nav-link' to='/pets'>Pets</Link></li>
         <li className='nav-item active'>
           <Link className='nav-link' to={`/shelters/${AuthService.getShelterIDFromToken()}`}>
             Shelter
