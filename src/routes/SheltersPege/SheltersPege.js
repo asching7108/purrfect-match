@@ -40,6 +40,7 @@ export default class SheltersPege extends Component {
       error: null
     };
     this.inputChanged = this.inputChanged.bind(this);
+    this.inputEdited = this.inputEdited.bind(this);
     this.onClickEdit = this.onClickEdit.bind(this);
     this.onClickUpdate = this.onClickUpdate.bind(this);
     this.onClickDelete = this.onClickDelete.bind(this);
@@ -67,6 +68,10 @@ export default class SheltersPege extends Component {
 
   inputChanged(field, content) {
     this.setState({ [field]: content }, () => this.handleSubmit());
+  }
+
+  inputEdited(field, content) {
+    this.setState({ [field]: content });
   }
 
   handleSubmit = () => {
@@ -251,17 +256,17 @@ export default class SheltersPege extends Component {
                 <tr>
                   <th>Shelter Name</th>
                   <td><Input type='text' className='form-control' required value={shelterName}
-                    onChange={e => this.inputChanged('shelterName', e.target.value)} /></td>
+                    onChange={e => this.inputEdited('shelterName', e.target.value)} /></td>
                 </tr>
                 <tr>
                   <th>Address</th>
                   <td><Input type='text' className='form-control' required value={address}
-                    onChange={e => this.inputChanged('address', e.target.value)} /></td>
+                    onChange={e => this.inputEdited('address', e.target.value)} /></td>
                 </tr>
                 <tr>
                   <th>City</th>
                   <td><Input type='text' className='form-control' required value={city}
-                    onChange={e => this.inputChanged('city', e.target.value)} /></td>
+                    onChange={e => this.inputEdited('city', e.target.value)} /></td>
                 </tr>
                 <tr>
                   <th>State</th>
@@ -276,22 +281,22 @@ export default class SheltersPege extends Component {
                 <tr>
                   <th>Zip Code</th>
                   <td><Input type='number' min='0' max='99999' className='form-control' required value={zip}
-                    onChange={e => this.inputChanged('zip', e.target.value)} /></td>
+                    onChange={e => this.inputEdited('zip', e.target.value)} /></td>
                 </tr>
                 <tr>
                   <th>Email</th>
                   <td><Input type='email' className='form-control' required value={email}
-                    onChange={e => this.inputChanged('email', e.target.value)} /></td>
+                    onChange={e => this.inputEdited('email', e.target.value)} /></td>
                 </tr>
                 <tr>
                   <th>Phone number</th>
                   <td><Input type='number' className='form-control' required value={phoneNumber}
-                    onChange={e => this.inputChanged('phoneNumber', e.target.value)} /></td>
+                    onChange={e => this.inputEdited('phoneNumber', e.target.value)} /></td>
                 </tr>
                 <tr>
                   <th>Website</th>
                   <td><Input type='text' className='form-control' value={website}
-                    onChange={e => this.inputChanged('website', e.target.value)} /></td>
+                    onChange={e => this.inputEdited('website', e.target.value)} /></td>
                 </tr>
               </tbody>
             </table>
