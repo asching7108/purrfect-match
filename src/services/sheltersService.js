@@ -48,6 +48,17 @@ const SheltersService = {
           ? res.json().then(e => Promise.reject(e))
           : res.json()
       );
+  },
+  deleteShelter(shelterID) {
+    return fetch(`${HOSTNAME}/shelters/${shelterID}`, {
+      method: 'DELETE',
+      headers: { 'authorization': AuthService.getToken() }
+    })
+      .then(res => {
+        if (!res.ok) {
+          return res.json().then(e => Promise.reject(e));
+        }
+      });
   }
 };
 

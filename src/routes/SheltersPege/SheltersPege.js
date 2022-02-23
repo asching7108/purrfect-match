@@ -120,7 +120,7 @@ export default class SheltersPege extends Component {
     }
   }
 
-  onClickUpdate(e) {
+  onClickUpdate() {
     const {
       shelterID,
       shelterName,
@@ -130,8 +130,7 @@ export default class SheltersPege extends Component {
       zip,
       email,
       phoneNumber,
-      website,
-      updated
+      website
     } = this.state;
 
     let data = {
@@ -145,7 +144,6 @@ export default class SheltersPege extends Component {
 
     SheltersService.updateShelter(data)
       .then(res => {
-
         this.props.onSubmitSuccess();
       })
       .catch(res => {
@@ -221,7 +219,7 @@ export default class SheltersPege extends Component {
     )
   }
 
-  renderEditShelter(shelter) {
+  renderEditShelter() {
     log.debug("Calling renderEditShelter...")
 
     const {
@@ -239,7 +237,6 @@ export default class SheltersPege extends Component {
       <div>
         <form>
           <div>
-
             <table className='shelterTable'>
               <tbody>
                 <tr>
