@@ -4,7 +4,7 @@ import AuthContext from '../../context/AuthContext';
 import UsersService from '../../services/usersService';
 import SheltersService from '../../services/sheltersService';
 import PasswordChecklist from 'react-password-checklist'
-import USStates from './USStates.json'
+import USStates from '../../config/USStates.json'
 
 export default class CreateAccountForm extends Component {
   static contextType = AuthContext;

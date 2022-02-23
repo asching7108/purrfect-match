@@ -7,6 +7,7 @@ import PetList from '../../components/PetList';
 import PetsService from '../../services/petsService';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import USStates from '../../config/USStates.json'
 var log = logUtils.getLogger()
 
 export default class SheltersPege extends Component {
@@ -28,15 +29,14 @@ export default class SheltersPege extends Component {
       maxAge: '',
       more: [],
       mode: "view",
-      shelterName: '',
-      address: '',
-      city: '',
-      state: '',
-      zip: '',
-      email: '',
-      phoneNumber: '',
-      website: '',
-      updated: ""
+      shelterName: null,
+      address: null,
+      city: null,
+      state: null,
+      zip: null,
+      email: null,
+      phoneNumber: null,
+      website: null
     };
     this.inputChanged = this.inputChanged.bind(this);
     this.onClickEdit = this.onClickEdit.bind(this);
@@ -105,7 +105,7 @@ export default class SheltersPege extends Component {
     this.setState({ state: shelter[0].Address.substring(shelter[0].Address.lastIndexOf(',') + 2, shelter[0].Address.lastIndexOf(',') + 4) })
     this.setState({ zip: parseInt(shelter[0].Address.substring(shelter[0].Address.length - 5)) })
     this.setState({ email: shelter[0].EmailAddress })
-    this.setState({ phoneNumber: shelter[0].PhoneNumber })
+    this.setState({ phoneNumber: parseInt(shelter[0].PhoneNumber) })
     this.setState({ website: shelter[0].Website })
   }
 
@@ -135,24 +135,24 @@ export default class SheltersPege extends Component {
     } = this.state;
 
     let data = {
-      "shelterID": shelterID,
+      "shelterID": parseInt(shelterID),
       "shelterName": shelterName,
       "address": address + ", " + city + ", " + state + " " + zip,
       "emailAddress": email,
-      "phoneNumber": phoneNumber,
+      "phoneNumber": parseInt(phoneNumber),
       "website": website ? website : null,
     }
 
     SheltersService.updateShelter(data)
       .then(res => {
-        
+
         this.props.onSubmitSuccess();
       })
       .catch(res => {
         this.setState({ error: res.error });
       });
 
-      this.setState({ updated: "Updated" })
+    this.setState({ updated: "Updated" })
   }
 
 
@@ -208,6 +208,19 @@ export default class SheltersPege extends Component {
     );
   }
 
+  renderUSStates() {
+    let stateOptions = [<options></options>];
+    const states = USStates.states;
+    for (let i = 0; i < states.length; i++) {
+      stateOptions.push(<option>{states[i]}</option>);
+    }
+    return (
+      <>
+        {stateOptions}
+      </>
+    )
+  }
+
   renderEditShelter(shelter) {
     log.debug("Calling renderEditShelter...")
 
@@ -246,8 +259,13 @@ export default class SheltersPege extends Component {
                 </tr>
                 <tr>
                   <th>State</th>
-                  <td><Input type='text' className='form-control' required value={state}
-                    onChange={e => this.inputChanged('state', e.target.value)} /></td>
+                  <td>
+                    <select className='form-control' value={state} onChange={e => {
+                      this.setState({ 'state': e.target.value });
+                    }}>
+                      {this.renderUSStates()}
+                    </select>
+                  </td>
                 </tr>
                 <tr>
                   <th>Zip Code</th>
