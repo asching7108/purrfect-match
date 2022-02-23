@@ -32,16 +32,13 @@ const SheltersService = {
         : res.json());
   },
   updateShelter(shelter) {
-    console.log("postShelter")
-    console.log(shelter.shelterID + ".")
-    console.log(shelter)
     return fetch(`${HOSTNAME}/shelters/${shelter.shelterID}`, {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json',
         'authorization': AuthService.getToken()
       },
-      body: JSON.stringify({ ...shelter })
+      body: JSON.stringify(shelter)
     })
       .then(res =>
         (!res.ok)

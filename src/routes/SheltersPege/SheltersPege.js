@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import USStates from '../../components/Utils/USStates.json'
 var log = logUtils.getLogger()
 
-export default class SheltersPege extends Component {
+export default class SheltersPage extends Component {
 
   static defaultProps = {
     onSubmitSuccess: () => { }
@@ -40,8 +40,8 @@ export default class SheltersPege extends Component {
       error: null
     };
     this.inputChanged = this.inputChanged.bind(this);
-    this.inputEdited = this.inputEdited.bind(this);
-    this.onClickEdit = this.onClickEdit.bind(this);
+    this.inputEdited = this.inputEdited.bind(this); //This actually update the database
+    this.handleEditButtonClick = this.handleEditButtonClick.bind(this); //This switches the "view" mode and "edit" mode
     this.onClickUpdate = this.onClickUpdate.bind(this);
     this.onClickDelete = this.onClickDelete.bind(this);
   }
@@ -106,17 +106,19 @@ export default class SheltersPege extends Component {
   }
 
   updateState(shelter) {
-    this.setState({ shelterName: shelter[0].ShelterName })
-    this.setState({ address: shelter[0].Address.substring(0, shelter[0].Address.indexOf(',')) })
-    this.setState({ city: shelter[0].Address.substring(shelter[0].Address.indexOf(',') + 2, shelter[0].Address.lastIndexOf(',')) })
-    this.setState({ state: shelter[0].Address.substring(shelter[0].Address.lastIndexOf(',') + 2, shelter[0].Address.lastIndexOf(',') + 4) })
-    this.setState({ zip: parseInt(shelter[0].Address.substring(shelter[0].Address.length - 5)) })
-    this.setState({ email: shelter[0].EmailAddress })
-    this.setState({ phoneNumber: parseInt(shelter[0].PhoneNumber) })
-    this.setState({ website: shelter[0].Website })
+    this.setState({
+      shelterName: shelter[0].ShelterName,
+      address: shelter[0].Address.substring(0, shelter[0].Address.indexOf(',')),
+      city: shelter[0].Address.substring(shelter[0].Address.indexOf(',') + 2, shelter[0].Address.lastIndexOf(',')),
+      state: shelter[0].Address.substring(shelter[0].Address.lastIndexOf(',') + 2, shelter[0].Address.lastIndexOf(',') + 4),
+      zip: parseInt(shelter[0].Address.substring(shelter[0].Address.length - 5)),
+      email: shelter[0].EmailAddress,
+      phoneNumber: shelter[0].PhoneNumber,
+      website: shelter[0].Website
+    });
   }
 
-  onClickEdit() {
+  handleEditButtonClick() {
     const { shelter } = this.state;
     if (this.state.mode === "view") {
       this.updateState(shelter)
@@ -179,7 +181,7 @@ export default class SheltersPege extends Component {
           <h2>{shelter[0].ShelterName}</h2>
           {isShelterAdmin(shelter[0].ShelterID) &&
             <div>
-              <span role='button' className='btn p-2 text-primary' onClick={this.onClickEdit}>
+              <span role='button' className='btn p-2 text-primary' onClick={this.handleEditButtonClick}>
                 <FontAwesomeIcon icon='edit' />
               </span>
               <span role='button' className='btn p-2 text-primary' onClick={this.onClickDelete} >
@@ -305,7 +307,7 @@ export default class SheltersPege extends Component {
           <div className="row">
             <div className="col-sm-12 text-center">
               <button className="btn btn-primary btn-md m-2" onClick={this.onClickUpdate}>Update</button>
-              <button className="btn btn-success  btn-md m-2" onClick={this.onClickEdit}>Cancel</button>
+              <button className="btn btn-outline-primary  btn-md m-2" onClick={this.handleEditButtonClick}>Cancel</button>
             </div>
           </div>
         </form>
