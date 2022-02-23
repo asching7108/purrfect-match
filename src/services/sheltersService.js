@@ -1,3 +1,4 @@
+import AuthService from './authService';
 const { HOSTNAME } = require('../config/hostname.config');
 
 const SheltersService = {
@@ -29,6 +30,24 @@ const SheltersService = {
       (!res.ok)
         ? res.json().then(e => Promise.reject(e))
         : res.json());
+  },
+  updateShelter(shelter) {
+    console.log("postShelter")
+    console.log(shelter.shelterID + ".")
+    console.log(shelter)
+    return fetch(`${HOSTNAME}/shelters/${shelter.shelterID}`, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': AuthService.getToken()
+      },
+      body: JSON.stringify({ ...shelter })
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      );
   }
 };
 
