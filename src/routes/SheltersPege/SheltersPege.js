@@ -164,17 +164,13 @@ export default class SheltersPege extends Component {
       .catch(res => {
         this.setState({ error: res.error });
       });
-
-    this.setState({ updated: "Updated" })
   }
 
 
   renderShelterName(shelter) {
-    const { updated } = this.state;
     return (
       <div className='col-md m-1'>
         <div className='d-flex justify-content-between align-items-center flex-wrap'>
-          {updated && <div className='alert alert-danger' role='info'>{updated}</div>}
           <h2>{shelter[0].ShelterName}</h2>
           {isShelterAdmin(shelter[0].ShelterID) &&
             <div>
