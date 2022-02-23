@@ -12,19 +12,20 @@ export default class CreateAccountForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: '',
-      lastName: '',
-      email: '',
+      firstName: props.firstName ? props.firstName : '',
+      lastName: props.lastName ? props.lastName : '',
+      email: props.email ? props.email : '',
       password: '',
       confirmPassword: '',
-      address: '',
-      city: '',
-      USState: '',
-      zipCode: null,
+      address: props.address ? props.address : '',
+      city: props.city ? props.city : '',
+      USState: props.USState ? props.USState : '',
+      zipCode: props.zipCode ? props.zipCode : null,
       shelterName: '',
       phoneNumber: null,
       website: '',
       shelter: props.shelter,
+      edit: props.edit
     }
   }
 
@@ -56,6 +57,22 @@ export default class CreateAccountForm extends Component {
     return true;
   }
 
+  getUserUpdateObject() {
+    // address should be included, even if null
+    let userUpdates = { address: this.getFullAddress() }
+    const updateKeys = [
+      'firstName',
+      'lastName',
+      'email',
+      'password',
+      'zipCode'
+    ]
+    for (const key of updateKeys) {
+      if (this.state[key]) userUpdates[key] = this.state[key];
+    }
+    return userUpdates;
+  }
+
   handleUserCreateSubmit = async (e) => {
     e.preventDefault();
 
@@ -83,6 +100,26 @@ export default class CreateAccountForm extends Component {
       this.setState({ errorText: 'Invalid password' });
     }
   };
+
+  handleUserUpdateSubmit = async (e) => {
+    e.preventDefault();
+
+    // only verify password if one is submitted
+    if (!this.state.password || this.verifyPassword(this.state.password, this.state.confirmPassword)) {
+      const userID = AuthService.getUserIDFromToken();
+      const userUpdates = this.getUserUpdateObject();
+
+      await UsersService.updateUser(userID, userUpdates)
+        .then(() => {
+          this.props.onUpdate(e)
+        })
+        .catch(() => {
+          this.setState({ errorText: 'Account update failed' })
+        })
+    } else if (this.state.password) {
+      this.setState({ errorText: 'Invalid password' });
+    }
+  }
 
   handleShelterCreateSubmit = async (e) => {
     e.preventDefault();
@@ -124,10 +161,10 @@ export default class CreateAccountForm extends Component {
   }
 
   renderUSStates() {
-    let stateOptions = [<options></options>];
+    let stateOptions = [];
     const states = USStates.states;
     for (let i = 0; i < states.length; i++) {
-      stateOptions.push(<option>{states[i]}</option>);
+      stateOptions.push(<option key={states[i]}>{states[i]}</option>);
     }
     return (
       <>
@@ -136,10 +173,17 @@ export default class CreateAccountForm extends Component {
     )
   }
 
+  renderHeader() {
+    if (this.state.edit) return null;
+    return (
+      <h2>Create {this.state.shelter ? 'Shelter ' : ''}Account</h2>
+    )
+  }
+
   renderCreateUserAccountForm() {
     return (
       <>
-        <form onSubmit={this.handleUserCreateSubmit}>
+        <form onSubmit={this.state.edit ? this.handleUserUpdateSubmit : this.handleUserCreateSubmit}>
           <div className='form-group'>
             <label className='mr-1'>
               <p>First Name</p>
@@ -165,13 +209,13 @@ export default class CreateAccountForm extends Component {
           <div className='form-group'>
             <label className='mr-1'>
               <p>Password</p>
-              <input type='password' className='form-control' required value={this.state.password} onChange={e => {
+              <input type='password' className='form-control' required={!this.state.edit} value={this.state.password} onChange={e => {
                 this.setState({ password: e.target.value });
               }} />
             </label>
             <label>
               <p>Confirm Password</p>
-              <input type='password' className='form-control' required value={this.state.confirmPassword} onChange={e => {
+              <input type='password' className='form-control' value={this.state.confirmPassword} onChange={e => {
                 this.setState({ confirmPassword: e.target.value });
               }} />
             </label>
@@ -209,7 +253,7 @@ export default class CreateAccountForm extends Component {
           <div className='form-group'>
             <label>
               <p>Zip Code</p>
-              <input type='number' min='0' max='99999' className='form-control' required onChange={e => {
+              <input type='number' min='0' max='99999' className='form-control' value={this.state.zipCode} required onChange={e => {
                 this.setState({ zipCode: e.target.value });
               }} />
             </label>
@@ -312,8 +356,7 @@ export default class CreateAccountForm extends Component {
   render() {
     return (
       <>
-
-        <h2>Create {this.state.shelter ? 'Shelter ' : ''}Account</h2>
+        {this.renderHeader()}
         {this.renderErrorMessage()}
         {this.state.shelter
           ? this.renderCreateShelterAccountForm()
