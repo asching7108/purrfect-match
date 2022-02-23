@@ -36,15 +36,16 @@ export default class SheltersPege extends Component {
       zip: null,
       email: null,
       phoneNumber: null,
-      website: null
+      website: null,
+      error: null
     };
     this.inputChanged = this.inputChanged.bind(this);
     this.onClickEdit = this.onClickEdit.bind(this);
     this.onClickUpdate = this.onClickUpdate.bind(this);
+    this.onClickDelete = this.onClickDelete.bind(this);
   }
 
   componentDidMount() {
-    log.debug("Getting shelter data...")
     const path = window.location.pathname;
     const shelterID = path.substring(path.lastIndexOf('/') + 1)
     this.setState({ shelterID });
@@ -54,23 +55,24 @@ export default class SheltersPege extends Component {
         this.setState({ shelter: shelter })
         this.updateState(shelter)
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        log.error(error)
+        this.setState({ error: "No shelter data avairable" });
+      });
 
-    log.debug("Getting pets data...")
     PetsService.getPets({ shelterID })
       .then(pets => this.setState({ pets: pets }))
-      .catch(error => console.log(error));
+      .catch(error => log.error(error));
   }
 
   inputChanged(field, content) {
-    log.debug("Calling inputChanged")
     this.setState({ [field]: content }, () => this.handleSubmit());
   }
 
   handleSubmit = () => {
     PetsService.getPets(this.getFilters())
       .then(pets => this.setState({ pets: pets }))
-      .catch(error => console.log(error));
+      .catch(error => log.error(error));
   }
 
   getFilters() {
@@ -110,7 +112,6 @@ export default class SheltersPege extends Component {
   }
 
   onClickEdit() {
-    log.debug("Calling onClickEdit")
     const { shelter } = this.state;
     if (this.state.mode === "view") {
       this.updateState(shelter)
@@ -119,6 +120,20 @@ export default class SheltersPege extends Component {
       this.setState({ mode: "view" })
     }
   }
+
+  onClickDelete() {
+    if (window.confirm('Are you sure you want to delete this shelter?')) {
+      const { shelterID } = this.state;
+      SheltersService.deleteShelter(shelterID)
+        .then(() => {
+          localStorage.removeItem('token')
+          window.open("/");
+        })
+        .catch(res => {
+          window.alert(res.error);
+        });
+    }
+  };
 
   onClickUpdate() {
     const {
@@ -166,7 +181,7 @@ export default class SheltersPege extends Component {
               <span role='button' className='btn p-2 text-primary' onClick={this.onClickEdit}>
                 <FontAwesomeIcon icon='edit' />
               </span>
-              <span role='button' className='btn p-2 text-primary' >
+              <span role='button' className='btn p-2 text-primary' onClick={this.onClickDelete} >
                 <FontAwesomeIcon icon='trash-alt' />
               </span>
             </div>
@@ -220,8 +235,6 @@ export default class SheltersPege extends Component {
   }
 
   renderEditShelter() {
-    log.debug("Calling renderEditShelter...")
-
     const {
       shelterName,
       address,
@@ -341,9 +354,10 @@ export default class SheltersPege extends Component {
 
   render() {
     log.debug("Calling render...")
-    const { shelter, mode } = this.state;
+    const { shelter, mode, error } = this.state;
     return (
       <div>
+        {error && <div className='alert alert-danger' role='alert'>{error}</div>}
         <Section>
           {shelter && this.renderShelterName(shelter)}
         </Section>
