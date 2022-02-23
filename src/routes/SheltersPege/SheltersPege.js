@@ -7,7 +7,7 @@ import PetList from '../../components/PetList';
 import PetsService from '../../services/petsService';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import USStates from '../../config/USStates.json'
+import USStates from '../../components/Utils/USStates.json'
 var log = logUtils.getLogger()
 
 export default class SheltersPege extends Component {
