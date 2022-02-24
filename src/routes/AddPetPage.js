@@ -12,7 +12,7 @@ export default function AddPetPage () {
   }
 
   const handleClickCancel = () => {
-    navigate(`/shelters/${AuthService.getShelterIDFromToken()}/pets`);
+    navigate(`/shelters/${AuthService.getShelterIDFromToken()}`);
   }
 
   return (
