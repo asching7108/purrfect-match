@@ -3,6 +3,10 @@ import Select from 'react-select';
 import PetCard from './PetCard';
 import { Input } from './Utils/Utils';
 import PetsService from '../services/petsService';
+import UsersService from '../services/usersService';
+import AuthService from '../services/authService';
+import * as logUtils from '../components/Utils/Logger';
+const log = logUtils.getLogger();
 
 export default function PetList(props) {
   const {
@@ -14,18 +18,29 @@ export default function PetList(props) {
     minAge,
     maxAge,
     more,
-    inputChangeHandler
+    inputChangeHandler,
+    savedPreferencesHandler,
   } = props;
 
   const [breeds, setBreeds] = useState([]);
+  const [savedPrefs, setSavedPrefs] = useState(false);
+  const [confirmSaved, setConfirmSaved] = useState(false);
 
   useEffect(() => {
     if (breeds.length === 0) {
       PetsService.getBreeds()
         .then(breeds => setBreeds(breeds))
-        .catch(error => console.log(error));
+        .catch(error => log.debug(error));
     }
   });
+
+  // This useEffect only runs one when mounted
+  useEffect(() => {
+    const userID = AuthService.getUserIDFromToken()
+    if (userID) {
+      getSavedPreferences(userID);
+    }
+  }, [])
 
   const typeOptions = [
     { value: 'Cat', label: 'Cat' },
@@ -55,7 +70,54 @@ export default function PetList(props) {
     { value: 'houseTrained', label: 'House Trained' },
   ];
 
+  const savePreferences = async (e) => {
+    e.preventDefault();
+    const objectKeys = ['typeOfAnimal', 'breed', 'sex', 'minAge', 'maxAge', 'more'];
+    const preferenceTypes = [typeOfAnimal, breed, sex?.value, minAge, maxAge, more];
+    let changedPreferences = {};
+
+    for (let i = 0; i < preferenceTypes.length; i++) {
+      let type = preferenceTypes[i];
+      if ((Array.isArray(type) && type.length !== 0) || (!Array.isArray(type) && type)) {
+        changedPreferences[objectKeys[i]] = type;
+      }
+    }
+    // Determine if POST or PATCH
+    if (savedPrefs) {
+      await UsersService.saveUserPreferences(AuthService.getUserIDFromToken(), 'PATCH', changedPreferences);
+      setConfirmSaved(true);
+    } else {
+      await UsersService.saveUserPreferences(AuthService.getUserIDFromToken(), 'POST', changedPreferences);
+      setSavedPrefs(true);
+      setConfirmSaved(true);
+    }
+
+  }
+
+  const getSavedPreferences = async (userID) => {
+    try {
+      let res = await UsersService.getSavedPreferences(userID);
+      if (res.length > 0) {
+        res = res[0];
+
+        const changedPrefs = {
+          typeOfAnimal: res.TypeOfAnimal ? JSON.parse(res.TypeOfAnimal) : [],
+          breed: res.Breed ? JSON.parse(res.Breed) : [],
+          sex: res.Sex ? { value: res.Sex, label: res.Sex } : '',
+          minAge: res.MinAge ? res.MinAge : '',
+          maxAge: res.MaxAge ? res.MaxAge : '',
+          more: res.More ? JSON.parse(res.More) : []
+        }
+        setSavedPrefs(true);
+        savedPreferencesHandler(changedPrefs);
+      }
+    } catch (error) {
+      log.debug(error);
+    }
+  }
+
   const clearFilters = () => {
+    setConfirmSaved(false);
     for (const field of ['typeOfAnimal', 'breed', 'more']) {
       inputChangeHandler(field, []);
     }
@@ -80,6 +142,14 @@ export default function PetList(props) {
     );
   };
 
+  const renderSaveButton = () => {
+
+    if (!AuthService.getUserIDFromToken()) return null;
+    if (confirmSaved) return (<button className='btn btn-success btn-sm m-1' disabled>Preferences saved!</button>)
+
+    return (<button className='btn btn-primary btn-sm m-1' onClick={savePreferences}>Save Preferences</button>)
+  }
+
   const renderFilters = () => {
     return (
       <>
@@ -92,7 +162,10 @@ export default function PetList(props) {
                 id='typeOfAnimal'
                 value={typeOfAnimal}
                 options={typeOptions}
-                onChange={selectedOptions => inputChangeHandler('typeOfAnimal', selectedOptions)}
+                onChange={selectedOptions => {
+                  setConfirmSaved(false);
+                  inputChangeHandler('typeOfAnimal', selectedOptions)
+                }}
                 isMulti
               />
             </div>
@@ -103,7 +176,10 @@ export default function PetList(props) {
                 id='breed'
                 value={breed}
                 options={breedOptions}
-                onChange={selectedOptions => inputChangeHandler('breed', selectedOptions)}
+                onChange={selectedOptions => {
+                  setConfirmSaved(false);
+                  inputChangeHandler('breed', selectedOptions)
+                }}
                 isMulti
               />
             </div>
@@ -114,7 +190,10 @@ export default function PetList(props) {
                 id='sex'
                 value={sex}
                 options={sexOptions}
-                onChange={selectedOption => inputChangeHandler('sex', selectedOption)}
+                onChange={selectedOption => {
+                  setConfirmSaved(false);
+                  inputChangeHandler('sex', selectedOption)
+                }}
                 isClearable
               />
             </div>
@@ -128,7 +207,10 @@ export default function PetList(props) {
                 id='minAge'
                 type='number'
                 value={minAge}
-                onChange={e => inputChangeHandler('minAge', e.target.value)}
+                onChange={e => {
+                  setConfirmSaved(false);
+                  inputChangeHandler('minAge', e.target.value)
+                }}
               />
             </div>
             <div className='col-sm m-1'>
@@ -139,7 +221,10 @@ export default function PetList(props) {
                 id='maxAge'
                 type='number'
                 value={maxAge}
-                onChange={e => inputChangeHandler('maxAge', e.target.value)}
+                onChange={e => {
+                  setConfirmSaved(false);
+                  inputChangeHandler('maxAge', e.target.value)
+                }}
               />
             </div>
             <div className='col-sm m-1'>
@@ -149,14 +234,18 @@ export default function PetList(props) {
                 id='more'
                 value={more}
                 options={moreOptions}
-                onChange={selectedOptions => inputChangeHandler('more', selectedOptions)}
+                onChange={selectedOptions => {
+                  setConfirmSaved(false);
+                  inputChangeHandler('more', selectedOptions)
+                }}
                 isMulti
               />
             </div>
           </div>
         </form>
         <div className='d-flex justify-content-end'>
-          <span role='button' className='btn btn-outline-primary btn-sm m-1' onClick={clearFilters}>Clear Filters</span>
+          {renderSaveButton()}
+          <button className='btn btn-outline-primary btn-sm m-1' onClick={clearFilters}>Clear Filters</button>
         </div>
       </>
     );
@@ -164,7 +253,7 @@ export default function PetList(props) {
 
   const renderPetList = () => {
     const petCount = pets.length;
-    
+
     // no pets exist
     if (petCount === 0) {
       return (

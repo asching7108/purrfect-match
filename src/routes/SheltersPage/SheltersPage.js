@@ -40,6 +40,7 @@ export default class SheltersPage extends Component {
       error: null
     };
     this.inputChanged = this.inputChanged.bind(this);
+    this.changeSavedPreferences = this.changeSavedPreferences.bind(this);
     this.inputEdited = this.inputEdited.bind(this); //This actually update the database
     this.handleEditButtonClick = this.handleEditButtonClick.bind(this); //This switches the "view" mode and "edit" mode
     this.onClickUpdate = this.onClickUpdate.bind(this);
@@ -78,6 +79,10 @@ export default class SheltersPage extends Component {
     PetsService.getPets(this.getFilters())
       .then(pets => this.setState({ pets: pets }))
       .catch(error => log.error(error));
+  }
+
+  changeSavedPreferences(changedPrefs) {
+    this.setState(changedPrefs, () => this.handleSubmit());
   }
 
   getFilters() {
@@ -348,6 +353,7 @@ export default class SheltersPage extends Component {
           maxAge={maxAge}
           more={more}
           inputChangeHandler={this.inputChanged}
+          savedPreferencesHandler={this.changeSavedPreferences}
         />}
       </>
     );
