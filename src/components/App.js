@@ -12,6 +12,7 @@ import LoginPage from '../routes/LoginPage/LoginPage';
 import PetPage from '../routes/PetPage';
 import PetsPage from '../routes/PetsPage';
 import SheltersPage from '../routes/SheltersPege/SheltersPege';
+import ProfilePage from '../routes/ProfilePage/ProfilePage';
 import NotFoundPage from '../routes/NotFoundPage';
 import AuthService from '../services/authService';
 
@@ -72,6 +73,14 @@ class App extends Component {
               element={
                 <PrivateRoute>
                   <FavoritesPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path='/profile'
+              element={
+                <PrivateRoute>
+                  <ProfilePage />
                 </PrivateRoute>
               }
             />

@@ -30,6 +30,29 @@ const UsersService = {
         ? res.text().then(e => Promise.reject(e))
         : res.text());
   },
+  async getUser(userID) {
+    const res = await fetch(`${HOSTNAME}/users/${userID}`, {
+      method: 'GET'
+    });
+    return await (
+      (!res.ok)
+        ? res.json().then(e => Promise.reject(e))
+        : res.json());
+  },
+  async updateUser(userID, userUpdates) {
+    const res = await fetch(`${HOSTNAME}/users/${userID}`, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': AuthService.getToken()
+      },
+      body: JSON.stringify(userUpdates)
+    });
+    return await (
+      (!res.ok)
+        ? res.then(e => Promise.reject(e))
+        : res);
+  },
   async getSavedPreferences(userID) {
     const res = await fetch(`${HOSTNAME}/users/${userID}/prefs`, {
       method: 'GET',
