@@ -59,7 +59,7 @@ export default class SheltersPage extends Component {
       })
       .catch(error => {
         log.error(error)
-        this.setState({ error: "No shelter data avairable" });
+        this.setState({ error: "No shelter data available" });
       });
 
     PetsService.getPets({ shelterID })
