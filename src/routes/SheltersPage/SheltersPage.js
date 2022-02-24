@@ -259,49 +259,49 @@ export default class SheltersPage extends Component {
 
     return (
       <div>
-        <form>
+        <form onSubmit={this.onClickUpdate}>
           <div>
             <table className='shelterTable'>
               <tbody>
                 <tr>
                   <th>Shelter Name</th>
-                  <td><Input type='text' className='form-control' required value={shelterName}
-                    onChange={e => this.inputEdited('shelterName', e.target.value)} /></td>
+                  <td><Input type='text' className='form-control'  value={shelterName}
+                    onChange={e => this.inputEdited('shelterName', e.target.value)} required/></td>
                 </tr>
                 <tr>
                   <th>Address</th>
-                  <td><Input type='text' className='form-control' required value={address}
-                    onChange={e => this.inputEdited('address', e.target.value)} /></td>
+                  <td><Input type='text' className='form-control' value={address}
+                    onChange={e => this.inputEdited('address', e.target.value)} required/></td>
                 </tr>
                 <tr>
                   <th>City</th>
-                  <td><Input type='text' className='form-control' required value={city}
-                    onChange={e => this.inputEdited('city', e.target.value)} /></td>
+                  <td><Input type='text' className='form-control' value={city}
+                    onChange={e => this.inputEdited('city', e.target.value)} required/></td>
                 </tr>
                 <tr>
                   <th>State</th>
                   <td>
                     <select className='form-control' value={state} onChange={e => {
                       this.setState({ 'state': e.target.value });
-                    }}>
+                    }} required>
                       {this.renderUSStates()}
                     </select>
                   </td>
                 </tr>
                 <tr>
                   <th>Zip Code</th>
-                  <td><Input type='number' min='0' max='99999' className='form-control' required value={zip}
-                    onChange={e => this.inputEdited('zip', e.target.value)} /></td>
+                  <td><Input type='number' min='0' max='99999' className='form-control' value={zip}
+                    onChange={e => this.inputEdited('zip', e.target.value)} required/></td>
                 </tr>
                 <tr>
                   <th>Email</th>
-                  <td><Input type='email' className='form-control' required value={email}
-                    onChange={e => this.inputEdited('email', e.target.value)} /></td>
+                  <td><Input type='email' className='form-control' value={email}
+                    onChange={e => this.inputEdited('email', e.target.value)} required/></td>
                 </tr>
                 <tr>
                   <th>Phone number</th>
-                  <td><Input type='number' max='9999999999' className='form-control' required value={phoneNumber}
-                    onChange={e => this.inputEdited('phoneNumber', e.target.value)} /></td>
+                  <td><Input type='number' max='9999999999' className='form-control' value={phoneNumber}
+                    onChange={e => this.inputEdited('phoneNumber', e.target.value)} required/></td>
                 </tr>
                 <tr>
                   <th>Website</th>
@@ -314,7 +314,7 @@ export default class SheltersPage extends Component {
           </div>
           <div className="row">
             <div className="col-sm-12 text-center">
-              <button className="btn btn-primary btn-md m-2" onClick={this.onClickUpdate}>Update</button>
+              <button className="btn btn-primary btn-md m-2" type="submit" >Update</button>
               <button className="btn btn-outline-primary  btn-md m-2" onClick={this.handleEditButtonClick}>Cancel</button>
             </div>
           </div>
