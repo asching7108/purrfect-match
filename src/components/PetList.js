@@ -5,6 +5,8 @@ import { Input } from './Utils/Utils';
 import PetsService from '../services/petsService';
 import UsersService from '../services/usersService';
 import AuthService from '../services/authService';
+import * as logUtils from '../../components/Utils/Logger';
+const log = logUtils.getLogger();
 
 export default function PetList(props) {
   const {
@@ -28,7 +30,7 @@ export default function PetList(props) {
     if (breeds.length === 0) {
       PetsService.getBreeds()
         .then(breeds => setBreeds(breeds))
-        .catch(error => console.log(error));
+        .catch(error => log.debug(error));
     }
   });
 
@@ -71,7 +73,7 @@ export default function PetList(props) {
   const savePreferences = async (e) => {
     e.preventDefault();
     const objectKeys = ['typeOfAnimal', 'breed', 'sex', 'minAge', 'maxAge', 'more'];
-    const preferenceTypes = [typeOfAnimal, breed, sex.value, minAge, maxAge, more];
+    const preferenceTypes = [typeOfAnimal, breed, sex?.value, minAge, maxAge, more];
     let changedPreferences = {};
 
     for (let i = 0; i < preferenceTypes.length; i++) {
@@ -89,7 +91,7 @@ export default function PetList(props) {
       setSavedPrefs(true);
       setConfirmSaved(true);
     }
-    
+
   }
 
   const getSavedPreferences = async (userID) => {
@@ -106,11 +108,11 @@ export default function PetList(props) {
           maxAge: res.MaxAge ? res.MaxAge : '',
           more: res.More ? JSON.parse(res.More) : []
         }
-          setSavedPrefs(true);
-          savedPreferencesHandler(changedPrefs);
+        setSavedPrefs(true);
+        savedPreferencesHandler(changedPrefs);
       }
     } catch (error) {
-      console.log(error);
+      log.debug(error);
     }
   }
 
