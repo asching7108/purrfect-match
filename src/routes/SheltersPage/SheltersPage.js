@@ -147,7 +147,8 @@ export default class SheltersPage extends Component {
     }
   };
 
-  onClickUpdate() {
+  onClickUpdate(e) {
+    e.preventDefault();
     const {
       shelterID,
       shelterName,
@@ -171,11 +172,13 @@ export default class SheltersPage extends Component {
 
     SheltersService.updateShelter(data)
       .then(res => {
+        window.location.reload(false)
         this.props.onSubmitSuccess();
       })
       .catch(res => {
         this.setState({ error: res.error });
       });
+
   }
 
 
