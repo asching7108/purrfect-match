@@ -292,7 +292,7 @@ export default class SheltersPage extends Component {
                 </tr>
                 <tr>
                   <th>Phone number</th>
-                  <td><Input type='number' className='form-control' required value={phoneNumber}
+                  <td><Input type='number' max='9999999999' className='form-control' required value={phoneNumber}
                     onChange={e => this.inputEdited('phoneNumber', e.target.value)} /></td>
                 </tr>
                 <tr>
