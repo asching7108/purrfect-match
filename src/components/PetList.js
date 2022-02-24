@@ -5,7 +5,7 @@ import { Input } from './Utils/Utils';
 import PetsService from '../services/petsService';
 import UsersService from '../services/usersService';
 import AuthService from '../services/authService';
-import * as logUtils from '../../components/Utils/Logger';
+import * as logUtils from '../components/Utils/Logger';
 const log = logUtils.getLogger();
 
 export default function PetList(props) {
