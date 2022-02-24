@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { isShelterAdmin, Section, Input } from '../../components/Utils/Utils';
-import './SheltersPege.css';
+import './SheltersPage.css';
 import SheltersService from '../../services/sheltersService';
 import * as logUtils from '../../components/Utils/Logger';
 import PetList from '../../components/PetList';
