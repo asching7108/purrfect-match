@@ -24,6 +24,7 @@ export default class SheltersPege extends Component {
       more: []
     };
     this.inputChanged = this.inputChanged.bind(this);
+    this.changeSavedPreferences = this.changeSavedPreferences.bind(this);
   }
 
   componentDidMount() {
@@ -44,6 +45,10 @@ export default class SheltersPege extends Component {
   inputChanged(field, content) {
     log.debug("Calling inputChanged")
     this.setState({ [field]: content }, () => this.handleSubmit());
+  }
+
+  changeSavedPreferences(changedPrefs) {
+    this.setState(changedPrefs, () => this.handleSubmit());
   }
 
   handleSubmit = () => {
@@ -142,6 +147,7 @@ export default class SheltersPege extends Component {
           maxAge={maxAge}
           more={more}
           inputChangeHandler={this.inputChanged}
+          savedPreferencesHandler={this.changeSavedPreferences}
         />}
       </>
     );

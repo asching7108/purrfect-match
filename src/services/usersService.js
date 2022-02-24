@@ -16,6 +16,20 @@ const UsersService = {
         ? res.json().then(e => Promise.reject(e))
         : res.json());
   },
+  async saveUserPreferences(userID, method, changedPreferences) {
+    const res = await fetch(`${HOSTNAME}/users/${userID}/prefs`, {
+      method: method,
+      headers: {
+        'content-type': 'application/json',
+        'authorization': AuthService.getToken()
+      },
+      body: JSON.stringify(changedPreferences)
+    });
+    return await (
+      (!res.ok)
+        ? res.text().then(e => Promise.reject(e))
+        : res.text());
+  },
   async getUser(userID) {
     const res = await fetch(`${HOSTNAME}/users/${userID}`, {
       method: 'GET'
@@ -38,6 +52,19 @@ const UsersService = {
       (!res.ok)
         ? res.then(e => Promise.reject(e))
         : res);
+  },
+  async getSavedPreferences(userID) {
+    const res = await fetch(`${HOSTNAME}/users/${userID}/prefs`, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': AuthService.getToken()
+      }
+    });
+    return await (
+      (!res.ok)
+        ? res.json().then(e => Promise.reject(e))
+        : res.json());
   }
 };
 
