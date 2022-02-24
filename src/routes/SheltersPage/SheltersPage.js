@@ -160,7 +160,7 @@ export default class SheltersPage extends Component {
       "shelterName": shelterName,
       "address": address + ", " + city + ", " + state + " " + zip,
       "emailAddress": email,
-      "phoneNumber": parseInt(phoneNumber),
+      "phoneNumber": phoneNumber,
       "website": website ? website : null,
     }
 
