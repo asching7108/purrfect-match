@@ -70,7 +70,7 @@ export default function HomePage() {
     if (pets) {
       return (
         <div className="container text-center m-3">
-          <h2>Meet Our New Pets!</h2>
+          <h1 className="title text-info font-weight-bold">Meet Our New Pets!</h1>
           <Section className="row">
             <div key="pet1" className='col-sm-4'>
               <PetCard pet={pets[0]} />
@@ -82,9 +82,9 @@ export default function HomePage() {
               <PetCard pet={pets[2]} />
             </div>
           </Section>
-          <SecondaryButton type='button' onClick={linkToPets}>
+          <button  type='button' className='btn btn-outline-info' onClick={linkToPets}>
             Looking for defferent match? Click here!
-          </SecondaryButton>
+          </button >
         </div>
       );
     }
