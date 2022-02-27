@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import PetList from '../components/PetList';
 import { Section } from '../components/Utils/Utils';
+import AuthService from '../services/authService';
 import PetsService from '../services/petsService';
+import UsersService from '../services/usersService';
+import * as logUtils from '../components/Utils/Logger';
+const log = logUtils.getLogger();
 
 export default class PetsPage extends Component {
   constructor(props) {
@@ -15,7 +19,8 @@ export default class PetsPage extends Component {
       maxAge: '',
       more: [],
       distance: { label: 'Anywhere', value: '' },
-      zipCode: ''
+      zipCode: '',
+      address: null
     };
     this.inputChanged = this.inputChanged.bind(this);
     this.changeSavedPreferences = this.changeSavedPreferences.bind(this);
@@ -24,7 +29,12 @@ export default class PetsPage extends Component {
   componentDidMount() {
     PetsService.getPets({})
       .then(pets => this.setState({ pets }))
-      .catch(error => console.log(error));
+      .catch(error => log.debug(error));
+    const userID = AuthService.getUserIDFromToken();
+    if (userID)
+      UsersService.getUser(userID)
+        .then(user => this.setState({ zipCode: user[0].ZipCode, address: user[0].Address }))
+        .catch(error => log.debug(error));
   }
 
   inputChanged(field, content) {
@@ -54,7 +64,8 @@ export default class PetsPage extends Component {
       maxAge,
       more,
       distance,
-      zipCode
+      zipCode,
+      address
     } = this.state;
     const filters = { availability: 'Available' };
     if (typeOfAnimal.length > 0)
@@ -72,6 +83,8 @@ export default class PetsPage extends Component {
       filters.distance = distance.value;
     if (zipCode > 0)
       filters.zipCode = zipCode;
+    if (address)
+      filters.address = address;
     return filters;
   }
   

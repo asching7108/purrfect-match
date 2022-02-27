@@ -25,8 +25,6 @@ export default function PetList(props) {
   } = props;
 
   const [breeds, setBreeds] = useState([]);
-  const [userAddress, setUserAddress] = useState('');
-  const [userZipCode, setUserZipCode] = useState('');
   const [savedPrefs, setSavedPrefs] = useState(false);
   const [confirmSaved, setConfirmSaved] = useState(false);
 
@@ -108,14 +106,6 @@ export default function PetList(props) {
 
   const getSavedPreferences = async (userID) => {
     try {
-      // gets user address and zip code
-      let userRes = await UsersService.getUser(userID);
-      if (userRes.length > 0) {
-        setUserAddress(userRes[0].Address || '');
-        setUserZipCode(userRes[0].ZipCode);
-      }
-
-      // gets saved preferences
       let res = await UsersService.getSavedPreferences(userID);
       if (res.length > 0) {
         res = res[0];
@@ -128,13 +118,10 @@ export default function PetList(props) {
           maxAge: res.MaxAge ? res.MaxAge : '',
           more: res.More ? JSON.parse(res.More) : [],
           distance: res.Distance ? JSON.parse(res.Distance) : { value: '', label: 'Anywhere' },
-          zipCode: res.ZipCode || userRes[0].ZipCode
+          zipCode: res.ZipCode || zipCode
         }
         setSavedPrefs(true);
         savedPreferencesHandler(changedPrefs);
-      }
-      else {
-        savedPreferencesHandler({ zipCode: userRes[0].ZipCode });
       }
     } catch (error) {
       log.debug(error);
@@ -171,9 +158,9 @@ export default function PetList(props) {
   const renderSaveButton = () => {
 
     if (!AuthService.getUserIDFromToken()) return null;
-    if (confirmSaved) return (<button className='btn btn-success btn-sm m-1' disabled>Preferences saved!</button>)
+    if (confirmSaved) return (<button className='btn btn-success btn-sm my-1' disabled>Preferences saved!</button>)
 
-    return (<button className='btn btn-primary btn-sm m-1' onClick={savePreferences}>Save Preferences</button>)
+    return (<button className='btn btn-primary btn-sm my-1' onClick={savePreferences}>Save Preferences</button>)
   }
 
   const renderFilters = () => {
@@ -280,8 +267,8 @@ export default function PetList(props) {
                 }}
               />
             </div>
-            <div className='col-sm m-1 form-inline'>
-              <label for='zipCode'>near </label>
+            <div className='col-sm m-1 d-flex align-items-start'>
+              <label className='mt-2' htmlFor='zipCode'>near </label>
               <Input
                 className='ml-2'
                 placeholder='ZIP CODE'
@@ -297,13 +284,12 @@ export default function PetList(props) {
                 }}
               />
             </div>
-            <div className='col-sm m-1'></div>
+            <div className='col-sm m-1 d-flex justify-content-end row'>
+              {renderSaveButton()}
+              <button className='btn btn-outline-primary btn-sm my-1 ml-2' onClick={clearFilters}>Clear Filters</button>
+            </div>
           </div>
         </form>
-        <div className='d-flex justify-content-end'>
-          {renderSaveButton()}
-          <button className='btn btn-outline-primary btn-sm m-1' onClick={clearFilters}>Clear Filters</button>
-        </div>
       </>
     );
   };

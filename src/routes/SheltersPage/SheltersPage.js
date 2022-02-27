@@ -8,6 +8,8 @@ import PetsService from '../../services/petsService';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import USStates from '../../components/Utils/USStates.json'
+import UsersService from '../../services/usersService';
+import AuthService from '../../services/authService';
 var log = logUtils.getLogger()
 
 export default class SheltersPage extends Component {
@@ -30,6 +32,7 @@ export default class SheltersPage extends Component {
       more: [],
       distance: { label: 'Anywhere', value: '' },
       zipCode: '',
+      address: null,
       mode: "view",
       shelterName: null,
       address: null,
@@ -67,7 +70,13 @@ export default class SheltersPage extends Component {
     PetsService.getPets({ shelterID })
       .then(pets => this.setState({ pets: pets }))
       .catch(error => log.error(error));
-  }
+
+    const userID = AuthService.getUserIDFromToken();
+    if (userID)
+      UsersService.getUser(userID)
+        .then(user => this.setState({ zipCode: user[0].ZipCode, address: user[0].Address }))
+        .catch(error => log.debug(error));
+    }
 
   inputChanged(field, content) {
     this.setState({ [field]: content }, () => this.handleSubmit());
@@ -97,7 +106,8 @@ export default class SheltersPage extends Component {
       maxAge,
       more,
       distance,
-      zipCode
+      zipCode,
+      address
     } = this.state;
     const filters = { shelterID, availability: 'Available' };
     if (typeOfAnimal.length > 0)
@@ -115,6 +125,8 @@ export default class SheltersPage extends Component {
       filters.distance = distance.value;
     if (zipCode)
       filters.zipCode = zipCode;
+    if (address)
+      filters.address = address;
     return filters;
   }
 
