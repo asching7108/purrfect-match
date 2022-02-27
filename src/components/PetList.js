@@ -18,11 +18,15 @@ export default function PetList(props) {
     minAge,
     maxAge,
     more,
+    distance,
+    zipCode,
     inputChangeHandler,
     savedPreferencesHandler,
   } = props;
 
   const [breeds, setBreeds] = useState([]);
+  const [userAddress, setUserAddress] = useState('');
+  const [userZipCode, setUserZipCode] = useState('');
   const [savedPrefs, setSavedPrefs] = useState(false);
   const [confirmSaved, setConfirmSaved] = useState(false);
 
@@ -70,10 +74,18 @@ export default function PetList(props) {
     { value: 'houseTrained', label: 'House Trained' },
   ];
 
+  const distanceOptions = [
+    { value: '', label: 'Anywhere' },
+    { value: '10', label: '10 miles' },
+    { value: '25', label: '25 miles' },
+    { value: '50', label: '50 miles' },
+    { value: '100', label: '100 miles' }
+  ];
+
   const savePreferences = async (e) => {
     e.preventDefault();
-    const objectKeys = ['typeOfAnimal', 'breed', 'sex', 'minAge', 'maxAge', 'more'];
-    const preferenceTypes = [typeOfAnimal, breed, sex?.value, minAge, maxAge, more];
+    const objectKeys = ['typeOfAnimal', 'breed', 'sex', 'minAge', 'maxAge', 'more', 'distance', 'zipCode'];
+    const preferenceTypes = [typeOfAnimal, breed, sex?.value, minAge, maxAge, more, distance, zipCode];
     let changedPreferences = {};
 
     for (let i = 0; i < preferenceTypes.length; i++) {
@@ -96,6 +108,14 @@ export default function PetList(props) {
 
   const getSavedPreferences = async (userID) => {
     try {
+      // gets user address and zip code
+      let userRes = await UsersService.getUser(userID);
+      if (userRes.length > 0) {
+        setUserAddress(userRes[0].Address || '');
+        setUserZipCode(userRes[0].ZipCode);
+      }
+
+      // gets saved preferences
       let res = await UsersService.getSavedPreferences(userID);
       if (res.length > 0) {
         res = res[0];
@@ -106,10 +126,15 @@ export default function PetList(props) {
           sex: res.Sex ? { value: res.Sex, label: res.Sex } : '',
           minAge: res.MinAge ? res.MinAge : '',
           maxAge: res.MaxAge ? res.MaxAge : '',
-          more: res.More ? JSON.parse(res.More) : []
+          more: res.More ? JSON.parse(res.More) : [],
+          distance: res.Distance ? JSON.parse(res.Distance) : { value: '', label: 'Anywhere' },
+          zipCode: res.ZipCode || userRes[0].ZipCode
         }
         setSavedPrefs(true);
         savedPreferencesHandler(changedPrefs);
+      }
+      else {
+        savedPreferencesHandler({ zipCode: userRes[0].ZipCode });
       }
     } catch (error) {
       log.debug(error);
@@ -124,6 +149,7 @@ export default function PetList(props) {
     for (const field of ['sex', 'minAge', 'maxAge']) {
       inputChangeHandler(field, '');
     }
+    inputChangeHandler(distance, { label: 'Anywhere', value: '' });
   };
 
   const renderPet = pet => {
@@ -201,7 +227,6 @@ export default function PetList(props) {
           <div className='row mb-2'>
             <div className='col-sm m-1'>
               <Input
-                className=''
                 placeholder='FROM AGE'
                 name='minAge'
                 id='minAge'
@@ -215,7 +240,6 @@ export default function PetList(props) {
             </div>
             <div className='col-sm m-1'>
               <Input
-                className=''
                 placeholder='TO AGE'
                 name='maxAge'
                 id='maxAge'
@@ -241,6 +265,39 @@ export default function PetList(props) {
                 isMulti
               />
             </div>
+          </div>
+          <div className='row mb-2'>
+            <div className='col-sm m-1'>
+              <Select
+                placeholder='DISTANCE'
+                name='distance'
+                id='distance'
+                value={distance}
+                options={distanceOptions}
+                onChange={selectedOption => {
+                  setConfirmSaved(false);
+                  inputChangeHandler('distance', selectedOption)
+                }}
+              />
+            </div>
+            <div className='col-sm m-1 form-inline'>
+              <label for='zipCode'>near </label>
+              <Input
+                className='ml-2'
+                placeholder='ZIP CODE'
+                name='zipCode'
+                id='zipCode'
+                type='number'
+                min='1'
+                max='99999'
+                value={zipCode}
+                onChange={e => {
+                  setConfirmSaved(false);
+                  inputChangeHandler('zipCode', e.target.value)
+                }}
+              />
+            </div>
+            <div className='col-sm m-1'></div>
           </div>
         </form>
         <div className='d-flex justify-content-end'>

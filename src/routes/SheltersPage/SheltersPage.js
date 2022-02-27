@@ -28,6 +28,8 @@ export default class SheltersPage extends Component {
       minAge: '',
       maxAge: '',
       more: [],
+      distance: { label: 'Anywhere', value: '' },
+      zipCode: '',
       mode: "view",
       shelterName: null,
       address: null,
@@ -93,7 +95,9 @@ export default class SheltersPage extends Component {
       sex,
       minAge,
       maxAge,
-      more
+      more,
+      distance,
+      zipCode
     } = this.state;
     const filters = { shelterID, availability: 'Available' };
     if (typeOfAnimal.length > 0)
@@ -107,6 +111,10 @@ export default class SheltersPage extends Component {
     if (maxAge > 0)
       filters.maxAge = maxAge;
     more.forEach(option => filters[option.value] = true);
+    if (distance)
+      filters.distance = distance.value;
+    if (zipCode)
+      filters.zipCode = zipCode;
     return filters;
   }
 
@@ -334,7 +342,9 @@ export default class SheltersPage extends Component {
       sex,
       minAge,
       maxAge,
-      more
+      more,
+      distance,
+      zipCode
     } = this.state;
     return (
       <>
@@ -355,6 +365,8 @@ export default class SheltersPage extends Component {
           minAge={minAge}
           maxAge={maxAge}
           more={more}
+          distance={distance}
+          zipCode={zipCode}
           inputChangeHandler={this.inputChanged}
           savedPreferencesHandler={this.changeSavedPreferences}
         />}

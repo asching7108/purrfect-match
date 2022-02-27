@@ -13,7 +13,9 @@ export default class PetsPage extends Component {
       sex: '',
       minAge: '',
       maxAge: '',
-      more: []
+      more: [],
+      distance: { label: 'Anywhere', value: '' },
+      zipCode: ''
     };
     this.inputChanged = this.inputChanged.bind(this);
     this.changeSavedPreferences = this.changeSavedPreferences.bind(this);
@@ -50,7 +52,9 @@ export default class PetsPage extends Component {
       sex,
       minAge,
       maxAge,
-      more
+      more,
+      distance,
+      zipCode
     } = this.state;
     const filters = { availability: 'Available' };
     if (typeOfAnimal.length > 0)
@@ -64,6 +68,10 @@ export default class PetsPage extends Component {
     if (maxAge > 0)
       filters.maxAge = maxAge;
     more.forEach(option => filters[option.value] = true);
+    if (distance)
+      filters.distance = distance.value;
+    if (zipCode > 0)
+      filters.zipCode = zipCode;
     return filters;
   }
   
@@ -75,7 +83,9 @@ export default class PetsPage extends Component {
       sex,
       minAge,
       maxAge,
-      more
+      more,
+      distance,
+      zipCode
     } = this.state;
     return (
       <Section>
@@ -88,6 +98,8 @@ export default class PetsPage extends Component {
           minAge={minAge}
           maxAge={maxAge}
           more={more}
+          distance={distance}
+          zipCode={zipCode}
           inputChangeHandler={this.inputChanged}
           savedPreferencesHandler={this.changeSavedPreferences}
         />}
