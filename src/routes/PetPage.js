@@ -3,7 +3,9 @@ import { useNavigate, useParams } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup, isShelterAdmin, PrimaryButton, renderFavoriteIcon, SecondaryButton, Section, TextArea } from '../components/Utils/Utils';
 import PetsService from '../services/petsService';
+import UsersService from '../services/usersService';
 import { Link } from 'react-router-dom';
+import AuthService from '../services/authService';
 const { HOSTNAME } = require('../config/hostname.config');
 
 export default function PetPage () {
@@ -14,6 +16,8 @@ export default function PetPage () {
   const [creatingNews, setCreatingNews] = useState(false);
   const [newUpdate, setNewUpdate] = useState('');
   const [error, setError] = useState(null);
+  const [favorites, setFavorites] = useState([]);
+  const [checkedFavorites, setCheckedFavorites] = useState(false);
 
   useEffect(() => {
     if (!pet) {
@@ -30,7 +34,28 @@ export default function PetPage () {
           setError(e.error);
         });
     }
+    if (!checkedFavorites) {
+      try {
+        if (AuthService.isLoggedIn()) {
+          getUserFavorites(AuthService.getUserIDFromToken());
+        } else {
+          setCheckedFavorites(true);
+        }
+      } catch (e) {
+        setError(e);
+      }
+    }
   });
+
+  const getUserFavorites = async (userID) => {
+    try {
+      const res = await UsersService.getUserFavorites(userID);
+      setFavorites(res);
+      setCheckedFavorites(true);
+    } catch (e) {
+      setError(e);
+    }
+  }
 
   const onClickDelete = () => {
     if (window.confirm('Are you sure you want to delete this pet?')) {
@@ -79,7 +104,7 @@ export default function PetPage () {
             <h2>
               Hi, I'm {pet.Name}!
               <span> </span>
-              {renderFavoriteIcon(pet.PetID)}
+              {renderFavoriteIcon(pet.PetID, favorites)}
             </h2>
           </div>
           {isShelterAdmin(pet.ShelterID) &&

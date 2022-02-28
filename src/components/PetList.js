@@ -25,6 +25,7 @@ export default function PetList(props) {
   const [breeds, setBreeds] = useState([]);
   const [savedPrefs, setSavedPrefs] = useState(false);
   const [confirmSaved, setConfirmSaved] = useState(false);
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     if (breeds.length === 0) {
@@ -39,6 +40,7 @@ export default function PetList(props) {
     const userID = AuthService.getUserIDFromToken()
     if (userID) {
       getSavedPreferences(userID);
+      getUserFavorites(userID);
     }
   }, [])
 
@@ -116,6 +118,15 @@ export default function PetList(props) {
     }
   }
 
+  const getUserFavorites = async (userID) => {
+    try {
+      const res = await UsersService.getUserFavorites(userID);
+      setFavorites(res);
+    } catch (error) {
+      log.debug(error);
+    }
+  }
+
   const clearFilters = () => {
     setConfirmSaved(false);
     for (const field of ['typeOfAnimal', 'breed', 'more']) {
@@ -129,7 +140,7 @@ export default function PetList(props) {
   const renderPet = pet => {
     return (
       <div key={pet.PetID} className='col-sm-4'>
-        <PetCard pet={pet} page={page} />
+        <PetCard pet={pet} page={page} favorites={favorites} />
       </div>
     );
   };

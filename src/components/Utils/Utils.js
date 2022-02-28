@@ -67,11 +67,10 @@ export function isShelterAdmin(shelterID) {
   return AuthService.getShelterIDFromToken() == shelterID;
 }
 
-export function renderFavoriteIcon(petID) {
-  // TODO
-  if (true) {
-    return <span className='text-danger'><FontAwesomeIcon icon='heart' /></span>;
-  }
+export function renderFavoriteIcon(petID, favorites=[]) {
+    if (favorites.includes(petID)) {
+      return <span className='text-danger'><FontAwesomeIcon icon='heart' /></span>;
+    }
   return <span className='text-danger'><FontAwesomeIcon icon={['far', 'heart']} /></span>;
 }
 
