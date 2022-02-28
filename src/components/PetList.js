@@ -134,12 +134,15 @@ export default function PetList(props) {
   const clearFilters = () => {
     setConfirmSaved(false);
     for (const field of ['typeOfAnimal', 'breed', 'more']) {
-      inputChangeHandler(field, []);
+      inputChangeHandler(field, [], false);
     }
     for (const field of ['sex', 'minAge', 'maxAge']) {
-      inputChangeHandler(field, '');
+      inputChangeHandler(field, '', false);
     }
-    inputChangeHandler(distance, { label: 'Anywhere', value: '' });
+    if (page === 'pets')
+      inputChangeHandler('distance', { label: 'Anywhere', value: '' });
+    else
+      inputChangeHandler('distance', distance);
   };
 
   const renderPet = pet => {
@@ -286,9 +289,9 @@ export default function PetList(props) {
                     value={zipCode}
                     onChange={e => {
                       setConfirmSaved(false);
-                      e.target.value.length < 5
-                        ? inputChangeHandler('zipCode', e.target.value, false)
-                        : inputChangeHandler('zipCode', e.target.value);
+                      e.target.value == '' || e.target.value.length == 5
+                        ? inputChangeHandler('zipCode', e.target.value)
+                        : inputChangeHandler('zipCode', e.target.value, false);
                     }}
                   />
                 </> : ''}
@@ -305,7 +308,7 @@ export default function PetList(props) {
 
   const renderPetList = () => {
     if (!pets) return '';
-    
+
     const petCount = pets.length;
 
     // no pets exist
