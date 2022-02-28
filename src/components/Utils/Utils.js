@@ -75,7 +75,6 @@ export function renderFavoriteIcon(petID, isFavorite, callback) {
       return (
         <span className='favorite-selected' onClick={(e) => { unfavoriteButtonClick(e, petID, callback) }}>
           <FontAwesomeIcon className='heart' icon='heart' />
-          <FontAwesomeIcon className='heart-outline' icon={['far', 'heart']} />
         </span>
       );
     }
@@ -86,7 +85,6 @@ export function renderFavoriteIcon(petID, isFavorite, callback) {
   }
   return (
     <span className='favorite-not-selected' onClick={(e) => { favoriteButtonClick(e, petID, callback) }}>
-      <FontAwesomeIcon className='heart' icon='heart' />
       <FontAwesomeIcon className='heart-outline' icon={['far', 'heart']} />
     </span>
   );

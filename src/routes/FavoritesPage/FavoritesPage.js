@@ -48,7 +48,8 @@ export default class FavoritesPage extends Component {
 
     return (
       <Section>
-        <h2>Favorites</h2>
+        <h2>My Favorite Pets</h2>
+        <span className='text-muted'>A place to view all of the pets you have marked as favorites</span>
         {pets && <PetList
           pets={pets}
           page='favorites'

@@ -1,21 +1,15 @@
-.favorite-not-selected:hover .heart-outline,
-.favorite-not-selected .heart {
-  display: none;
-}
-.favorite-not-selected:hover .heart,
-.favorite-not-selected .heart-outline {
-  display: inline;
+.favorite-not-selected:hover .heart-outline {
+  color: #bbb;
 }
 
-.favorite-selected:hover .heart,
-.favorite-selected .heart-outline {
-  display: none;
-}
-.favorite-selected:hover .heart-outline,
-.favorite-selected .heart {
-  display: inline;
+.favorite-selected:hover .heart {
+  color: #e17572;
 }
 
-.heart, .heart-outline {
+.heart {
   color: #d9534f
+}
+
+.heart-outline {
+  color: #aaa
 }
