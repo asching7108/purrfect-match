@@ -79,6 +79,10 @@ export function renderFavoriteIcon(petID, isFavorite, callback) {
         </span>
       );
     }
+  } 
+  // return nothing if shelter admin
+  if (AuthService.isShelterAdmin()) {
+    return (<></>); 
   }
   return (
     <span className='favorite-not-selected' onClick={(e) => { favoriteButtonClick(e, petID, callback) }}>
@@ -86,11 +90,17 @@ export function renderFavoriteIcon(petID, isFavorite, callback) {
       <FontAwesomeIcon className='heart-outline' icon={['far', 'heart']} />
     </span>
   );
+
+
 }
 
 async function favoriteButtonClick(e, petID, callback) {
   e.stopPropagation()
   try {
+    if (!AuthService.isLoggedIn()) {
+      const currentLocation = window.location.pathname;
+      window.location.replace('/login?redirect=' + currentLocation);
+    }
     await UsersService.addUserFavorite(AuthService.getUserIDFromToken(), petID)
     callback();
   } catch (err) {
