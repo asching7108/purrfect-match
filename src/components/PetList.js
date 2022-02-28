@@ -140,7 +140,9 @@ export default function PetList(props) {
   const renderPet = pet => {
     return (
       <div key={pet.PetID} className='col-sm-4'>
-        <PetCard pet={pet} page={page} favorites={favorites} />
+        <PetCard pet={pet} page={page} isFavorite={favorites.includes(pet.PetID)} onClickHeart={() => {
+          getUserFavorites(AuthService.getUserIDFromToken())
+        }} />
       </div>
     );
   };

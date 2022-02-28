@@ -1,0 +1,21 @@
+.favorite-not-selected:hover .heart-outline,
+.favorite-not-selected .heart {
+  display: none;
+}
+.favorite-not-selected:hover .heart,
+.favorite-not-selected .heart-outline {
+  display: inline;
+}
+
+.favorite-selected:hover .heart,
+.favorite-selected .heart-outline {
+  display: none;
+}
+.favorite-selected:hover .heart-outline,
+.favorite-selected .heart {
+  display: inline;
+}
+
+.heart, .heart-outline {
+  color: #d9534f
+}

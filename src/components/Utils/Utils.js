@@ -13,6 +13,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthService from '../../services/authService';
+import UsersService from '../../services/usersService';
+import './Utils.css'
 
 // page container
 export function Section({ className, ...props }) {
@@ -67,11 +69,43 @@ export function isShelterAdmin(shelterID) {
   return AuthService.getShelterIDFromToken() == shelterID;
 }
 
-export function renderFavoriteIcon(petID, favorites=[]) {
-    if (favorites.includes(petID)) {
-      return <span className='text-danger'><FontAwesomeIcon icon='heart' /></span>;
+export function renderFavoriteIcon(petID, isFavorite, callback) {
+  if (AuthService.isLoggedIn()) {
+    if (isFavorite) {
+      return (
+        <span className='favorite-selected' onClick={(e) => { unfavoriteButtonClick(e, petID, callback) }}>
+          <FontAwesomeIcon className='heart' icon='heart' />
+          <FontAwesomeIcon className='heart-outline' icon={['far', 'heart']} />
+        </span>
+      );
     }
-  return <span className='text-danger'><FontAwesomeIcon icon={['far', 'heart']} /></span>;
+  }
+  return (
+    <span className='favorite-not-selected' onClick={(e) => { favoriteButtonClick(e, petID, callback) }}>
+      <FontAwesomeIcon className='heart' icon='heart' />
+      <FontAwesomeIcon className='heart-outline' icon={['far', 'heart']} />
+    </span>
+  );
+}
+
+async function favoriteButtonClick(e, petID, callback) {
+  e.stopPropagation()
+  try {
+    await UsersService.addUserFavorite(AuthService.getUserIDFromToken(), petID)
+    callback();
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+async function unfavoriteButtonClick(e, petID, callback) {
+  e.stopPropagation()
+  try {
+    await UsersService.removeUserFavorite(AuthService.getUserIDFromToken(), petID)
+    callback();
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 export function registerIcons() {
