@@ -5,6 +5,7 @@ import UsersService from '../../services/usersService';
 import { Section } from '../../components/Utils/Utils';
 import './ProfilePage.css'
 import CreateAccountForm from '../../components/CreateAccountForm/CreateAccountForm';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const log = logUtils.getLogger()
 
 export default class ProfilePage extends Component {
@@ -144,7 +145,7 @@ export default class ProfilePage extends Component {
     return (
       <Section>
         <>
-          <h2>Saved Preferences <button className='btn' onClick={this.deleteAllPreferences}>Delete All</button></h2>
+          <h2>Saved Preferences <span className='btn p-2 text-primary' onClick={this.deleteAllPreferences}><FontAwesomeIcon icon='trash-alt' /></span></h2>
           <table className='table'>
             <tbody>
               {animalTypes ? <tr><th>Types of Animals</th><td>{animalTypes}</td></tr> : null}
