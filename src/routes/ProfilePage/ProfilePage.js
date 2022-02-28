@@ -25,7 +25,10 @@ export default class ProfilePage extends Component {
     this.setState({ userID });
     UsersService.getUser(userID)
       .then(user => this.setState({ user: user[0] }))
-      .catch(error => console.log(error));
+      .catch(error => log.debug(error));
+    UsersService.getSavedPreferences(userID)
+      .then(prefs => this.setState({ userPreferences: prefs[0] }))
+      .catch(error => log.debug(error));
   }
 
   handleEditButtonClick = async () => {
@@ -35,6 +38,14 @@ export default class ProfilePage extends Component {
   onUpdate = async (e) => {
     e.preventDefault();
     window.location.reload()
+  }
+
+  deleteAllPreferences = async () => {
+    if (window.confirm('Are you sure you want to delete all preferences?')) {
+      UsersService.deleteAllUserPreferences(this.state.userID)
+        .then(() => { this.setState({ userPreferences: null }) })
+        .catch(error => log.debug(error));
+    }
   }
 
   renderProfile() {
@@ -96,11 +107,53 @@ export default class ProfilePage extends Component {
   }
 
   renderPreferences() {
-    // TODO: add after userPreferences backend is complete  
+    const prefs = this.state.userPreferences;
+    let animalTypes = prefs.TypeOfAnimal ? JSON.parse(prefs.TypeOfAnimal) : null;
+    let breeds = prefs.Breed ? JSON.parse(prefs.Breed) : null;
+    let more = prefs.More ? JSON.parse(prefs.More) : null;
+
+    // Format age range
+    let ageRange;
+    if (prefs.MinAge && prefs.MaxAge) {
+      ageRange = prefs.MinAge + '-' + prefs.MaxAge;
+    } else if (prefs.MinAge) {
+      ageRange = prefs.MinAge + '+';
+    } else if (prefs.MaxAge) {
+      ageRange = '< ' + prefs.MaxAge;
+    }
+
+    // Format objects
+    if (animalTypes) {
+      animalTypes = animalTypes.map((elem) => {
+        return elem.value;
+      }).join(', ');
+    };
+    if (breeds) {
+      breeds = breeds.map((elem) => {
+        return elem.value;
+      }).join(', ');
+    };
+    if (more) {
+      more = more.map((elem) => {
+        // This will add a space before any capital letter, and then lowercase
+        // Simply for formatting purposes
+        return elem.value.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase();
+      }).join(', ');
+    };
+
     return (
       <Section>
         <>
-          <h2>Saved Preferences</h2>
+          <h2>Saved Preferences <button className='btn' onClick={this.deleteAllPreferences}>Delete All</button></h2>
+          <table className='table'>
+            <tbody>
+              {animalTypes ? <tr><th>Types of Animals</th><td>{animalTypes}</td></tr> : null}
+              {breeds ? <tr><th>Breeds</th><td>{breeds}</td></tr> : null}
+              {prefs.Sex ? <tr><th>Sex</th><td>{prefs.Sex}</td></tr> : null}
+              {ageRange ? <tr><th>Age Range</th><td>{ageRange}</td></tr> : null}
+              {more ? <tr><th>Other</th><td>{more}</td></tr> : null}
+            </tbody>
+          </table>
         </>
       </Section>
 
