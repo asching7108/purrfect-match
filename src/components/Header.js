@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import AuthService from '../services/authService';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPaw } from "@fortawesome/free-solid-svg-icons";
 
 export default class Header extends Component {
   static contextType = AuthContext;
@@ -67,7 +69,7 @@ export default class Header extends Component {
   render() {
     return (
       <nav className='navbar navbar-expand-sm navbar-fixed-top navbar-dark bg-info'>
-        <Link className='navbar-brand' to='/'>Purrfect Match</Link>
+        <Link className='navbar-brand' to='/'><FontAwesomeIcon icon={faPaw} /> Purrfect Match</Link>
         <button
           className='navbar-toggler'
           type='button'
