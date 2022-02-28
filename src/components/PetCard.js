@@ -20,7 +20,7 @@ export default function PetCard(props) {
   const renderShelter = () => {
     return (
       <p>
-        <Link to={`/shelters/${pet.ShelterID}`} onClick={onClickShelter}>
+        <Link to={`/shelters/${pet.ShelterID}`} onClick={onClickShelter} className='baseFont'>
           <FontAwesomeIcon icon='house-user' />
           <span> </span>
           {pet.ShelterName}
