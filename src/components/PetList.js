@@ -260,6 +260,7 @@ export default function PetList(props) {
           {renderSaveButton()}
           <button className='btn btn-outline-primary btn-sm m-1' onClick={clearFilters}>Clear Filters</button>
         </div>
+        <br />
       </>
     );
   };
@@ -271,7 +272,7 @@ export default function PetList(props) {
     if (petCount === 0) {
       return (
         <div className='alert alert-success' role='alert'>
-          More pets will be available soon! Check back later :)
+          {page === 'favorites' ? 'Add pets to your favorites by clicking on the heart icon next to a pet\'s name!' : 'More pets will be available soon! Check back later :)'}
         </div>
       );
     }
@@ -288,8 +289,7 @@ export default function PetList(props) {
 
   return (
     <>
-      {renderFilters()}
-      <br />
+      {page === 'favorites' ? '' : renderFilters()}
       {renderPetList()}
     </>
   );
