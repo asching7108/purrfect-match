@@ -143,21 +143,18 @@ export default class ProfilePage extends Component {
     };
 
     return (
-      <Section>
-        <>
-          <h2>Saved Preferences <span className='btn p-2 text-primary' onClick={this.deleteAllPreferences}><FontAwesomeIcon icon='trash-alt' /></span></h2>
-          <table className='table'>
-            <tbody>
-              {animalTypes ? <tr><th>Types of Animals</th><td>{animalTypes}</td></tr> : null}
-              {breeds ? <tr><th>Breeds</th><td>{breeds}</td></tr> : null}
-              {prefs.Sex ? <tr><th>Sex</th><td>{prefs.Sex}</td></tr> : null}
-              {ageRange ? <tr><th>Age Range</th><td>{ageRange}</td></tr> : null}
-              {more ? <tr><th>Other</th><td>{more}</td></tr> : null}
-            </tbody>
-          </table>
-        </>
+      <Section className={'mt-5'}>
+        <h2>My Pet Preferences <span className='btn p-2 text-primary' onClick={this.deleteAllPreferences}><FontAwesomeIcon icon='trash-alt' /></span></h2>
+        <table className='table'>
+          <tbody>
+            {animalTypes ? <tr><th>Types of Animals</th><td>{animalTypes}</td></tr> : null}
+            {breeds ? <tr><th>Breeds</th><td>{breeds}</td></tr> : null}
+            {prefs.Sex ? <tr><th>Sex</th><td>{prefs.Sex}</td></tr> : null}
+            {ageRange ? <tr><th>Age Range</th><td>{ageRange}</td></tr> : null}
+            {more ? <tr><th>Other</th><td>{more}</td></tr> : null}
+          </tbody>
+        </table>
       </Section>
-
     )
   }
 
