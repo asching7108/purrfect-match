@@ -22,6 +22,7 @@ export default function PetList(props) {
     zipCode,
     inputChangeHandler,
     savedPreferencesHandler,
+    loading
   } = props;
 
   const [breeds, setBreeds] = useState([]);
@@ -122,6 +123,8 @@ export default function PetList(props) {
         }
         setSavedPrefs(true);
         savedPreferencesHandler(changedPrefs);
+      } else {
+        savedPreferencesHandler({});
       }
     } catch (error) {
       log.debug(error);
@@ -158,15 +161,15 @@ export default function PetList(props) {
   const renderSaveButton = () => {
 
     if (!AuthService.getUserIDFromToken()) return null;
-    if (confirmSaved) return (<button className='btn btn-success btn-sm my-1' disabled>Preferences saved!</button>)
+    if (confirmSaved) return (<button type='button' className='btn btn-success btn-sm my-1' disabled>Preferences saved!</button>)
 
-    return (<button className='btn btn-primary btn-sm my-1' onClick={savePreferences}>Save Preferences</button>)
+    return (<button type='button' className='btn btn-primary btn-sm my-1' onClick={savePreferences}>Save Preferences</button>)
   }
 
   const renderFilters = () => {
     return (
       <>
-        <form>
+        <form onSubmit={e => false}>
           <div className='row mb-2'>
             <div className='col-sm m-1'>
               <Select
@@ -255,38 +258,44 @@ export default function PetList(props) {
           </div>
           <div className='row mb-2'>
             <div className='col-sm m-1'>
-              <Select
-                placeholder='DISTANCE'
-                name='distance'
-                id='distance'
-                value={distance}
-                options={distanceOptions}
-                onChange={selectedOption => {
-                  setConfirmSaved(false);
-                  inputChangeHandler('distance', selectedOption)
-                }}
-              />
+              {page == 'pets' ?
+                <Select
+                  placeholder='DISTANCE'
+                  name='distance'
+                  id='distance'
+                  value={distance}
+                  options={distanceOptions}
+                  onChange={selectedOption => {
+                    setConfirmSaved(false);
+                    inputChangeHandler('distance', selectedOption)
+                  }}
+                /> : ''}
             </div>
             <div className='col-sm m-1 d-flex align-items-start'>
-              <label className='mt-2' htmlFor='zipCode'>near </label>
-              <Input
-                className='ml-2'
-                placeholder='ZIP CODE'
-                name='zipCode'
-                id='zipCode'
-                type='number'
-                min='1'
-                max='99999'
-                value={zipCode}
-                onChange={e => {
-                  setConfirmSaved(false);
-                  inputChangeHandler('zipCode', e.target.value)
-                }}
-              />
+              {page == 'pets' ?
+                <>
+                  <label className='mt-2' htmlFor='zipCode'>near </label>
+                  <Input
+                    className='ml-2'
+                    placeholder='ZIP CODE'
+                    name='zipCode'
+                    id='zipCode'
+                    type='number'
+                    min='1'
+                    max='99999'
+                    value={zipCode}
+                    onChange={e => {
+                      setConfirmSaved(false);
+                      e.target.value.length < 5
+                        ? inputChangeHandler('zipCode', e.target.value, false)
+                        : inputChangeHandler('zipCode', e.target.value);
+                    }}
+                  />
+                </> : ''}
             </div>
             <div className='col-sm m-1 d-flex justify-content-end row'>
               {renderSaveButton()}
-              <button className='btn btn-outline-primary btn-sm my-1 ml-2' onClick={clearFilters}>Clear Filters</button>
+              <button type='button' className='btn btn-outline-primary btn-sm my-1 ml-2' onClick={clearFilters}>Clear Filters</button>
             </div>
           </div>
         </form>
@@ -295,6 +304,8 @@ export default function PetList(props) {
   };
 
   const renderPetList = () => {
+    if (!pets) return '';
+    
     const petCount = pets.length;
 
     // no pets exist
@@ -320,6 +331,7 @@ export default function PetList(props) {
     <>
       {renderFilters()}
       <br />
+      {loading ? <p className='text-center text-info'>Loading pets...</p> : ''}
       {renderPetList()}
     </>
   );

@@ -8,8 +8,6 @@ import PetsService from '../../services/petsService';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import USStates from '../../components/Utils/USStates.json'
-import UsersService from '../../services/usersService';
-import AuthService from '../../services/authService';
 var log = logUtils.getLogger()
 
 export default class SheltersPage extends Component {
@@ -30,9 +28,6 @@ export default class SheltersPage extends Component {
       minAge: '',
       maxAge: '',
       more: [],
-      distance: { label: 'Anywhere', value: '' },
-      zipCode: '',
-      address: null,
       mode: "view",
       shelterName: null,
       address: null,
@@ -70,13 +65,7 @@ export default class SheltersPage extends Component {
     PetsService.getPets({ shelterID })
       .then(pets => this.setState({ pets: pets }))
       .catch(error => log.error(error));
-
-    const userID = AuthService.getUserIDFromToken();
-    if (userID)
-      UsersService.getUser(userID)
-        .then(user => this.setState({ zipCode: user[0].ZipCode, address: user[0].Address }))
-        .catch(error => log.debug(error));
-    }
+  }
 
   inputChanged(field, content) {
     this.setState({ [field]: content }, () => this.handleSubmit());
@@ -104,10 +93,7 @@ export default class SheltersPage extends Component {
       sex,
       minAge,
       maxAge,
-      more,
-      distance,
-      zipCode,
-      address
+      more
     } = this.state;
     const filters = { shelterID, availability: 'Available' };
     if (typeOfAnimal.length > 0)
@@ -121,12 +107,6 @@ export default class SheltersPage extends Component {
     if (maxAge > 0)
       filters.maxAge = maxAge;
     more.forEach(option => filters[option.value] = true);
-    if (distance)
-      filters.distance = distance.value;
-    if (zipCode)
-      filters.zipCode = zipCode;
-    if (address)
-      filters.address = address;
     return filters;
   }
 
@@ -354,9 +334,7 @@ export default class SheltersPage extends Component {
       sex,
       minAge,
       maxAge,
-      more,
-      distance,
-      zipCode
+      more
     } = this.state;
     return (
       <>
@@ -368,7 +346,7 @@ export default class SheltersPage extends Component {
             </Link>
           }
         </div>
-        {pets && <PetList
+        {<PetList
           pets={pets}
           page='shelter'
           typeOfAnimal={typeOfAnimal}
@@ -377,8 +355,6 @@ export default class SheltersPage extends Component {
           minAge={minAge}
           maxAge={maxAge}
           more={more}
-          distance={distance}
-          zipCode={zipCode}
           inputChangeHandler={this.inputChanged}
           savedPreferencesHandler={this.changeSavedPreferences}
         />}

@@ -20,25 +20,30 @@ export default class PetsPage extends Component {
       more: [],
       distance: { label: 'Anywhere', value: '' },
       zipCode: '',
-      address: null
+      address: null,
+      loading: false
     };
     this.inputChanged = this.inputChanged.bind(this);
     this.changeSavedPreferences = this.changeSavedPreferences.bind(this);
   }
 
   componentDidMount() {
-    PetsService.getPets({})
-      .then(pets => this.setState({ pets }))
-      .catch(error => log.debug(error));
     const userID = AuthService.getUserIDFromToken();
     if (userID)
       UsersService.getUser(userID)
         .then(user => this.setState({ zipCode: user[0].ZipCode, address: user[0].Address }))
         .catch(error => log.debug(error));
+    else
+      PetsService.getPets({})
+        .then(pets => this.setState({ pets }))
+        .catch(error => log.debug(error));
   }
 
-  inputChanged(field, content) {
-    this.setState({ [field]: content }, () => this.handleSubmit());
+  inputChanged(field, content, submit = true) {
+    if (submit)
+      this.setState({ [field]: content }, () => this.handleSubmit());
+    else
+      this.setState({ [field]: content });
   }
 
   changeSavedPreferences(changedPrefs) {
@@ -46,12 +51,13 @@ export default class PetsPage extends Component {
   }
 
   handleSubmit = () => {
+    this.setState({ loading: true });
     PetsService.getPets(this.getFilters())
       .then(pets => {
-        this.setState({ pets });
+        this.setState({ loading: false, pets });
       })
       .catch(res => {
-        this.setState({ error: res.error });
+        this.setState({ loading: false, error: res.error });
       });
   }
 
@@ -98,11 +104,13 @@ export default class PetsPage extends Component {
       maxAge,
       more,
       distance,
-      zipCode
+      zipCode,
+      loading
     } = this.state;
+
     return (
       <Section>
-        {pets && <PetList
+        {<PetList
           pets={pets}
           page='pets'
           typeOfAnimal={typeOfAnimal}
@@ -115,6 +123,7 @@ export default class PetsPage extends Component {
           zipCode={zipCode}
           inputChangeHandler={this.inputChanged}
           savedPreferencesHandler={this.changeSavedPreferences}
+          loading={loading}
         />}
       </Section>
     );
