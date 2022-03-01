@@ -189,10 +189,10 @@ export default class SheltersPage extends Component {
           <h2>{shelter[0].ShelterName}</h2>
           {isShelterAdmin(shelter[0].ShelterID) &&
             <div>
-              <span role='button' className='btn p-2 text-primary' onClick={this.handleEditButtonClick}>
+              <span role='button' className='btn p-2 text-info' onClick={this.handleEditButtonClick}>
                 <FontAwesomeIcon icon='edit' />
               </span>
-              <span role='button' className='btn p-2 text-primary' onClick={this.onClickDelete} >
+              <span role='button' className='btn p-2 text-info' onClick={this.onClickDelete} >
                 <FontAwesomeIcon icon='trash-alt' />
               </span>
             </div>
@@ -313,8 +313,8 @@ export default class SheltersPage extends Component {
           </div>
           <div className="row">
             <div className="col-sm-12 text-center">
-              <button className="btn btn-primary btn-md m-2" type="submit" >Update</button>
-              <button className="btn btn-outline-primary  btn-md m-2" onClick={this.handleEditButtonClick}>Cancel</button>
+              <button className="btn btn-info btn-md m-2" type="submit" >Update</button>
+              <button className="btn btn-outline-info  btn-md m-2" onClick={this.handleEditButtonClick}>Cancel</button>
             </div>
           </div>
         </form>
@@ -340,7 +340,7 @@ export default class SheltersPage extends Component {
         <div className='d-flex justify-content-between align-items-center flex-wrap'>
           <h2>Pets at {shelter[0].ShelterName}</h2>
           {isShelterAdmin(shelterID) &&
-            <Link to={`/pets/create`} className='btn btn-primary m-1'>
+            <Link to={`/pets/create`} className='btn btn-info m-1'>
               Add A Pet
             </Link>
           }

@@ -147,7 +147,7 @@ export default function PetList(props) {
     if (!AuthService.getUserIDFromToken()) return null;
     if (confirmSaved) return (<button className='btn btn-success btn-sm m-1' disabled>Preferences saved!</button>)
 
-    return (<button className='btn btn-primary btn-sm m-1' onClick={savePreferences}>Save Preferences</button>)
+    return (<button className='btn btn-info btn-sm m-1' onClick={savePreferences}>Save Preferences</button>)
   }
 
   const renderFilters = () => {
@@ -245,7 +245,7 @@ export default function PetList(props) {
         </form>
         <div className='d-flex justify-content-end'>
           {renderSaveButton()}
-          <button className='btn btn-outline-primary btn-sm m-1' onClick={clearFilters}>Clear Filters</button>
+          <button className='btn btn-outline-info btn-sm m-1' onClick={clearFilters}>Clear Filters</button>
         </div>
       </>
     );

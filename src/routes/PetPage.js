@@ -84,10 +84,10 @@ export default function PetPage () {
           </div>
           {isShelterAdmin(pet.ShelterID) &&
             <div>
-              <Link className='btn p-2 text-primary' to={`/pets/${pet.PetID}/edit`}>
+              <Link className='btn p-2 text-info' to={`/pets/${pet.PetID}/edit`}>
                 <FontAwesomeIcon icon='edit' />
               </Link>
-              <span role='button' className='btn p-2 text-primary' onClick={onClickDelete}>
+              <span role='button' className='btn p-2 text-info' onClick={onClickDelete}>
                 <FontAwesomeIcon icon='trash-alt' />
               </span>
             </div>
@@ -135,7 +135,7 @@ export default function PetPage () {
 
   const renderShelterInfo = () => {
     return (
-      <div className='col-md m-1 border border-primary rounded'>
+      <div className='col-md m-1 border border-info rounded'>
         <h4><small>Shelter Info</small></h4>
         <h3><Link to={`/shelters/${pet.ShelterID}`}><small>{pet.ShelterName}</small></Link></h3>
         <p>
@@ -164,7 +164,7 @@ export default function PetPage () {
 
   const renderPetDescription = () => {
     return (
-      <div className='col-md m-1 border border-primary rounded'>
+      <div className='col-md m-1 border border-info rounded'>
         <h3><small>About Me</small></h3>
         <p>{pet.Description}</p>
       </div>
@@ -175,7 +175,7 @@ export default function PetPage () {
     if (!creatingNews) {
       return (
         <div className='row justify-content-center'>
-          <button className='btn btn-primary mb-2' onClick={toggleCreatingNewsState}>
+          <button className='btn btn-info mb-2' onClick={toggleCreatingNewsState}>
             New Update
           </button>
         </div>
@@ -224,7 +224,7 @@ export default function PetPage () {
                 {isShelterAdmin(pet.ShelterID) &&
                   <span
                     role='button'
-                    className='btn p-2 text-primary'
+                    className='btn p-2 text-info'
                     onClick={e => onClickDeleteNewsItem(news.NewsItemID)}>
                     <FontAwesomeIcon icon='trash-alt' />
                   </span>
