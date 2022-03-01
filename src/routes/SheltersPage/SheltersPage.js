@@ -198,7 +198,6 @@ export default class SheltersPage extends Component {
             </div>
           }
         </div>
-        <hr />
       </div>
     )
   }
@@ -207,7 +206,7 @@ export default class SheltersPage extends Component {
     log.debug("Calling renderShelter...")
     return (
       <div>
-        <table className='shelterTable'>
+        <table className='table'>
           <tbody>
             <tr>
               <th>Address</th>
@@ -215,15 +214,15 @@ export default class SheltersPage extends Component {
             </tr>
             <tr>
               <th>Email</th>
-              <td><a href={"mailto:" + shelter[0].EmailAddress}>{shelter[0].EmailAddress}</a></td>
+              <td><a className='baseFont' href={"mailto:" + shelter[0].EmailAddress}>{shelter[0].EmailAddress}</a></td>
             </tr>
             <tr>
               <th>Phone number</th>
-              <td><a href={"tel:" + shelter[0].PhoneNumber}>{shelter[0].PhoneNumber}</a></td>
+              <td><a className='baseFont' href={"tel:" + shelter[0].PhoneNumber}>{shelter[0].PhoneNumber}</a></td>
             </tr>
             <tr>
               <th>Website</th>
-              <td><a href={shelter[0].Website}>{shelter[0].Website}</a></td>
+              <td><a className='baseFont' href={shelter[0].Website}>{shelter[0].Website}</a></td>
             </tr>
           </tbody>
         </table>
