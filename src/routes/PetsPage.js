@@ -20,7 +20,6 @@ export default class PetsPage extends Component {
       more: [],
       distance: { label: 'Anywhere', value: '' },
       zipCode: '',
-      address: null,
       loading: false
     };
     this.inputChanged = this.inputChanged.bind(this);
@@ -31,7 +30,7 @@ export default class PetsPage extends Component {
     const userID = AuthService.getUserIDFromToken();
     if (userID)
       UsersService.getUser(userID)
-        .then(user => this.setState({ zipCode: user[0].ZipCode, address: user[0].Address }))
+        .then(user => this.setState({ zipCode: user[0].ZipCode }))
         .catch(error => log.debug(error));
     else
       PetsService.getPets({})
@@ -70,8 +69,7 @@ export default class PetsPage extends Component {
       maxAge,
       more,
       distance,
-      zipCode,
-      address
+      zipCode
     } = this.state;
     const filters = { availability: 'Available' };
     if (typeOfAnimal.length > 0)
@@ -89,8 +87,6 @@ export default class PetsPage extends Component {
       filters.distance = distance.value;
     if (zipCode > 0)
       filters.zipCode = zipCode;
-    if (address)
-      filters.address = address;
     return filters;
   }
   

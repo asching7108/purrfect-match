@@ -82,11 +82,7 @@ export default class ProfilePage extends Component {
           <div className='profile'>
             <h3>{firstName} {lastName}</h3>
             <div>Email: {email}</div>
-            <div>{
-              address
-                ? 'Address: ' + address + ' ' + zipCode
-                : 'ZIP Code:' + zipCode
-            }</div>
+            <div>ZIP Code: {zipCode}</div>
             <small className='text-muted'>Last updated: {lastUpdated}</small>
           </div>
 
