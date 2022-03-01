@@ -99,6 +99,19 @@ const UsersService = {
         ? res.text().then(e => Promise.reject(e))
         : res.text());
   },
+  async deleteAllUserPreferences(userID) {
+    const res = await fetch(`${HOSTNAME}/users/${userID}/prefs`, {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': AuthService.getToken()
+      }
+    });
+    return await (
+      (!res.ok)
+        ? res.text().then(e => Promise.reject(e))
+        : res.text());
+  }
 };
 
 export default UsersService;

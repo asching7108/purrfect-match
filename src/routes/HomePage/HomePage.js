@@ -1,10 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Section } from '../../components/Utils/Utils';
 import './HomePage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCat, faStar, faPaw } from "@fortawesome/free-solid-svg-icons";
+import PetsService from '../../services/petsService';
+import PetCard from '../../components/PetCard';
+import { useNavigate } from 'react-router';
+import * as logUtils from '../../components/Utils/Logger';
+const log = logUtils.getLogger();
 
 export default function HomePage() {
+
+  const [pets, setPets] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!pets) {
+      PetsService.getPets({ "limit": 3 })
+        .then(pets => setPets(pets))
+        .catch(e => {
+          log.debug(e.error);
+        });
+    }
+  });
 
   const renderImage = () => {
     return (
@@ -45,11 +63,26 @@ export default function HomePage() {
   }
 
   const renderFeaturedPets = () => {
-    return (
-      <div className="container text-center m-3">
-        <h2>Add featured pets section in PM-43</h2>
-      </div>
-    );
+    if (pets) {
+      return (
+        <div className="container text-center m-3">
+          <h1 className="title text-info font-weight-bold">MEET OUR NEW PETS!</h1>
+          <Section className="row">
+            <div key="pet1" className='col-sm-4'>
+              <PetCard pet={pets[0]} />
+            </div>
+            <div key="pet2" className='col-sm-4'>
+              <PetCard pet={pets[1]} />
+            </div>
+            <div key="pet3" className='col-sm-4'>
+              <PetCard pet={pets[2]} />
+            </div>
+          </Section>
+          <a class="btn btn-outline-info" href="/pets">Looking for different match? Click here!</a>
+        </div>
+      );
+    }
+
   }
 
   return (
