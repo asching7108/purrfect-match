@@ -78,7 +78,7 @@ export default function HomePage() {
               <PetCard pet={pets[2]} />
             </div>
           </Section>
-          <a class="btn btn-outline-info" href="/pets">Looking for different match? Click here!</a>
+          <a className="btn btn-outline-info" href="/pets">Looking for different match? Click here!</a>
         </div>
       );
     }
