@@ -137,21 +137,21 @@ export default function PetPage () {
     return (
       <div className='col-md m-1 border border-primary rounded'>
         <h4><small>Shelter Info</small></h4>
-        <h3><Link to={`/shelters/${pet.ShelterID}`}>{pet.ShelterName}</Link></h3>
+        <h3><Link to={`/shelters/${pet.ShelterID}`}><small>{pet.ShelterName}</small></Link></h3>
         <p>
           <FontAwesomeIcon icon='globe' />
           <span> </span>
-          <a href={pet.Website} target="_blank">{pet.Website}</a>
+          <a href={pet.Website} className='baseFont' target="_blank">{pet.Website}</a>
         </p>
         <p>
           <FontAwesomeIcon icon='phone' />
           <span> </span>
-          <a href={'tel:' + pet.PhoneNumber}>{pet.PhoneNumber}</a>
+          <a href={'tel:' + pet.PhoneNumber} className='baseFont'>{pet.PhoneNumber}</a>
         </p>
         <p>
           <FontAwesomeIcon icon='envelope' />
           <span> </span>
-          <a href={'mailto:' + pet.EmailAddress}>{pet.EmailAddress}</a>
+          <a href={'mailto:' + pet.EmailAddress} className='baseFont'>{pet.EmailAddress}</a>
         </p>
         <p>
           <FontAwesomeIcon icon='location-arrow' />
@@ -165,7 +165,7 @@ export default function PetPage () {
   const renderPetDescription = () => {
     return (
       <div className='col-md m-1 border border-primary rounded'>
-        <h3>About Me</h3>
+        <h3><small>About Me</small></h3>
         <p>{pet.Description}</p>
       </div>
     );

@@ -11,8 +11,8 @@
   position: absolute;
   top: 85%;
   left: 50%;
+  font-family: 'Fredoka One', cursive;
   transform: translate(-50%, -50%);
-  font-family: 'Source Sans Pro', sans-serif;
   font-size: 45px;
   text-align: center;
   width: 80%;
