@@ -5,14 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCat, faStar, faPaw } from "@fortawesome/free-solid-svg-icons";
 import PetsService from '../../services/petsService';
 import PetCard from '../../components/PetCard';
-import { useNavigate } from 'react-router';
 import * as logUtils from '../../components/Utils/Logger';
 const log = logUtils.getLogger();
 
 export default function HomePage() {
 
   const [pets, setPets] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (!pets) {
