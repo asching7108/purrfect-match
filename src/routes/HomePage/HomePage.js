@@ -66,7 +66,7 @@ export default function HomePage() {
     if (pets) {
       return (
         <div className="container text-center m-3">
-          <h1 className="title text-info font-weight-bold">MEET OUR NEW PETS!</h1>
+          <h1 className="text-info font-weight-bold">MEET OUR NEW PETS!</h1>
           <Section className="row">
             <div key="pet1" className='col-sm-4'>
               <PetCard pet={pets[0]} />
