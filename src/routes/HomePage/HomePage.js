@@ -44,18 +44,17 @@ export default function HomePage() {
           <div className="col-sm border rounded m-1 p-2">
             <FontAwesomeIcon icon={faPaw} className="fa-4x text-info" />
             <h3>Our Vision</h3>
-            <p>Intently sniff hand sleep on my human's head. Lick face hiss at owner, pee a lot, and meow repeatedly scratch at fence purrrrrr eat muffins and poutine until owner comes back chase little red dot someday it will be mine!</p>
+            <p>We want to help people find a pet that is perfect for them! Using a filter system, we allow users to narrow down their search. Our goal is to make the adoption experience easy and fun!</p>
           </div>
           <div className="col-sm border rounded m-1 p-2">
             <FontAwesomeIcon icon={faStar} className="fa-4x text-info" />
             <h3>Easy to Use</h3>
-            <p>Blep bork floofs shoob shoober, long bois most angery pupper I have ever seen maximum borkdrive blop, he made many woofs shoob many pats.</p>
+            <p>Click on the "Pets" link in the header to view a list of pets. In the Pets page, you can filter by animal type, breed, sex, age range, and more. If you have an account, you can even save your filters!</p>
           </div>
           <div className="col-sm border rounded m-1 p-2">
             <FontAwesomeIcon icon={faCat} className="fa-4x text-info" />
             <h3>Favorites</h3>
-            <p>Nap all day cat dog hate mouse eat string barf pillow no baths hate everything but kitty poochy. Sleep on keyboard toy mouse squeak roll over. Mesmerizing birds. Poop on grasses licks paws destroy couch intently sniff hand.</p>
-
+            <p>Click the heart icon next to a pet's name to add it to your favorites list! On the favorites page, you can view your favorite animals all in one place.</p>
           </div>
         </div>
       </div>
