@@ -206,7 +206,11 @@ export default class SheltersPage extends Component {
   renderShelter(shelter) {
     log.debug("Calling renderShelter...")
 
-    console.log(shelter[0].Website)
+    // Add protocol to website link if none exists
+    let websiteLink = shelter[0].Website;
+    if (websiteLink.substring(0, 4) !== 'http') {
+      websiteLink = 'http://' + websiteLink;
+    }
 
     return (
       <div>
@@ -226,8 +230,7 @@ export default class SheltersPage extends Component {
             </tr>
             <tr>
               <th>Website</th>
-              {/* '//' ensures that an absolute path is used */}
-              <td><a href={'//' + shelter[0].Website}>{shelter[0].Website}</a></td>
+              <td><a href={websiteLink}>{shelter[0].Website}</a></td>
             </tr>
           </tbody>
         </table>
