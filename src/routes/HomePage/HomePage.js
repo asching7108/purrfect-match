@@ -5,14 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCat, faStar, faPaw } from "@fortawesome/free-solid-svg-icons";
 import PetsService from '../../services/petsService';
 import PetCard from '../../components/PetCard';
-import { useNavigate } from 'react-router';
 import * as logUtils from '../../components/Utils/Logger';
 const log = logUtils.getLogger();
 
 export default function HomePage() {
 
   const [pets, setPets] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (!pets) {
@@ -66,7 +64,7 @@ export default function HomePage() {
     if (pets) {
       return (
         <div className="container text-center m-3">
-          <h1 className="title text-info font-weight-bold">MEET OUR NEW PETS!</h1>
+          <h1 className="text-info font-weight-bold">MEET OUR NEW PETS!</h1>
           <Section className="row">
             <div key="pet1" className='col-sm-4'>
               <PetCard pet={pets[0]} />
@@ -78,7 +76,7 @@ export default function HomePage() {
               <PetCard pet={pets[2]} />
             </div>
           </Section>
-          <a class="btn btn-outline-info" href="/pets">Looking for different match? Click here!</a>
+          <a className="btn btn-outline-info" href="/pets">Looking for different match? Click here!</a>
         </div>
       );
     }

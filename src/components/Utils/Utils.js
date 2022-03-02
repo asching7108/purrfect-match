@@ -53,18 +53,18 @@ export function TextArea({ className, ...props }) {
 
 export function PrimaryButton({ className, ...props }) {
   return (
-    <button className={['btn btn-primary btn-block', className].join(' ')} {...props} />
+    <button className={['btn btn-info btn-block', className].join(' ')} {...props} />
   );
 }
 
 export function SecondaryButton({ className, ...props }) {
   return (
-    <button className={['btn btn-outline-primary btn-block', className].join(' ')} {...props} />
+    <button className={['btn btn-outline-info btn-block', className].join(' ')} {...props} />
   );
 }
 
 export function isShelterAdmin(shelterID) {
-  return AuthService.getShelterIDFromToken() == shelterID;
+  return AuthService.getShelterIDFromToken() === shelterID;
 }
 
 export function renderFavoriteIcon(petID) {
