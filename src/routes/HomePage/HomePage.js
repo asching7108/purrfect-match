@@ -6,16 +6,29 @@ import { faCat, faStar, faPaw } from "@fortawesome/free-solid-svg-icons";
 import PetsService from '../../services/petsService';
 import PetCard from '../../components/PetCard';
 import * as logUtils from '../../components/Utils/Logger';
+import { Link } from 'react-router-dom';
+
+const { HOSTNAME } = require('../../config/hostname.config');
 const log = logUtils.getLogger();
+
 
 export default function HomePage() {
 
   const [pets, setPets] = useState(null);
+  const [petNews, setpetNews] = useState(null);
 
   useEffect(() => {
     if (!pets) {
       PetsService.getPets({ "limit": 3 })
         .then(pets => setPets(pets))
+        .catch(e => {
+          log.debug(e.error);
+        });
+    }
+
+    if (!petNews) {
+      PetsService.getNews(3)
+        .then(news => setpetNews(news))
         .catch(e => {
           log.debug(e.error);
         });
@@ -80,7 +93,30 @@ export default function HomePage() {
         </div>
       );
     }
+  }
 
+  const renderNewsFeed = () => {
+    if (petNews) {
+      return (
+        <div className="container text-center m-3">
+          <h1 className="text-info font-weight-bold">NEWS UPDATE!</h1>
+          <div>
+            <div>
+              {petNews.map(news =>
+                <Link key={news.NewsItemID} to={`/pets/${news.PetID}`} className='baseFont'>
+                  <div className='d-flex border rounded m-2 p-2'>
+                    <img className="float-left rounded col-4 my-auto" src={HOSTNAME + news.Picture} alt={news.Name} width={"30%"} height={"30%"} />
+                    <div key={news.NewsItemID} className='row col-8' height={"100%"}>
+                      <p>{news.NewsItem}</p>
+                    </div>
+                  </div>
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
   }
 
   return (
@@ -93,6 +129,9 @@ export default function HomePage() {
       </div>
       <div className='row'>
         {renderFeaturedPets()}
+      </div>
+      <div className='row'>
+        {renderNewsFeed()}
       </div>
     </Section>
   );
