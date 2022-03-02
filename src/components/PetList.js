@@ -75,10 +75,11 @@ export default function PetList(props) {
 
   const distanceOptions = [
     { value: '', label: 'Anywhere' },
-    { value: '10', label: '10 miles' },
-    { value: '25', label: '25 miles' },
-    { value: '50', label: '50 miles' },
-    { value: '100', label: '100 miles' }
+    { value: '10', label: '10 miles from' },
+    { value: '25', label: '25 miles from' },
+    { value: '50', label: '50 miles from' },
+    { value: '100', label: '100 miles from' },
+    { value: '250', label: '250 miles from' }
   ];
 
   const savePreferences = async (e) => {
@@ -274,27 +275,24 @@ export default function PetList(props) {
                   }}
                 /> : ''}
             </div>
-            <div className='col-sm m-1 d-flex align-items-start'>
+            <div className='col-sm m-1'>
               {page == 'pets' ?
-                <>
-                  <label className='mt-2' htmlFor='zipCode'>near </label>
-                  <Input
-                    className='ml-2'
-                    placeholder='ZIP CODE'
-                    name='zipCode'
-                    id='zipCode'
-                    type='number'
-                    min='1'
-                    max='99999'
-                    value={zipCode}
-                    onChange={e => {
-                      setConfirmSaved(false);
-                      e.target.value == '' || e.target.value.length == 5
-                        ? inputChangeHandler('zipCode', e.target.value)
-                        : inputChangeHandler('zipCode', e.target.value, false);
-                    }}
-                  />
-                </> : ''}
+                <Input
+                  className='ml-2'
+                  placeholder='ZIP CODE'
+                  name='zipCode'
+                  id='zipCode'
+                  type='number'
+                  min='1'
+                  max='99999'
+                  value={zipCode}
+                  onChange={e => {
+                    setConfirmSaved(false);
+                    e.target.value == '' || e.target.value.length == 5
+                      ? inputChangeHandler('zipCode', e.target.value)
+                      : inputChangeHandler('zipCode', e.target.value, false);
+                  }}
+                /> : ''}
             </div>
             <div className='col-sm m-1 d-flex justify-content-end row'>
               {renderSaveButton()}
@@ -334,7 +332,10 @@ export default function PetList(props) {
     <>
       {renderFilters()}
       <br />
-      {loading ? <p className='text-center text-info'>Loading pets...</p> : ''}
+      {loading ?
+        <p className='text-center text-info'>
+          Loading pets... This could take a little while...
+        </p> : ''}
       {renderPetList()}
     </>
   );
