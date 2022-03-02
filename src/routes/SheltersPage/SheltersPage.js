@@ -205,6 +205,9 @@ export default class SheltersPage extends Component {
 
   renderShelter(shelter) {
     log.debug("Calling renderShelter...")
+
+    console.log(shelter[0].Website)
+
     return (
       <div>
         <table className='shelterTable'>
@@ -223,7 +226,8 @@ export default class SheltersPage extends Component {
             </tr>
             <tr>
               <th>Website</th>
-              <td><a href={shelter[0].Website}>{shelter[0].Website}</a></td>
+              {/* '//' ensures that an absolute path is used */}
+              <td><a href={'//' + shelter[0].Website}>{shelter[0].Website}</a></td>
             </tr>
           </tbody>
         </table>
