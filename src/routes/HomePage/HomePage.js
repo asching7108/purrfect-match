@@ -16,8 +16,15 @@ export default function HomePage() {
 
   const [pets, setPets] = useState(null);
   const [petNews, setpetNews] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
 
   useEffect(() => {
+
+    window.addEventListener("resize", () => {
+      const ismobile = window.innerWidth < 1200;
+      if (ismobile !== isMobile) setIsMobile(ismobile);
+  }, false);
+
     if (!pets) {
       PetsService.getPets({ "limit": 3 })
         .then(pets => setPets(pets))
@@ -33,7 +40,7 @@ export default function HomePage() {
           log.debug(e.error);
         });
     }
-  });
+  }, [isMobile]);
 
   const renderImage = () => {
     return (
@@ -96,6 +103,17 @@ export default function HomePage() {
   }
 
   const renderNewsFeed = () => {
+
+    let cardClass = 'd-flex border rounded m-2 p-2';
+    let textClass = 'row col-8';
+    let leftClass = 'col-4'
+
+    if(isMobile){
+      cardClass = 'border rounded m-2 p-2';
+      textClass = 'row m-2 p-2';
+      leftClass = ''
+    }
+
     if (petNews) {
       return (
         <div className="container text-center m-3">
@@ -104,9 +122,13 @@ export default function HomePage() {
             <div>
               {petNews.map(news =>
                 <Link key={news.NewsItemID} to={`/pets/${news.PetID}`} className='baseFont'>
-                  <div className='d-flex border rounded m-2 p-2'>
-                    <img className="float-left rounded col-4 my-auto" src={HOSTNAME + news.Picture} alt={news.Name} width={"30%"} height={"30%"} />
-                    <div key={news.NewsItemID} className='row col-8' height={"100%"}>
+                  <div className={cardClass}>
+                    <div className={leftClass}>
+                      <img className="rounded" src={HOSTNAME + news.Picture} alt={news.Name} style={{ width: "80%", maxWidth: "200px", minWidth: "200px" }} />
+                      <h4>{news.Name}</h4>
+                      <h6>{news.ShelterName}</h6>
+                    </div>
+                    <div key={news.NewsItemID} className={textClass} height={"100%"}>
                       <p>{news.NewsItem}</p>
                     </div>
                   </div>
