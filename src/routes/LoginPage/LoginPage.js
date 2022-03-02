@@ -35,7 +35,7 @@ export default class LoginPage extends Component {
         <Section className='container'>
           <div className='loginWrapper'>
             <LoginForm shelter={this.state.shelter} />
-            <button className='btn btn-link' onClick={this.handlePageSwitch}>Don't have an account? Create one!</button>
+            <button className='btn btn-link text-info' onClick={this.handlePageSwitch}>Don't have an account? Create one!</button>
           </div>
         </Section>
       </>
