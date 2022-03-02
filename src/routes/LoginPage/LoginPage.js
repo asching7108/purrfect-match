@@ -49,7 +49,7 @@ export default class LoginPage extends Component {
           <div className='row justify-content-md-center'>
             <div className='col-md-auto'>
               <CreateAccountForm shelter={this.state.shelter} />
-              <button className='btn btn-link' onClick={this.handlePageSwitch}>Already have an account? Log in here!</button>
+              <button className='btn btn-link text-info' onClick={this.handlePageSwitch}>Already have an account? Log in here!</button>
             </div>
           </div>
         </Section>
