@@ -1,0 +1,15 @@
+.favorite-not-selected:hover .heart-outline {
+  color: #bbb;
+}
+
+.favorite-selected:hover .heart {
+  color: #e17572;
+}
+
+.heart {
+  color: #d9534f
+}
+
+.heart-outline {
+  color: #aaa
+}

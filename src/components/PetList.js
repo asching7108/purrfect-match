@@ -25,6 +25,7 @@ export default function PetList(props) {
   const [breeds, setBreeds] = useState([]);
   const [savedPrefs, setSavedPrefs] = useState(false);
   const [confirmSaved, setConfirmSaved] = useState(false);
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     if (breeds.length === 0) {
@@ -39,6 +40,7 @@ export default function PetList(props) {
     const userID = AuthService.getUserIDFromToken()
     if (userID) {
       getSavedPreferences(userID);
+      getUserFavorites(userID);
     }
   }, [])
 
@@ -116,6 +118,15 @@ export default function PetList(props) {
     }
   }
 
+  const getUserFavorites = async (userID) => {
+    try {
+      const res = await UsersService.getUserFavorites(userID);
+      setFavorites(res);
+    } catch (error) {
+      log.debug(error);
+    }
+  }
+
   const clearFilters = () => {
     setConfirmSaved(false);
     for (const field of ['typeOfAnimal', 'breed', 'more']) {
@@ -129,7 +140,9 @@ export default function PetList(props) {
   const renderPet = pet => {
     return (
       <div key={pet.PetID} className='col-sm-4'>
-        <PetCard pet={pet} page={page} />
+        <PetCard pet={pet} page={page} isFavorite={favorites.includes(pet.PetID)} onClickHeart={() => {
+          getUserFavorites(AuthService.getUserIDFromToken())
+        }} />
       </div>
     );
   };
@@ -247,6 +260,7 @@ export default function PetList(props) {
           {renderSaveButton()}
           <button className='btn btn-outline-info btn-sm m-1' onClick={clearFilters}>Clear Filters</button>
         </div>
+        <br />
       </>
     );
   };
@@ -258,7 +272,7 @@ export default function PetList(props) {
     if (petCount === 0) {
       return (
         <div className='alert alert-success' role='alert'>
-          More pets will be available soon! Check back later :)
+          {page === 'favorites' ? 'Add pets to your favorites by clicking on the heart icon next to a pet\'s name!' : 'More pets will be available soon! Check back later :)'}
         </div>
       );
     }
@@ -275,8 +289,7 @@ export default function PetList(props) {
 
   return (
     <>
-      {renderFilters()}
-      <br />
+      {page === 'favorites' ? '' : renderFilters()}
       {renderPetList()}
     </>
   );

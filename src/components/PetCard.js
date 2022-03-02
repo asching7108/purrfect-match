@@ -6,7 +6,7 @@ import { renderFavoriteIcon } from './Utils/Utils';
 const { HOSTNAME } = require('../config/hostname.config');
 
 export default function PetCard(props) {
-  const { pet, page } = props;
+  const { pet, page, isFavorite, onClickHeart } = props;
   const navigate = useNavigate();
 
   const onClickCard = () => {
@@ -35,7 +35,7 @@ export default function PetCard(props) {
       <h3>
         {pet.Name}
         <span> </span>
-        {renderFavoriteIcon(pet.petID)}
+        {renderFavoriteIcon(pet.PetID, isFavorite, onClickHeart)}
       </h3>
       <h6>{pet.TypeOfAnimal}, {pet.Breed}</h6>
       <p>{pet.Sex}, {pet.Age} yrs</p>
