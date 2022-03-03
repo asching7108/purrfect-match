@@ -180,9 +180,7 @@ export default class SheltersPage extends Component {
       .catch(res => {
         this.setState({ error: res.error });
       });
-
   }
-
 
   renderShelterName(shelter) {
     return (
@@ -266,18 +264,18 @@ export default class SheltersPage extends Component {
               <tbody>
                 <tr>
                   <th>Shelter Name</th>
-                  <td><Input type='text' className='form-control'  value={shelterName}
-                    onChange={e => this.inputEdited('shelterName', e.target.value)} required/></td>
+                  <td><Input type='text' className='form-control' value={shelterName}
+                    onChange={e => this.inputEdited('shelterName', e.target.value)} required /></td>
                 </tr>
                 <tr>
                   <th>Address</th>
                   <td><Input type='text' className='form-control' value={address}
-                    onChange={e => this.inputEdited('address', e.target.value)} required/></td>
+                    onChange={e => this.inputEdited('address', e.target.value)} required /></td>
                 </tr>
                 <tr>
                   <th>City</th>
                   <td><Input type='text' className='form-control' value={city}
-                    onChange={e => this.inputEdited('city', e.target.value)} required/></td>
+                    onChange={e => this.inputEdited('city', e.target.value)} required /></td>
                 </tr>
                 <tr>
                   <th>State</th>
@@ -292,17 +290,17 @@ export default class SheltersPage extends Component {
                 <tr>
                   <th>Zip Code</th>
                   <td><Input type='number' min='0' max='99999' className='form-control' value={zip}
-                    onChange={e => this.inputEdited('zip', e.target.value)} required/></td>
+                    onChange={e => this.inputEdited('zip', e.target.value)} required /></td>
                 </tr>
                 <tr>
                   <th>Email</th>
                   <td><Input type='email' className='form-control' value={email}
-                    onChange={e => this.inputEdited('email', e.target.value)} required/></td>
+                    onChange={e => this.inputEdited('email', e.target.value)} required /></td>
                 </tr>
                 <tr>
                   <th>Phone number</th>
                   <td><Input type='number' max='9999999999' className='form-control' value={phoneNumber}
-                    onChange={e => this.inputEdited('phoneNumber', e.target.value)} required/></td>
+                    onChange={e => this.inputEdited('phoneNumber', e.target.value)} required /></td>
                 </tr>
                 <tr>
                   <th>Website</th>
@@ -388,7 +386,6 @@ export default class SheltersPage extends Component {
           {shelter && this.renderPetList()}
         </Section>
       </div>
-
     );
   }
 }

@@ -89,7 +89,7 @@ export default class PetsPage extends Component {
       filters.zipCode = zipCode;
     return filters;
   }
-  
+
   render() {
     const {
       pets,

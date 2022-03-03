@@ -11,7 +11,6 @@ import { Link } from 'react-router-dom';
 const { HOSTNAME } = require('../../config/hostname.config');
 const log = logUtils.getLogger();
 
-
 export default function HomePage() {
 
   const [pets, setPets] = useState(null);
@@ -23,7 +22,7 @@ export default function HomePage() {
     window.addEventListener("resize", () => {
       const ismobile = window.innerWidth < 1200;
       if (ismobile !== isMobile) setIsMobile(ismobile);
-  }, false);
+    }, false);
 
     if (!pets) {
       PetsService.getPets({ "limit": 3 })
@@ -107,7 +106,7 @@ export default function HomePage() {
     let textClass = 'row col-8';
     let leftClass = 'col-4'
 
-    if(isMobile){
+    if (isMobile) {
       cardClass = 'border rounded m-2 p-2';
       textClass = 'row m-2 p-2';
       leftClass = ''

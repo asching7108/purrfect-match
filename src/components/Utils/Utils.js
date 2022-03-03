@@ -78,18 +78,16 @@ export function renderFavoriteIcon(petID, isFavorite, callback) {
         </span>
       );
     }
-  } 
+  }
   // return nothing if shelter admin
   if (AuthService.isShelterAdmin()) {
-    return (<></>); 
+    return (<></>);
   }
   return (
     <span className='favorite-not-selected' onClick={(e) => { favoriteButtonClick(e, petID, callback) }}>
       <FontAwesomeIcon className='heart-outline' icon={['far', 'heart']} />
     </span>
   );
-
-
 }
 
 async function favoriteButtonClick(e, petID, callback) {

@@ -1,19 +1,19 @@
 .homeImageContainer {
-  position: relative;
-  width: 100%;
+	position: relative;
+	width: 100%;
 }
 
-.homeImageContainer img{
-  max-height: 600px;
-  object-fit: cover;
+.homeImageContainer img {
+	max-height: 600px;
+	object-fit: cover;
 }
-#message{
-  position: absolute;
-  top: 85%;
-  left: 50%;
-  font-family: 'Fredoka One', cursive;
-  transform: translate(-50%, -50%);
-  font-size: 45px;
-  text-align: center;
-  width: 80%;
+#message {
+	position: absolute;
+	top: 85%;
+	left: 50%;
+	font-family: 'Fredoka One', cursive;
+	transform: translate(-50%, -50%);
+	font-size: 45px;
+	text-align: center;
+	width: 80%;
 }

@@ -123,7 +123,7 @@ const PetsService = {
         (!res.ok)
           ? res.json().then(e => Promise.reject(e))
           : res.json()
-        );
+      );
   },
 
   getNews(limit) {
@@ -132,7 +132,7 @@ const PetsService = {
         (!res.ok)
           ? res.json().then(e => Promise.reject(e))
           : res.json()
-        );
+      );
   },
 
   getBreeds() {

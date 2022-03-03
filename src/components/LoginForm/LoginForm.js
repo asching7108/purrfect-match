@@ -49,7 +49,6 @@ export default class LoginForm extends Component {
     })
       .catch(() => {
         this.setState({ errorText: 'Invalid email or password' })
-
       });
   };
 

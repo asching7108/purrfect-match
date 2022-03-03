@@ -10,6 +10,7 @@ const SheltersService = {
           : res.json()
       );
   },
+
   getPetsByShelter(shelterID) {
     return fetch(`${HOSTNAME}/shelters/${shelterID}/pets`)
       .then(res =>
@@ -18,6 +19,7 @@ const SheltersService = {
           : res.json()
       );
   },
+
   async createShelter(newShelter) {
     const res = await fetch(`${HOSTNAME}/shelters`, {
       method: 'POST',
@@ -31,6 +33,7 @@ const SheltersService = {
         ? res.json().then(e => Promise.reject(e))
         : res.json());
   },
+
   updateShelter(shelter) {
     return fetch(`${HOSTNAME}/shelters/${shelter.shelterID}`, {
       method: 'PATCH',
@@ -46,6 +49,7 @@ const SheltersService = {
           : res.text()
       );
   },
+  
   deleteShelter(shelterID) {
     return fetch(`${HOSTNAME}/shelters/${shelterID}`, {
       method: 'DELETE',

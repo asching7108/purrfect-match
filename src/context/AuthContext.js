@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 const AuthContext = React.createContext({
   isLoggedIn: false,
   isShelterAdmin: false,
-  setLoggedInState: () => {},
-  setShelterAdminState: () => {}
+  setLoggedInState: () => { },
+  setShelterAdminState: () => { }
 })
 
 export default AuthContext;
