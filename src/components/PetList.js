@@ -278,7 +278,6 @@ export default function PetList(props) {
             <div className='col-sm m-1'>
               {page == 'pets' ?
                 <Input
-                  className='ml-2'
                   placeholder='ZIP CODE'
                   name='zipCode'
                   id='zipCode'
