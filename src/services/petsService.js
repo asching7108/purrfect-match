@@ -126,6 +126,15 @@ const PetsService = {
         );
   },
 
+  getNews(limit) {
+    return fetch(`${HOSTNAME}/news?limit=${limit}`)
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+        );
+  },
+
   getBreeds() {
     return fetch(`${HOSTNAME}/breeds`)
       .then(res =>
