@@ -131,7 +131,7 @@ export default class ProfilePage extends Component {
 
     return (
       <Section className={'mt-5'}>
-        <h2>My Pet Preferences <span className='btn p-2 text-primary' onClick={this.deleteAllPreferences}><FontAwesomeIcon icon='trash-alt' /></span></h2>
+        <h2>My Pet Preferences <span className='btn p-2 text-info' onClick={this.deleteAllPreferences}><FontAwesomeIcon icon='trash-alt' /></span></h2>
         <table className='table'>
           <tbody>
             {animalTypes ? <tr><th className='table-header'>Types of Animals</th><td>{animalTypes}</td></tr> : null}

@@ -13,6 +13,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthService from '../../services/authService';
+import UsersService from '../../services/usersService';
+import './Utils.css'
 
 // page container
 export function Section({ className, ...props }) {
@@ -53,26 +55,65 @@ export function TextArea({ className, ...props }) {
 
 export function PrimaryButton({ className, ...props }) {
   return (
-    <button className={['btn btn-primary btn-block', className].join(' ')} {...props} />
+    <button className={['btn btn-info btn-block', className].join(' ')} {...props} />
   );
 }
 
 export function SecondaryButton({ className, ...props }) {
   return (
-    <button className={['btn btn-outline-primary btn-block', className].join(' ')} {...props} />
+    <button className={['btn btn-outline-info btn-block', className].join(' ')} {...props} />
   );
 }
 
 export function isShelterAdmin(shelterID) {
-  return AuthService.getShelterIDFromToken() == shelterID;
+  return AuthService.getShelterIDFromToken() === shelterID;
 }
 
-export function renderFavoriteIcon(petID) {
-  // TODO
-  if (true) {
-    return <span className='text-danger'><FontAwesomeIcon icon='heart' /></span>;
+export function renderFavoriteIcon(petID, isFavorite, callback) {
+  if (AuthService.isLoggedIn()) {
+    if (isFavorite) {
+      return (
+        <span className='favorite-selected' onClick={(e) => { unfavoriteButtonClick(e, petID, callback) }}>
+          <FontAwesomeIcon className='heart' icon='heart' />
+        </span>
+      );
+    }
+  } 
+  // return nothing if shelter admin
+  if (AuthService.isShelterAdmin()) {
+    return (<></>); 
   }
-  return <span className='text-danger'><FontAwesomeIcon icon={['far', 'heart']} /></span>;
+  return (
+    <span className='favorite-not-selected' onClick={(e) => { favoriteButtonClick(e, petID, callback) }}>
+      <FontAwesomeIcon className='heart-outline' icon={['far', 'heart']} />
+    </span>
+  );
+
+
+}
+
+async function favoriteButtonClick(e, petID, callback) {
+  e.stopPropagation()
+  try {
+    if (!AuthService.isLoggedIn()) {
+      const currentLocation = window.location.pathname;
+      window.location.replace('/login?redirect=' + currentLocation);
+    }
+    await UsersService.addUserFavorite(AuthService.getUserIDFromToken(), petID)
+    callback();
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+async function unfavoriteButtonClick(e, petID, callback) {
+  e.stopPropagation()
+  try {
+    await UsersService.removeUserFavorite(AuthService.getUserIDFromToken(), petID)
+    callback();
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 export function registerIcons() {

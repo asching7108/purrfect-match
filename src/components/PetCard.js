@@ -6,7 +6,7 @@ import { renderFavoriteIcon } from './Utils/Utils';
 const { HOSTNAME } = require('../config/hostname.config');
 
 export default function PetCard(props) {
-  const { pet, page } = props;
+  const { pet, page, isFavorite, onClickHeart } = props;
   const navigate = useNavigate();
 
   const onClickCard = () => {
@@ -20,7 +20,7 @@ export default function PetCard(props) {
   const renderShelter = () => {
     return (
       <p>
-        <Link to={`/shelters/${pet.ShelterID}`} onClick={onClickShelter}>
+        <Link to={`/shelters/${pet.ShelterID}`} onClick={onClickShelter} className='baseFont'>
           <FontAwesomeIcon icon='house-user' />
           <span> </span>
           {pet.ShelterName}
@@ -35,7 +35,7 @@ export default function PetCard(props) {
       <div className='d-flex justify-content-between align-items-center'>
         <h3>
           <span className='mr-1'>{pet.Name}</span>
-          {renderFavoriteIcon(pet.PetID)}
+          {renderFavoriteIcon(pet.PetID, isFavorite, onClickHeart)}
         </h3>
         {pet.Distance ? <p>{pet.Distance} mi</p> : ''}
       </div>
