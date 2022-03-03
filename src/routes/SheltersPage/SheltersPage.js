@@ -28,6 +28,8 @@ export default class SheltersPage extends Component {
       minAge: '',
       maxAge: '',
       more: [],
+      distance: { label: 'Anywhere', value: '' },
+      zipCode: '',
       mode: "view",
       shelterName: null,
       address: null,
@@ -333,7 +335,9 @@ export default class SheltersPage extends Component {
       sex,
       minAge,
       maxAge,
-      more
+      more,
+      distance,
+      zipCode
     } = this.state;
     return (
       <>
@@ -345,7 +349,7 @@ export default class SheltersPage extends Component {
             </Link>
           }
         </div>
-        {pets && <PetList
+        {<PetList
           pets={pets}
           page='shelter'
           typeOfAnimal={typeOfAnimal}
@@ -354,6 +358,8 @@ export default class SheltersPage extends Component {
           minAge={minAge}
           maxAge={maxAge}
           more={more}
+          distance={distance}
+          zipCode={zipCode}
           inputChangeHandler={this.inputChanged}
           savedPreferencesHandler={this.changeSavedPreferences}
         />}

@@ -39,12 +39,8 @@ export default class CreateAccountForm extends Component {
     // Add zip code if shelter
     if (this.state.shelter && this.state.address && this.state.city && this.state.USState && this.state.zipCode) {
       return this.state.address + ', ' + this.state.city + ', ' + this.state.USState + ' ' + this.state.zipCode;
-      // Ignore zip code if user
-    } else if (this.state.address && this.state.city && this.state.USState) {
-      return this.state.address + ', ' + this.state.city + ', ' + this.state.USState;
-    } else {
-      return null;
     }
+    return null;
   }
 
   verifyPassword(password, confirmPassword) {
@@ -58,8 +54,7 @@ export default class CreateAccountForm extends Component {
   }
 
   getUserUpdateObject() {
-    // address should be included, even if null
-    let userUpdates = { address: this.getFullAddress() }
+    let userUpdates = {}
     const updateKeys = [
       'firstName',
       'lastName',
@@ -82,7 +77,6 @@ export default class CreateAccountForm extends Component {
         lastName: this.state.lastName,
         email: this.state.email,
         password: this.state.password,
-        address: this.getFullAddress(),
         zipCode: this.state.zipCode,
       }).then(() => {
         AuthService.loginUser({
@@ -226,29 +220,6 @@ export default class CreateAccountForm extends Component {
               valueAgain={this.state.confirmPassword}
               onChange={(isValid) => { }}
             />
-          </div>
-          <div className='form-group'>
-            <label className='mr-1'>
-              <p>Address <small className='text-muted'>(Optional)</small></p>
-              <input type='text' className='form-control' value={this.state.address} onChange={e => {
-                this.setState({ address: e.target.value });
-              }} />
-            </label>
-            <label className='mr-1'>
-              <p>City <small className='text-muted'>(Optional)</small></p>
-              <input type='text' className='form-control' value={this.state.city} onChange={e => {
-                this.setState({ city: e.target.value });
-              }} />
-            </label>
-            <label>
-              <p>State <small className='text-muted'>(Optional)</small></p>
-              <select className='form-control' value={this.state.USState} onChange={e => {
-                this.setState({ USState: e.target.value });
-              }}>
-                {this.renderUSStates()}
-              </select>
-            </label>
-            <small className='form-text text-muted'>All three of the above inputs inputs must be entered to save full address</small>
           </div>
           <div className='form-group'>
             <label>

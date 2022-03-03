@@ -18,8 +18,11 @@ export default function PetList(props) {
     minAge,
     maxAge,
     more,
+    distance,
+    zipCode,
     inputChangeHandler,
     savedPreferencesHandler,
+    loading
   } = props;
 
   const [breeds, setBreeds] = useState([]);
@@ -72,10 +75,19 @@ export default function PetList(props) {
     { value: 'houseTrained', label: 'House Trained' },
   ];
 
+  const distanceOptions = [
+    { value: '', label: 'Anywhere' },
+    { value: '10', label: '10 miles from' },
+    { value: '25', label: '25 miles from' },
+    { value: '50', label: '50 miles from' },
+    { value: '100', label: '100 miles from' },
+    { value: '250', label: '250 miles from' }
+  ];
+
   const savePreferences = async (e) => {
     e.preventDefault();
-    const objectKeys = ['typeOfAnimal', 'breed', 'sex', 'minAge', 'maxAge', 'more'];
-    const preferenceTypes = [typeOfAnimal, breed, sex?.value, minAge, maxAge, more];
+    const objectKeys = ['typeOfAnimal', 'breed', 'sex', 'minAge', 'maxAge', 'more', 'distance', 'zipCode'];
+    const preferenceTypes = [typeOfAnimal, breed, sex?.value, minAge, maxAge, more, distance, zipCode];
     let changedPreferences = {};
 
     for (let i = 0; i < preferenceTypes.length; i++) {
@@ -108,10 +120,14 @@ export default function PetList(props) {
           sex: res.Sex ? { value: res.Sex, label: res.Sex } : '',
           minAge: res.MinAge ? res.MinAge : '',
           maxAge: res.MaxAge ? res.MaxAge : '',
-          more: res.More ? JSON.parse(res.More) : []
+          more: res.More ? JSON.parse(res.More) : [],
+          distance: res.Distance ? JSON.parse(res.Distance) : { value: '', label: 'Anywhere' },
+          zipCode: res.ZipCode || zipCode
         }
         setSavedPrefs(true);
         savedPreferencesHandler(changedPrefs);
+      } else {
+        savedPreferencesHandler({});
       }
     } catch (error) {
       log.debug(error);
@@ -130,11 +146,15 @@ export default function PetList(props) {
   const clearFilters = () => {
     setConfirmSaved(false);
     for (const field of ['typeOfAnimal', 'breed', 'more']) {
-      inputChangeHandler(field, []);
+      inputChangeHandler(field, [], false);
     }
     for (const field of ['sex', 'minAge', 'maxAge']) {
-      inputChangeHandler(field, '');
+      inputChangeHandler(field, '', false);
     }
+    if (page === 'pets')
+      inputChangeHandler('distance', { label: 'Anywhere', value: '' });
+    else
+      inputChangeHandler('distance', distance);
   };
 
   const renderPet = pet => {
@@ -158,15 +178,15 @@ export default function PetList(props) {
   const renderSaveButton = () => {
 
     if (!AuthService.getUserIDFromToken()) return null;
-    if (confirmSaved) return (<button className='btn btn-success btn-sm m-1' disabled>Preferences saved!</button>)
+    if (confirmSaved) return (<button type='button' className='btn btn-success btn-sm my-1' disabled>Preferences saved!</button>)
 
-    return (<button className='btn btn-info btn-sm m-1' onClick={savePreferences}>Save Preferences</button>)
+    return (<button type='button' className='btn btn-primary btn-sm my-1' onClick={savePreferences}>Save Preferences</button>)
   }
 
   const renderFilters = () => {
     return (
       <>
-        <form>
+        <form onSubmit={e => false}>
           <div className='row mb-2'>
             <div className='col-sm m-1'>
               <Select
@@ -214,7 +234,6 @@ export default function PetList(props) {
           <div className='row mb-2'>
             <div className='col-sm m-1'>
               <Input
-                className=''
                 placeholder='FROM AGE'
                 name='minAge'
                 id='minAge'
@@ -228,7 +247,6 @@ export default function PetList(props) {
             </div>
             <div className='col-sm m-1'>
               <Input
-                className=''
                 placeholder='TO AGE'
                 name='maxAge'
                 id='maxAge'
@@ -255,17 +273,52 @@ export default function PetList(props) {
               />
             </div>
           </div>
+          <div className='row mb-2'>
+            <div className='col-sm m-1'>
+              {page == 'pets' ?
+                <Select
+                  placeholder='DISTANCE'
+                  name='distance'
+                  id='distance'
+                  value={distance}
+                  options={distanceOptions}
+                  onChange={selectedOption => {
+                    setConfirmSaved(false);
+                    inputChangeHandler('distance', selectedOption)
+                  }}
+                /> : ''}
+            </div>
+            <div className='col-sm m-1'>
+              {page == 'pets' ?
+                <Input
+                  placeholder='ZIP CODE'
+                  name='zipCode'
+                  id='zipCode'
+                  type='number'
+                  min='1'
+                  max='99999'
+                  value={zipCode}
+                  onChange={e => {
+                    setConfirmSaved(false);
+                    e.target.value == '' || e.target.value.length == 5
+                      ? inputChangeHandler('zipCode', e.target.value)
+                      : inputChangeHandler('zipCode', e.target.value, false);
+                  }}
+                /> : ''}
+            </div>
+            <div className='col-sm m-1 d-flex justify-content-end row'>
+              {renderSaveButton()}
+              <button type='button' className='btn btn-outline-primary btn-sm my-1 ml-2' onClick={clearFilters}>Clear Filters</button>
+            </div>
+          </div>
         </form>
-        <div className='d-flex justify-content-end'>
-          {renderSaveButton()}
-          <button className='btn btn-outline-info btn-sm m-1' onClick={clearFilters}>Clear Filters</button>
-        </div>
-        <br />
       </>
     );
   };
 
   const renderPetList = () => {
+    if (!pets) return '';
+
     const petCount = pets.length;
 
     // no pets exist
@@ -290,6 +343,11 @@ export default function PetList(props) {
   return (
     <>
       {page === 'favorites' ? '' : renderFilters()}
+      <br />
+      {loading ?
+        <p className='text-center text-info'>
+          Loading pets... This could take a little while...
+        </p> : ''}
       {renderPetList()}
     </>
   );
