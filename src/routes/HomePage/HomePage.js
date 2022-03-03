@@ -7,6 +7,8 @@ import PetsService from '../../services/petsService';
 import PetCard from '../../components/PetCard';
 import * as logUtils from '../../components/Utils/Logger';
 import { Link } from 'react-router-dom';
+import AuthService from '../../services/authService';
+import UsersService from '../../services/usersService';
 
 const { HOSTNAME } = require('../../config/hostname.config');
 const log = logUtils.getLogger();
@@ -17,13 +19,14 @@ export default function HomePage() {
   const [pets, setPets] = useState(null);
   const [petNews, setpetNews] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
 
     window.addEventListener("resize", () => {
       const ismobile = window.innerWidth < 1200;
       if (ismobile !== isMobile) setIsMobile(ismobile);
-  }, false);
+    }, false);
 
     if (!pets) {
       PetsService.getPets({ "limit": 3 })
@@ -41,6 +44,23 @@ export default function HomePage() {
         });
     }
   }, [isMobile]);
+
+  // This useEffect only runs one when mounted
+  useEffect(() => {
+    const userID = AuthService.getUserIDFromToken()
+    if (userID) {
+      getUserFavorites(userID);
+    }
+  }, [])
+
+  const getUserFavorites = async (userID) => {
+    try {
+      const res = await UsersService.getUserFavorites(userID);
+      setFavorites(res);
+    } catch (error) {
+      log.debug(error);
+    }
+  }
 
   const renderImage = () => {
     return (
@@ -81,18 +101,19 @@ export default function HomePage() {
 
   const renderFeaturedPets = () => {
     if (pets) {
+      const userID = AuthService.getUserIDFromToken();
       return (
         <div className="container text-center m-3">
           <h1 className="text-info font-weight-bold">MEET OUR NEW PETS!</h1>
           <Section className="row">
             <div key="pet1" className='col-sm-4'>
-              <PetCard pet={pets[0]} />
+              <PetCard pet={pets[0]} isFavorite={favorites.includes(pets[0].PetID)} onClickHeart={() => { getUserFavorites(userID) }} />
             </div>
             <div key="pet2" className='col-sm-4'>
-              <PetCard pet={pets[1]} />
+              <PetCard pet={pets[1]} isFavorite={favorites.includes(pets[1].PetID)} onClickHeart={() => { getUserFavorites(userID) }} />
             </div>
             <div key="pet3" className='col-sm-4'>
-              <PetCard pet={pets[2]} />
+              <PetCard pet={pets[2]} isFavorite={favorites.includes(pets[2].PetID)} onClickHeart={() => { getUserFavorites(userID) }} />
             </div>
           </Section>
           <a className="btn btn-outline-info" href="/pets">Looking for different match? Click here!</a>
@@ -107,7 +128,7 @@ export default function HomePage() {
     let textClass = 'row col-8';
     let leftClass = 'col-4'
 
-    if(isMobile){
+    if (isMobile) {
       cardClass = 'border rounded m-2 p-2';
       textClass = 'row m-2 p-2';
       leftClass = ''
