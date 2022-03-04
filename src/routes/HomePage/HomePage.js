@@ -16,8 +16,8 @@ const log = logUtils.getLogger();
 
 export default function HomePage() {
 
-  const [pets, setPets] = useState(null);
-  const [petNews, setpetNews] = useState(null);
+  const [pets, setPets] = useState();
+  const [petNews, setpetNews] = useState();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
   const [favorites, setFavorites] = useState([]);
 
@@ -95,21 +95,17 @@ export default function HomePage() {
   }
 
   const renderFeaturedPets = () => {
-    if (pets) {
+    if (pets && pets.length > 0) {
       const userID = AuthService.getUserIDFromToken();
       return (
         <div className="container text-center m-3">
           <h1 className="text-info font-weight-bold">MEET OUR NEW PETS!</h1>
           <Section className="row">
-            <div key="pet1" className='col-sm-4'>
-              <PetCard pet={pets[0]} isFavorite={favorites.includes(pets[0].PetID)} onClickHeart={() => { getUserFavorites(userID) }} />
-            </div>
-            <div key="pet2" className='col-sm-4'>
-              <PetCard pet={pets[1]} isFavorite={favorites.includes(pets[1].PetID)} onClickHeart={() => { getUserFavorites(userID) }} />
-            </div>
-            <div key="pet3" className='col-sm-4'>
-              <PetCard pet={pets[2]} isFavorite={favorites.includes(pets[2].PetID)} onClickHeart={() => { getUserFavorites(userID) }} />
-            </div>
+            {pets.map(pet =>
+              <div key={pet.PetID} className='col-sm-4'>
+                <PetCard pet={pet} isFavorite={favorites.includes(pet.PetID)} onClickHeart={() => { getUserFavorites(userID) }} />
+              </div>
+            )}
           </Section>
           <a className="btn btn-outline-info" href="/pets">Looking for different match? Click here!</a>
         </div>
@@ -129,7 +125,7 @@ export default function HomePage() {
       leftClass = ''
     }
 
-    if (petNews) {
+    if (petNews && petNews.length > 0) {
       return (
         <div className="container text-center m-3">
           <h1 className="text-info font-weight-bold">NEWS UPDATE!</h1>
