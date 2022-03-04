@@ -7,6 +7,8 @@ import PetsService from '../../services/petsService';
 import PetCard from '../../components/PetCard';
 import * as logUtils from '../../components/Utils/Logger';
 import { Link } from 'react-router-dom';
+import AuthService from '../../services/authService';
+import UsersService from '../../services/usersService';
 
 const { HOSTNAME } = require('../../config/hostname.config');
 const log = logUtils.getLogger();
@@ -17,6 +19,7 @@ export default function HomePage() {
   const [pets, setPets] = useState();
   const [petNews, setpetNews] = useState();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
 
@@ -40,7 +43,19 @@ export default function HomePage() {
           log.debug(e.error);
         });
     }
+
+    const userID = AuthService.getUserIDFromToken()
+    if (userID) getUserFavorites(userID);
   }, [isMobile]);
+
+  const getUserFavorites = async (userID) => {
+    try {
+      const res = await UsersService.getUserFavorites(userID);
+      setFavorites(res);
+    } catch (error) {
+      log.debug(error);
+    }
+  }
 
   const renderImage = () => {
     return (
@@ -81,13 +96,14 @@ export default function HomePage() {
 
   const renderFeaturedPets = () => {
     if (pets && pets.length > 0) {
+      const userID = AuthService.getUserIDFromToken();
       return (
         <div className="container text-center m-3">
           <h1 className="text-info font-weight-bold">MEET OUR NEW PETS!</h1>
           <Section className="row">
             {pets.map(pet =>
               <div key={pet.PetID} className='col-sm-4'>
-                <PetCard pet={pet} />
+                <PetCard pet={pet} isFavorite={favorites.includes(pet.PetID)} onClickHeart={() => { getUserFavorites(userID) }} />
               </div>
             )}
           </Section>
