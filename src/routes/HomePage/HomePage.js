@@ -14,8 +14,8 @@ const log = logUtils.getLogger();
 
 export default function HomePage() {
 
-  const [pets, setPets] = useState(null);
-  const [petNews, setpetNews] = useState(null);
+  const [pets, setPets] = useState();
+  const [petNews, setpetNews] = useState();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export default function HomePage() {
     window.addEventListener("resize", () => {
       const ismobile = window.innerWidth < 1200;
       if (ismobile !== isMobile) setIsMobile(ismobile);
-  }, false);
+    }, false);
 
     if (!pets) {
       PetsService.getPets({ "limit": 3 })
@@ -80,20 +80,16 @@ export default function HomePage() {
   }
 
   const renderFeaturedPets = () => {
-    if (pets) {
+    if (pets && pets.length > 0) {
       return (
         <div className="container text-center m-3">
           <h1 className="text-info font-weight-bold">MEET OUR NEW PETS!</h1>
           <Section className="row">
-            <div key="pet1" className='col-sm-4'>
-              <PetCard pet={pets[0]} />
-            </div>
-            <div key="pet2" className='col-sm-4'>
-              <PetCard pet={pets[1]} />
-            </div>
-            <div key="pet3" className='col-sm-4'>
-              <PetCard pet={pets[2]} />
-            </div>
+            {pets.map(pet =>
+              <div key={pet.PetID} className='col-sm-4'>
+                <PetCard pet={pet} />
+              </div>
+            )}
           </Section>
           <a className="btn btn-outline-info" href="/pets">Looking for different match? Click here!</a>
         </div>
@@ -107,13 +103,13 @@ export default function HomePage() {
     let textClass = 'row col-8';
     let leftClass = 'col-4'
 
-    if(isMobile){
+    if (isMobile) {
       cardClass = 'border rounded m-2 p-2';
       textClass = 'row m-2 p-2';
       leftClass = ''
     }
 
-    if (petNews) {
+    if (petNews && petNews.length > 0) {
       return (
         <div className="container text-center m-3">
           <h1 className="text-info font-weight-bold">NEWS UPDATE!</h1>
