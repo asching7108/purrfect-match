@@ -43,15 +43,10 @@ export default function HomePage() {
           log.debug(e.error);
         });
     }
-  }, [isMobile]);
 
-  // This useEffect only runs one when mounted
-  useEffect(() => {
     const userID = AuthService.getUserIDFromToken()
-    if (userID) {
-      getUserFavorites(userID);
-    }
-  }, [])
+    if (userID) getUserFavorites(userID);
+  }, [isMobile]);
 
   const getUserFavorites = async (userID) => {
     try {
