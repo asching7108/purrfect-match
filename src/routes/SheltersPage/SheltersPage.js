@@ -28,6 +28,8 @@ export default class SheltersPage extends Component {
       minAge: '',
       maxAge: '',
       more: [],
+      distance: { label: 'Anywhere', value: '' },
+      zipCode: '',
       mode: "view",
       shelterName: null,
       address: null,
@@ -189,16 +191,15 @@ export default class SheltersPage extends Component {
           <h2>{shelter[0].ShelterName}</h2>
           {isShelterAdmin(shelter[0].ShelterID) &&
             <div>
-              <span role='button' className='btn p-2 text-primary' onClick={this.handleEditButtonClick}>
+              <span role='button' className='btn p-2 text-info' onClick={this.handleEditButtonClick}>
                 <FontAwesomeIcon icon='edit' />
               </span>
-              <span role='button' className='btn p-2 text-primary' onClick={this.onClickDelete} >
+              <span role='button' className='btn p-2 text-info' onClick={this.onClickDelete} >
                 <FontAwesomeIcon icon='trash-alt' />
               </span>
             </div>
           }
         </div>
-        <hr />
       </div>
     )
   }
@@ -214,7 +215,7 @@ export default class SheltersPage extends Component {
 
     return (
       <div>
-        <table className='shelterTable'>
+        <table className='table'>
           <tbody>
             <tr>
               <th>Address</th>
@@ -222,15 +223,15 @@ export default class SheltersPage extends Component {
             </tr>
             <tr>
               <th>Email</th>
-              <td><a href={"mailto:" + shelter[0].EmailAddress}>{shelter[0].EmailAddress}</a></td>
+              <td><a className='baseFont' href={"mailto:" + shelter[0].EmailAddress}>{shelter[0].EmailAddress}</a></td>
             </tr>
             <tr>
               <th>Phone number</th>
-              <td><a href={"tel:" + shelter[0].PhoneNumber}>{shelter[0].PhoneNumber}</a></td>
+              <td><a className='baseFont' href={"tel:" + shelter[0].PhoneNumber}>{shelter[0].PhoneNumber}</a></td>
             </tr>
             <tr>
               <th>Website</th>
-              <td><a href={websiteLink}>{shelter[0].Website}</a></td>
+              <td><a className='baseFont' href={websiteLink}>{shelter[0].Website}</a></td>
             </tr>
           </tbody>
         </table>
@@ -321,8 +322,8 @@ export default class SheltersPage extends Component {
           </div>
           <div className="row">
             <div className="col-sm-12 text-center">
-              <button className="btn btn-primary btn-md m-2" type="submit" >Update</button>
-              <button className="btn btn-outline-primary  btn-md m-2" onClick={this.handleEditButtonClick}>Cancel</button>
+              <button className="btn btn-info btn-md m-2" type="submit" >Update</button>
+              <button className="btn btn-outline-info  btn-md m-2" onClick={this.handleEditButtonClick}>Cancel</button>
             </div>
           </div>
         </form>
@@ -341,19 +342,21 @@ export default class SheltersPage extends Component {
       sex,
       minAge,
       maxAge,
-      more
+      more,
+      distance,
+      zipCode
     } = this.state;
     return (
       <>
         <div className='d-flex justify-content-between align-items-center flex-wrap'>
           <h2>Pets at {shelter[0].ShelterName}</h2>
           {isShelterAdmin(shelterID) &&
-            <Link to={`/pets/create`} className='btn btn-primary m-1'>
+            <Link to={`/pets/create`} className='btn btn-info m-1'>
               Add A Pet
             </Link>
           }
         </div>
-        {pets && <PetList
+        {<PetList
           pets={pets}
           page='shelter'
           typeOfAnimal={typeOfAnimal}
@@ -362,6 +365,8 @@ export default class SheltersPage extends Component {
           minAge={minAge}
           maxAge={maxAge}
           more={more}
+          distance={distance}
+          zipCode={zipCode}
           inputChangeHandler={this.inputChanged}
           savedPreferencesHandler={this.changeSavedPreferences}
         />}

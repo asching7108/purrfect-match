@@ -3,10 +3,12 @@ import { useNavigate, useParams } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup, isShelterAdmin, PrimaryButton, renderFavoriteIcon, SecondaryButton, Section, TextArea } from '../components/Utils/Utils';
 import PetsService from '../services/petsService';
+import UsersService from '../services/usersService';
 import { Link } from 'react-router-dom';
+import AuthService from '../services/authService';
 const { HOSTNAME } = require('../config/hostname.config');
 
-export default function PetPage () {
+export default function PetPage() {
   const navigate = useNavigate();
   const params = useParams();
   const [pet, setPet] = useState(null);
@@ -14,6 +16,8 @@ export default function PetPage () {
   const [creatingNews, setCreatingNews] = useState(false);
   const [newUpdate, setNewUpdate] = useState('');
   const [error, setError] = useState(null);
+  const [favorites, setFavorites] = useState([]);
+  const [checkedFavorites, setCheckedFavorites] = useState(false);
 
   useEffect(() => {
     if (!pet) {
@@ -30,7 +34,28 @@ export default function PetPage () {
           setError(e.error);
         });
     }
+    if (!checkedFavorites) {
+      try {
+        if (AuthService.isLoggedIn()) {
+          getUserFavorites(AuthService.getUserIDFromToken());
+        } else {
+          setCheckedFavorites(true);
+        }
+      } catch (e) {
+        setError(e);
+      }
+    }
   });
+
+  const getUserFavorites = async (userID) => {
+    try {
+      const res = await UsersService.getUserFavorites(userID);
+      setFavorites(res);
+      setCheckedFavorites(true);
+    } catch (e) {
+      setError(e);
+    }
+  }
 
   const onClickDelete = () => {
     if (window.confirm('Are you sure you want to delete this pet?')) {
@@ -79,15 +104,17 @@ export default function PetPage () {
             <h2>
               Hi, I'm {pet.Name}!
               <span> </span>
-              {renderFavoriteIcon(pet.PetID)}
+              {renderFavoriteIcon(pet.PetID, favorites.includes(pet.PetID), () => {
+                getUserFavorites(AuthService.getUserIDFromToken());
+              })}
             </h2>
           </div>
           {isShelterAdmin(pet.ShelterID) &&
             <div>
-              <Link className='btn p-2 text-primary' to={`/pets/${pet.PetID}/edit`}>
+              <Link className='btn p-2 text-info' to={`/pets/${pet.PetID}/edit`}>
                 <FontAwesomeIcon icon='edit' />
               </Link>
-              <span role='button' className='btn p-2 text-primary' onClick={onClickDelete}>
+              <span role='button' className='btn p-2 text-info' onClick={onClickDelete}>
                 <FontAwesomeIcon icon='trash-alt' />
               </span>
             </div>
@@ -110,13 +137,13 @@ export default function PetPage () {
             </tr>
             <tr>
               <td scope='row'>I am:</td>
-              <td style={{whiteSpace: 'pre-wrap'}}>
-              {pet.GoodWithOtherAnimals ? 'Good With Other Animals' : 'Not Good With Other Animals'}
-              {pet.GoodWithChildren ? '\nGood With Children' : '\nNot Good With Children'}
-              {pet.MustBeLeashed ? '\nMust Be Leashed' : '\nLeash Not Required'}
-              {pet.Neutered ? '\nNeutered' : '\nNot Yet Neutered'}
-              {pet.Vaccinated ? '\nVaccinated' : '\nNot Yet Vaccinated'}
-              {pet.HouseTrained ? '\nHouse Trained' : '\nNot Yet House Trained'}
+              <td style={{ whiteSpace: 'pre-wrap' }}>
+                {pet.GoodWithOtherAnimals ? 'Good With Other Animals' : 'Not Good With Other Animals'}
+                {pet.GoodWithChildren ? '\nGood With Children' : '\nNot Good With Children'}
+                {pet.MustBeLeashed ? '\nMust Be Leashed' : '\nLeash Not Required'}
+                {pet.Neutered ? '\nNeutered' : '\nNot Yet Neutered'}
+                {pet.Vaccinated ? '\nVaccinated' : '\nNot Yet Vaccinated'}
+                {pet.HouseTrained ? '\nHouse Trained' : '\nNot Yet House Trained'}
               </td>
             </tr>
           </tbody>
@@ -135,7 +162,7 @@ export default function PetPage () {
 
   const renderShelterInfo = () => {
     return (
-      <div className='col-md m-1 border border-primary rounded'>
+      <div className='col-md m-1 border border-info rounded'>
         <h4><small>Shelter Info</small></h4>
         <h3><Link to={`/shelters/${pet.ShelterID}`}><small>{pet.ShelterName}</small></Link></h3>
         <p>
@@ -164,7 +191,7 @@ export default function PetPage () {
 
   const renderPetDescription = () => {
     return (
-      <div className='col-md m-1 border border-primary rounded'>
+      <div className='col-md m-1 border border-info rounded'>
         <h3><small>About Me</small></h3>
         <p>{pet.Description}</p>
       </div>
@@ -175,7 +202,7 @@ export default function PetPage () {
     if (!creatingNews) {
       return (
         <div className='row justify-content-center'>
-          <button className='btn btn-primary mb-2' onClick={toggleCreatingNewsState}>
+          <button className='btn btn-info mb-2' onClick={toggleCreatingNewsState}>
             New Update
           </button>
         </div>
@@ -224,7 +251,7 @@ export default function PetPage () {
                 {isShelterAdmin(pet.ShelterID) &&
                   <span
                     role='button'
-                    className='btn p-2 text-primary'
+                    className='btn p-2 text-info'
                     onClick={e => onClickDeleteNewsItem(news.NewsItemID)}>
                     <FontAwesomeIcon icon='trash-alt' />
                   </span>

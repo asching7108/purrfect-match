@@ -54,20 +54,11 @@ export default class ProfilePage extends Component {
     const firstName = user.FirstName;
     const lastName = user.LastName;
     const email = user.EmailAddress;
-    const address = user.Address;
     const zipCode = user.ZipCode;
     const lastUpdated = new Date(user.LastUpdated).toLocaleDateString();
     let street = '';
     let city = '';
     let USState = '';
-
-    if (address) {
-      const addressArray = address.split(', ');
-      street = addressArray.slice(0, -2).join(', '); // handles street addresses with commas in them
-      // 2nd to last item in array is always city. Last is always state
-      city = addressArray[addressArray.length - 2];
-      USState = addressArray[addressArray.length - 1];
-    }
 
     if (this.state.edit) {
       return (
@@ -77,11 +68,7 @@ export default class ProfilePage extends Component {
             firstName={firstName}
             lastName={lastName}
             email={email}
-            address={address}
             zipCode={zipCode}
-            address={street}
-            city={city}
-            USState={USState}
             onUpdate={this.onUpdate}
           />
         </Section>
@@ -94,11 +81,7 @@ export default class ProfilePage extends Component {
           <div className='profile'>
             <h3>{firstName} {lastName}</h3>
             <div>Email: {email}</div>
-            <div>{
-              address
-                ? 'Address: ' + address + ' ' + zipCode
-                : 'ZIP Code:' + zipCode
-            }</div>
+            <div>ZIP Code: {zipCode}</div>
             <small className='text-muted'>Last updated: {lastUpdated}</small>
           </div>
 
@@ -112,6 +95,7 @@ export default class ProfilePage extends Component {
     let animalTypes = prefs.TypeOfAnimal ? JSON.parse(prefs.TypeOfAnimal) : null;
     let breeds = prefs.Breed ? JSON.parse(prefs.Breed) : null;
     let more = prefs.More ? JSON.parse(prefs.More) : null;
+    let distance = prefs.Distance ? JSON.parse(prefs.Distance) : null;
 
     // Format age range
     let ageRange;
@@ -141,10 +125,13 @@ export default class ProfilePage extends Component {
         return elem.value.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase();
       }).join(', ');
     };
+    if (distance) {
+      distance = distance.value === '' ? 'Anywhere' : `${distance.value} miles`;
+    }
 
     return (
       <Section className={'mt-5'}>
-        <h2>My Pet Preferences <span className='btn p-2 text-primary' onClick={this.deleteAllPreferences}><FontAwesomeIcon icon='trash-alt' /></span></h2>
+        <h2>My Pet Preferences <span className='btn p-2 text-info' onClick={this.deleteAllPreferences}><FontAwesomeIcon icon='trash-alt' /></span></h2>
         <table className='table'>
           <tbody>
             {animalTypes ? <tr><th className='table-header'>Types of Animals</th><td>{animalTypes}</td></tr> : null}
@@ -152,6 +139,8 @@ export default class ProfilePage extends Component {
             {prefs.Sex ? <tr><th className='table-header'>Sex</th><td>{prefs.Sex}</td></tr> : null}
             {ageRange ? <tr><th className='table-header'>Age Range</th><td>{ageRange}</td></tr> : null}
             {more ? <tr><th className='table-header'>Other</th><td>{more}</td></tr> : null}
+            {distance ? <tr><th className='table-header'>Distance</th><td>{distance}</td></tr> : null}
+            {prefs.ZipCode ? <tr><th className='table-header'>ZIP Code</th><td>{prefs.ZipCode}</td></tr> : null}
           </tbody>
         </table>
       </Section>

@@ -66,6 +66,39 @@ const UsersService = {
         ? res.json().then(e => Promise.reject(e))
         : res.json());
   },
+  async addUserFavorite(userID, petID) {
+    const res = await fetch(`${HOSTNAME}/users/${userID}/favorites/${petID}`, {
+      method: 'PUT',
+      headers: {
+        'authorization': AuthService.getToken()
+      }
+    });
+    return await (
+      (!res.ok)
+        ? res.json().then(e => Promise.reject(e))
+        : res.json());
+  },
+  async getUserFavorites(userID) {
+    const res = await fetch(`${HOSTNAME}/users/${userID}/favorites`, {
+      method: 'GET'
+    });
+    return await (
+      (!res.ok)
+        ? res.json().then(e => Promise.reject(e))
+        : res.json());
+  },
+  async removeUserFavorite(userID, petID) {
+    const res = await fetch(`${HOSTNAME}/users/${userID}/favorites/${petID}`, {
+      method: 'DELETE',
+      headers: {
+        'authorization': AuthService.getToken()
+      }
+    });
+    return await (
+      (!res.ok)
+        ? res.text().then(e => Promise.reject(e))
+        : res.text());
+  },
   async deleteAllUserPreferences(userID) {
     const res = await fetch(`${HOSTNAME}/users/${userID}/prefs`, {
       method: 'DELETE',

@@ -6,7 +6,7 @@ import { renderFavoriteIcon } from './Utils/Utils';
 const { HOSTNAME } = require('../config/hostname.config');
 
 export default function PetCard(props) {
-  const { pet, page } = props;
+  const { pet, page, isFavorite, onClickHeart } = props;
   const navigate = useNavigate();
 
   const onClickCard = () => {
@@ -32,11 +32,13 @@ export default function PetCard(props) {
   return (
     <div className='border rounded m-1 p-2' onClick={onClickCard}>
       <img className="img-fluid rounded" src={HOSTNAME + pet.Picture} width="100%"/>
-      <h3>
-        {pet.Name}
-        <span> </span>
-        {renderFavoriteIcon(pet.petID)}
-      </h3>
+      <div className='d-flex justify-content-between align-items-center'>
+        <h3>
+          <span className='mr-1'>{pet.Name}</span>
+          {renderFavoriteIcon(pet.PetID, isFavorite, onClickHeart)}
+        </h3>
+        {pet.Distance ? <p>{pet.Distance} mi</p> : ''}
+      </div>
       <h6>{pet.TypeOfAnimal}, {pet.Breed}</h6>
       <p>{pet.Sex}, {pet.Age} yrs</p>
       {page === 'shelter' ? '' : renderShelter()}
