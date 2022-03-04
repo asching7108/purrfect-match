@@ -204,6 +204,13 @@ export default class SheltersPage extends Component {
 
   renderShelter(shelter) {
     log.debug("Calling renderShelter...")
+
+    // Add protocol to website link if none exists
+    let websiteLink = shelter[0].Website;
+    if (websiteLink.substring(0, 4) !== 'http') {
+      websiteLink = 'http://' + websiteLink;
+    }
+
     return (
       <div>
         <table className='table'>
@@ -222,7 +229,7 @@ export default class SheltersPage extends Component {
             </tr>
             <tr>
               <th>Website</th>
-              <td><a className='baseFont' href={shelter[0].Website}>{shelter[0].Website}</a></td>
+              <td><a className='baseFont' href={websiteLink}>{shelter[0].Website}</a></td>
             </tr>
           </tbody>
         </table>
