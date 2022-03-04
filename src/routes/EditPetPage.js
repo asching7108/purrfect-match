@@ -5,7 +5,7 @@ import { Section } from '../components/Utils/Utils';
 import AuthService from '../services/authService';
 import PetsService from '../services/petsService';
 
-export default function EditPetPage () {
+export default function EditPetPage() {
   const navigate = useNavigate();
   const params = useParams();
   const [pet, setPet] = useState(null);
@@ -43,7 +43,7 @@ export default function EditPetPage () {
       <div className='alert alert-danger' role='alert'>
         Not authorized to edit the selected pet.
       </div>
-    );    
+    );
   }
 
   return (

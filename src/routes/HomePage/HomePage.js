@@ -13,7 +13,6 @@ import UsersService from '../../services/usersService';
 const { HOSTNAME } = require('../../config/hostname.config');
 const log = logUtils.getLogger();
 
-
 export default function HomePage() {
 
   const [pets, setPets] = useState();

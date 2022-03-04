@@ -30,7 +30,6 @@ export default class FavoritesPage extends Component {
             }));
             this.setState({ pets: favoritePets })
           })
-          
       })
       .catch(error => console.log(error));
   }

@@ -6,13 +6,13 @@ import "./FileUpload.css";
 export default function FileUpload(props) {
   const { handler, imgHandler, req } = props;
   const [image, setImage] = useState();
-  const [saved, setSaved ] = useState("");
-  const [showCropImage, setCropImage ] = useState("hide");
+  const [saved, setSaved] = useState("");
+  const [showCropImage, setCropImage] = useState("hide");
   const [cropper, setCropper] = useState();
   const onChange = (e) => {
     e.preventDefault();
     let files;
-    
+
     if (e.dataTransfer) {
       files = e.dataTransfer.files;
     } else if (e.target) {
@@ -43,11 +43,11 @@ export default function FileUpload(props) {
   return (
     <div>
       <div style={{ width: "100%" }}>
-      {req === true
-        ? <input type="file" accept="image/png, image/jpg, image/jpeg" onChange={onChange} required/> 
-        : <input type="file" accept="image/png, image/jpg, image/jpeg" onChange={onChange} /> 
-      }
-        
+        {req === true
+          ? <input type="file" accept="image/png, image/jpg, image/jpeg" onChange={onChange} required />
+          : <input type="file" accept="image/png, image/jpg, image/jpeg" onChange={onChange} />
+        }
+
         <br />
         <Cropper
           style={{ maxHeight: 400, width: "100%" }}
@@ -66,10 +66,9 @@ export default function FileUpload(props) {
         />
       </div>
       <div id="cropImage" className={showCropImage}>
-      <input type="button" id='picture' onClick={getCropData} value="Crop Image"/><p className="message" style={{display: "inline"}}>{saved}</p>
+        <input type="button" id='picture' onClick={getCropData} value="Crop Image" /><p className="message" style={{ display: "inline" }}>{saved}</p>
       </div>
     </div>
-
   );
 };
 

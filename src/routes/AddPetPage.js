@@ -4,7 +4,7 @@ import PetForm from '../components/PetForm';
 import { Section } from '../components/Utils/Utils';
 import AuthService from '../services/authService';
 
-export default function AddPetPage () {
+export default function AddPetPage() {
   const navigate = useNavigate();
 
   const handleAddPetSuccess = petID => {

@@ -56,9 +56,6 @@ export default class ProfilePage extends Component {
     const email = user.EmailAddress;
     const zipCode = user.ZipCode;
     const lastUpdated = new Date(user.LastUpdated).toLocaleDateString();
-    let street = '';
-    let city = '';
-    let USState = '';
 
     if (this.state.edit) {
       return (

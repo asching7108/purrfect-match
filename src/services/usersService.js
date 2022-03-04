@@ -16,6 +16,7 @@ const UsersService = {
         ? res.json().then(e => Promise.reject(e))
         : res.json());
   },
+
   async saveUserPreferences(userID, method, changedPreferences) {
     const res = await fetch(`${HOSTNAME}/users/${userID}/prefs`, {
       method: method,
@@ -30,6 +31,7 @@ const UsersService = {
         ? res.text().then(e => Promise.reject(e))
         : res.text());
   },
+
   async getUser(userID) {
     const res = await fetch(`${HOSTNAME}/users/${userID}`, {
       method: 'GET'
@@ -39,6 +41,7 @@ const UsersService = {
         ? res.json().then(e => Promise.reject(e))
         : res.json());
   },
+
   async updateUser(userID, userUpdates) {
     const res = await fetch(`${HOSTNAME}/users/${userID}`, {
       method: 'PATCH',
@@ -53,6 +56,7 @@ const UsersService = {
         ? res.then(e => Promise.reject(e))
         : res);
   },
+
   async getSavedPreferences(userID) {
     const res = await fetch(`${HOSTNAME}/users/${userID}/prefs`, {
       method: 'GET',
@@ -66,6 +70,7 @@ const UsersService = {
         ? res.json().then(e => Promise.reject(e))
         : res.json());
   },
+
   async addUserFavorite(userID, petID) {
     const res = await fetch(`${HOSTNAME}/users/${userID}/favorites/${petID}`, {
       method: 'PUT',
@@ -78,6 +83,7 @@ const UsersService = {
         ? res.json().then(e => Promise.reject(e))
         : res.json());
   },
+
   async getUserFavorites(userID) {
     const res = await fetch(`${HOSTNAME}/users/${userID}/favorites`, {
       method: 'GET'
@@ -87,6 +93,7 @@ const UsersService = {
         ? res.json().then(e => Promise.reject(e))
         : res.json());
   },
+
   async removeUserFavorite(userID, petID) {
     const res = await fetch(`${HOSTNAME}/users/${userID}/favorites/${petID}`, {
       method: 'DELETE',
@@ -99,6 +106,7 @@ const UsersService = {
         ? res.text().then(e => Promise.reject(e))
         : res.text());
   },
+  
   async deleteAllUserPreferences(userID) {
     const res = await fetch(`${HOSTNAME}/users/${userID}/prefs`, {
       method: 'DELETE',

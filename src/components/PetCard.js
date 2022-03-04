@@ -31,7 +31,7 @@ export default function PetCard(props) {
 
   return (
     <div className='border rounded m-1 p-2' onClick={onClickCard}>
-      <img className="img-fluid rounded" src={HOSTNAME + pet.Picture} width="100%"/>
+      <img className="img-fluid rounded" src={HOSTNAME + pet.Picture} width="100%" />
       <div className='d-flex justify-content-between align-items-center'>
         <h3>
           <span className='mr-1'>{pet.Name}</span>

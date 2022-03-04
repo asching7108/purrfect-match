@@ -17,6 +17,5 @@ export default function PublicRoute({ children, shelter }) {
     return AuthService.isLoggedIn()
       ? <Navigate to={determineRedirect()} />
       : children;
-    
   }
 }

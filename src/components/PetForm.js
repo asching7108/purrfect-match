@@ -330,7 +330,7 @@ export default class PetForm extends Component {
           <label htmlFor='petImage'>Pet Image</label>
           {this.props.type === 'create'
             ? <FilesUploadComponent id='picture' handler={this.onFileChange} imgHandler={this.imageStatusChange} req={true} />
-            : <FilesUploadComponent id='picture' handler={this.onFileChange} imgHandler={this.imageStatusChange} req={false}/>
+            : <FilesUploadComponent id='picture' handler={this.onFileChange} imgHandler={this.imageStatusChange} req={false} />
           }
         </FormGroup>
         <FormGroup className='form-check'>

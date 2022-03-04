@@ -105,7 +105,6 @@ export default function PetList(props) {
       setSavedPrefs(true);
       setConfirmSaved(true);
     }
-
   }
 
   const getSavedPreferences = async (userID) => {
